@@ -55,6 +55,10 @@ def install_phase_alpha():
         file_status = os.stat('psql.sh')
         os.chmod('psql.sh', file_status.st_mode | stat.S_IEXEC)
         subprocess.call(['./psql.sh'])
+
+        metasploit_file = os.stat('metasploit.sh')
+        os.chmod('metasploit.sh', metasploit_file.st_mode | stat.S_IEXEC)
+        subprocess.call(['./metasploit.sh'])
     except IOError as error:
         sys.exit(str(error))
     except subprocess.CalledProcessError as error:
@@ -73,5 +77,6 @@ if __name__ == '__main__':
         system_update_upgrade()
         install_phase_alpha()
         print("\n\n\n\nDone? May be.....")
+        sys.exit(0)  # The END
     else:
         sys.exit("Permission Denied!")
