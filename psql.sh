@@ -1,39 +1,55 @@
 #!/usr/bin/env bash
+green="\033[0;32m"
+red="\033[0;31m"
+cyan="\033[0;36m"
+nc="\033[0m"
+blue="\033[1;34m"
+yellow="\033[1;33m"
+lightPurple='\033[1;35m'
+
 ## ===========================##
 ## ===========================##
 ## Installing or managing PSQL##
 ## ===========================##
 ## ===========================##
+echo -e "${cyan} Escaping PostgreSQL Installation phase${nc}"
 exit 200 #### TODO REPLACE this line
 
-echo "Checking if PostgreSQL is installed"
+echo -e "${lightPurple}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~Checking PostgreSQL Status~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ${nc}"
+
+echo -e "${yellow}Checking if PostgreSQL is installed${nc}"
 #check if psql is installed.
 which -a psql
 if [ $? -eq 1 ] #returns 0 if psql is installed.
 then
-    echo "PostgreSQL is not installed" #install psql here.
-    echo "Installing PostgreSQL....\/\/\/"
+    echo -e "${red}PostgreSQL is not installed${nc}" #install psql here.
+    echo "${blue}Installing PostgreSQL....${nc}"
     apt install postgresql postgresql-contrib #psql installation command
 fi
 
-echo "PostgreSQL is installed!"
+echo -e "${green}PostgreSQL is installed!${nc}"
 printf "Configuring PostgreSQL to start upon server boot"
 update-rc.d postgresql enable #configured psql to start upon booting
-printf " -- Done\n"
+printf " -- ${green}Done${nc}\n"
 
-printf "Starting POSTGRESQL...\/\/\/\/\/\/"
+printf "Starting PostgreSQL.."
 service postgresql start #starting the postgresql server for the first time.
-printf " -- Done\n"
+printf " -- ${green}Done${nc}\n"
 
 
 ## checking postgresql connection status
 if /usr/bin/pg_isready &> /dev/null;then #one final check if psql has been installed successfully
-    printf "Postgresql database has been installed successfully and running properly!\n"
-    printf "It is running in default configuration. Necessary documentation regarding default configuration will be found googling/postgresql official website.\n"
+    printf "${green}Postgresql database has been installed successfully and running properly!${nc}\n"
+    printf "It is running in ${yellow}default configuration.${nc} Necessary documentation regarding default configuration will be found googling/postgresql official website.\n"
 else
     #there is some error installing psql.
     #TODO: NEED a fucking try catch block here. If things does not work accordingly. Turn the python program off!
-    echo "There might be some problem with postgresql connection creation!"
-    echo "Shutting down the script!"
+    echo -e "${red} There might be some problem with postgresql connection creation!"
+    echo -e "${red} Shutting down the script!${nc}"
     kill $(pgrep -f 'main.py')
 fi
