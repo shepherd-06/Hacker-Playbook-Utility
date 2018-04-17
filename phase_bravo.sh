@@ -13,8 +13,88 @@ echo -e "${lightPurple}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !Running Phase BRAVO Installation!
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ${nc}"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{nc}"
 
+#----------------------------------------
+#Downloading Different files using WGET
+#----------------------------------------
+function little_wget_magic() {
+    echo -e "${yellow}-------------------------------
+    ${blue} Running a little WGET magic to download ${cyan}WCE (Windows Credential Editor), Mimikatz, Custom Password Lists, PeepingTom, NMap Script, PowerSploit, Responder, SET (Social Engineering Toolkit), BypassUAC and Fuzzing Lists.
+    ${blue} This list is so f**king long, I know....
+    ${yellow}-------------------------------${nc}"
+
+    backup_directory=~/backup_wget
+
+    # WCE
+    echo -e "${blue} Download WCE (Windows Credential Editor) ${nc}.
+    Windows Credential Editor will be used to pull password from memory."
+    cd ~/Desktop/ && wget http://www.ampliasecurity.com/research/wce_v1_41beta_universal.zip
+    unzip -d ~/Desktop/wce wce_v1_41beta_universal.zip
+    if [ ! -d ${backup_directory} ];then
+        mkdir ~/backup_wget
+    fi
+    mv ~/Desktop/wce_v1_41beta_universal.zip ~/backup_wget/
+    echo -e "${green}WCE is downloaded and unzipped in ~/Desktop/wce. zipped backup is kept in ~/backup_wget/ directory${nc}"
+
+
+    #Mimikatz
+    echo -e "${blue} Download Mimikatz ${nc}.
+    Mimikatz will be used to pull password from memory."
+    cd ~/Desktop/ && wget http://blog.gentilkiwi.com/downloads/mimikatz_trunk.zip
+    unzip -d ~/Desktop/mimikatz mimikatz_trunk.zip
+    if [ ! -d ${backup_directory} ];then
+        mkdir ~/backup_wget
+    fi
+    mv ~/Desktop/mimikatz_trunk.zip ~/backup_wget/
+    echo -e "${green}Mimikatz is downloaded and unzipped. A backup is kept as well.${nc}"
+
+
+    # --------- Custom Password list ---------
+    # Skill Security
+
+    custom_password_directory=~/Desktop/password_list/
+    custom_password_bk=~/backup_wget/password_list/
+    echo -e "${blue}Download Custom Password list.${nc}
+    First. Rock you of Skull Security"
+    cd ~/Desktop/ && wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
+    if [ ! -d ${custom_password_directory} ];then
+        mkdir ~/Desktop/password_list/
+    fi
+    bzip2 rockyou.txt.bz2
+    if [ ! -d ${custom_password_bk} ];then
+        mkdir ~/backup_wget/password_list/
+    fi
+    mv ~/Desktop/password_list/ ~/backup_wget/password_list/
+    echo -e "${green}Downloaded Rock you file of Skull Security${nc}
+    ${blue}Downloading Human password list of CrackStation${nc}
+    ${cyan}The list is free however, CrackStation has a donation page running for whatever amount you wish. If you feel, follow this url: ${yellow} https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm${nc}
+
+    Do you want to Download ${blue}CrackStation password list ${nc} using Torrent or HTTP Mirror? It's a ${blue}247 MB${nc} of GZIP compressed file.
+    ${blue}Choose 1, if you want Torrent (Fast).
+    Choose 2, if you want to use HTTP Mirror (Bit Slower) ${nc}"
+
+    read -n1 -p "Please Choose between [1,2] : " user_option
+    if (($user_option == 1 ));then
+        cd ~/Desktop/ && wget https://crackstation.net/downloads/crackstation-human-only.txt.gz.torrent
+        which -a transmission-gtk
+        if [ $? -eq 0 ];then
+            transmission-gtk ~/Desktop/crackstation-human-only.txt.gz.torrent
+            sleep 5s # sleep 5 seconds for this command to finish
+            echo "${green}I am guessing Transmission is downloading the crackstation's file. Moving on... ${nc}"
+        else
+            #TODO  --------- --------- --------- --------- --------- ---------
+            echo "TODO: Transmission is not installed. Tell the user to Download via HTTP mirror or Use any other torrent manager."
+        fi
+    else
+        #TODO  --------- --------- --------- --------- --------- ---------
+        echo "HTTP Mirror | wget magic"
+        cd ~/Desktop/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
+        if [ ! -d ${custom_password_directory} ];then
+            mkdir ~/Desktop/password_list/
+        fi
+    fi
+}
 
 #----------------------------------------
 #Veil version 3.0 Installation!
@@ -44,7 +124,7 @@ function Veil() {
         printf "${green}Done.\n${nc}Running installation now."
         cd /opt/Veil && ./Veil.py --setup
         prinf " -- ${green}Complete\n${nc}"
-        # go to Someplace else
+        little_wget_magic # go to Someplace else
     else
         # directory exists.
         echo -e "${red}A folder named Veil already exist!${nc} Choose your options:
@@ -57,7 +137,7 @@ function Veil() {
         "
         if (($user_option == 1 ));then
             echo -e "${green}Moving on...${nc}"
-            # go to Other places from here to execute from there.
+            little_wget_magic # go to Other places from here to execute from there.
         elif (($user_option == 2));then
             echo -e "Removing OLD Veil and cloning again from github"
             rm -rf /opt/Veil/
@@ -69,7 +149,7 @@ function Veil() {
             printf "${green}Done.${nc} \nRunning installation now."
             cd /opt/Veil && ./Veil.py --setup
             prinf " -- ${green}Complete${nc}\n"
-            # go to Someplace else
+            little_wget_magic # go to Someplace else
         elif (($user_option == 3));then
             chmod a+x /opt/Veil/Veil.py
             chmod a+x /opt/Veil/config/update-config.py
@@ -78,6 +158,7 @@ function Veil() {
             printf "${green}Done.${nc} \nRunning installation again."
             cd /opt/Veil && ./Veil.py --setup
             prinf " -- ${green}Complete${nc}\nVeil has been successfully re-configured and re-installed!"
+            little_wget_magic # go to next phase
         else
             echo -e "${red} Terminating the script. ${blue} Superheroes need help too. :) ${nc}"
             exit -1
