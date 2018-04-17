@@ -29,13 +29,32 @@ def ask_sudo():
 
 def system_update_upgrade():
     """
-
+    run system update upgrade before doing anything.
     :return:
     """
     try:
         file_status = os.stat('updater.sh')
-        os.chmod('updater.sh', file_status.st_mode| stat.S_IEXEC)
+        os.chmod('updater.sh', file_status.st_mode | stat.S_IEXEC)
         subprocess.call(['./updater.sh'])
+    except IOError as error:
+        sys.exit(str(error))
+    except subprocess.CalledProcessError as error:
+        sys.exit(str(error))
+    except OSError as error:
+        sys.exit((str(error)))
+    finally:
+        return 1
+
+
+def install_phase_alpha():
+    """
+    Install Postgresql and Metasploit Framework related stuff
+    :return:
+    """
+    try:
+        file_status = os.stat('psql.sh')
+        os.chmod('psql.sh', file_status.st_mode | stat.S_IEXEC)
+        subprocess.call(['./psql.sh'])
     except IOError as error:
         sys.exit(str(error))
     except subprocess.CalledProcessError as error:
@@ -52,6 +71,7 @@ if __name__ == '__main__':
         exit(1)
     if ask_sudo():
         system_update_upgrade()
-        print("Hello!")
+        install_phase_alpha()
+        print("\n\n\n\nDone? May be.....")
     else:
         sys.exit("Permission Denied!")
