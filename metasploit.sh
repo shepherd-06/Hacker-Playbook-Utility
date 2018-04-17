@@ -7,6 +7,6 @@ then
 else
     echo "Metasploit FM is installed!"
 fi
-
+# step 5.c and 6 (a,b,c)
 echo "TODO: work on Metasploit must be done from the Kali machine or a VM machine.
 Tue Apr 17 06:28:51 +06 2018"

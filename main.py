@@ -69,6 +69,26 @@ def install_phase_alpha():
         return 1
 
 
+def install_phase_bravo():
+    """
+    Installing scripts and apps inside /opt/
+    Discover, SMBExec, Veil (new)
+    :return:
+    """
+    try:
+        file_status = os.stat('phase_bravo.sh')
+        os.chmod('phase_bravo.sh', file_status.st_mode | stat.S_IEXEC)
+        subprocess.call(['./phase_bravo.sh'])
+    except IOError as error:
+        sys.exit(str(error))
+    except subprocess.CalledProcessError as error:
+        sys.exit(str(error))
+    except OSError as error:
+        sys.exit((str(error)))
+    finally:
+        return 1
+
+
 if __name__ == '__main__':
     if sys.version_info < (3, 0, 0):
         sys.stderr.write("You need python 3.0.0 or later to run this script\n")
@@ -76,6 +96,7 @@ if __name__ == '__main__':
     if ask_sudo():
         system_update_upgrade()
         install_phase_alpha()
+        install_phase_bravo()
         print("\n\n\n\nDone? May be.....")
         sys.exit(0)  # The END
     else:
