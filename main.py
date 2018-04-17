@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 import stat
+import platform
 
 
 def ask_sudo():
@@ -93,6 +94,8 @@ if __name__ == '__main__':
     if sys.version_info < (3, 0, 0):
         sys.stderr.write("You need python 3.0.0 or later to run this script\n")
         exit(1)
+    if platform.dist()[0] != 'Kali':
+        print("Not Running in Kali Linux. Proceed with caution")
     if ask_sudo():
         system_update_upgrade()
         install_phase_alpha()
