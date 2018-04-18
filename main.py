@@ -100,7 +100,7 @@ if __name__ == '__main__':
         system_update_upgrade()
         install_phase_alpha()
         install_phase_bravo()
-        print("\n\n\n\nDone? May be.....")
+        print("\n\n$Done? May be.....")
         sys.exit(0)  # The END
     else:
         sys.exit("Permission Denied!")

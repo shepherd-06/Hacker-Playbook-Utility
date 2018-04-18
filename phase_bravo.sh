@@ -15,6 +15,190 @@ echo -e "${lightPurple}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${nc}"
 
+
+#----------------------------------------
+#Installing Beef and Fuzzing List--------
+#----------------------------------------
+function beef_fuzzing() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing BeEF
+    ${nc}BeFF will be used as an cross-site scripting attack framework
+    "
+    #TODO: will install beef later
+    #TODO: beef requires Ruby2.3 to run.
+    #TODO: clone and install beef cloning their github page
+
+
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing Fuzzling Lists (SecLists)
+    ${nc}These are scripts to use with Burp to Fuzz Parameters
+    "
+    fuzzDir=/opt/SecLists
+    if [ ! -d ${fuzzDir} ];then
+        # install Fuzzing Lists
+        cd /opt/ && git clone http://github.com/danielmiessler/SecLists.git
+        echo -e "${green}Fuzzing Lists installation is complete${nc}"
+    else
+        # directory exists.
+        echo -e "A folder named ${red}SecLists already exist!${nc} Choose your options:
+        1) Fuzzing Lists (SecLists) is already installed. ${green}Move on!${nc}
+        2) ${red}Remove the SecLists folder,${nc}Install fresh"
+        read -p "Please Choose between [1,2] : " user_option
+        echo ""
+        if (($user_option == 1 ));then
+            echo -e "${green}Moving on...${nc}"
+        else
+            echo -e "Removing ${red}OLD SecLists${nc}"
+            rm -rf /opt/SecLists/
+            # install fuzzing lists
+            cd /opt/ && git clone http://github.com/danielmiessler/SecLists.git
+            echo -e "${green}Fuzzing Lists installation is complete${nc}"
+        fi
+    fi
+}
+
+#----------------------------------------
+#Installing bypassUAC--------------------
+#TODO: Need Metepreter. Test and write in KALI
+#----------------------------------------
+function bypassUAC() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing bypassuac
+    ${nc}will be used to bypass UAC in post exploitation.
+    "
+    beef_fuzzing
+}
+
+#----------------------------------------
+#Installing Social Engineering Toolkit---
+#----------------------------------------
+function social_engineering_toolkit() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing Social Engineering Toolkit [SET]
+    ${nc}SET will be used for Social Engineering Campagin
+    "
+    setDir=/opt/set
+    if [ ! -d ${setDir} ];then
+        # install set
+        cd /opt/ && git clone http://github.com/trustedsec/social-engineer-toolkit/ set/
+        cd /opt/set/ && chmod a+x setup.py
+        cd /opt/set/ && python setup.py install
+        echo -e "${green}SET installation is complete${nc}"
+    else
+        # directory exists.
+        echo -e "A folder named ${red}SET already exist!${nc} Choose your options:
+        1) SET is already installed. ${green}Move on!${nc}
+        2) ${red}Remove the SET folder,${nc}Install fresh"
+        read -p "Please Choose between [1,2] : " user_option
+        echo ""
+        if (($user_option == 1 ));then
+            echo -e "${green}Moving on...${nc}"
+        else
+            echo -e "Removing ${red}OLD SET${nc}"
+            rm -rf /opt/set/
+            # install set
+            cd /opt/ && git clone http://github.com/trustedsec/social-engineer-toolkit/ set/
+            cd /opt/set/ && chmod a+x setup.py
+            cd /opt/set/ && python setup.py install
+            echo -e "${green}SET installation is complete${nc}"
+        fi
+    fi
+    bypassUAC
+}
+
+
+#----------------------------------------
+#Installing PowerSploit
+#----------------------------------------
+function responder() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing Responder
+    ${nc}Responder will be used to gain NTLM challenge/response hashes
+    "
+    responderDir=/opt/Responder
+    if [ ! -d ${responderDir} ];then
+        # install Responder
+        cd /opt/ && git clone http://github.com/SpiderLabs/Responder.git
+        echo -e "${green}Responder installation is complete${nc}"
+    else
+        # directory exists.
+        echo -e "A folder named ${red}Responder already exist!${nc} Choose your options:
+        1) Responder is already installed. ${green}Move on!${nc}
+        2) ${red}Remove the Responder folder,${nc}Install fresh"
+        read -p "Please Choose between [1,2] : " user_option
+        echo ""
+        if (($user_option == 1 ));then
+            echo -e "${green}Moving on...${nc}"
+        else
+            echo -e "Removing ${red}OLD Responder${nc}"
+            rm -rf /opt/Responder/
+            # install Responder
+            cd /opt/ && git clone http://github.com/SpiderLabs/Responder.git
+            echo -e "${green}Responder installation is complete${nc}"
+        fi
+    fi
+    social_engineering_toolkit
+}
+
+
+
+#----------------------------------------
+#Installing PowerSploit
+#----------------------------------------
+function powersploit() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing PowerSploit
+    ${nc}PowerSploit are PowerShell scripts for post exploitation
+    "
+    PowerSploitDir=/opt/PowerSploit
+    if [ ! -d ${PowerSploitDir} ];then
+        # install PowerSploit
+        cd /opt/ && git clone http://github.com/mattifestation/PowerSploit.git
+        cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py
+        cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py
+        echo -e "${green}PowerSploit installation is complete${nc}"
+    else
+        # directory exists.
+        echo -e "A folder named ${red}PowerSploit already exist!${nc} Choose your options:
+        1) PowerSploit is already installed. ${green}Move on!${nc}
+        2) ${red}Remove the PowerSploit folder,${nc}Install fresh"
+        read -p "Please Choose between [1,2] : " user_option
+        echo ""
+        if (($user_option == 1 ));then
+            echo -e "${green}Moving on...${nc}"
+        else
+            echo -e "Removing ${red}OLD PowerSploit${nc}"
+            rm -rf /opt/PowerSploit/
+            # install PowerSploit
+            cd /opt/ && git clone http://github.com/mattifestation/PowerSploit.git
+            cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py
+            cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py
+            echo -e "${green}PowerSploit installation is complete${nc}"
+        fi
+    fi
+    responder
+}
+
+#----------------------------------------
+#Installing NMap Script
+#----------------------------------------
+function nmap_script() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Downloading Banner Plus Script
+    ${nc}Banner Plus Script will be used for quicker scanning and smarter identification.
+    "
+    cd /usr/share/nmap/scripts/ && wget http://raw.github.com/hdm/scan-tools/master/nse/banner-plus.nse
+    return
+}
+
+
 #----------------------------------------
 #Peeping Tom
 #----------------------------------------
@@ -22,7 +206,7 @@ function install_peeping_tom() {
     echo -e "
     ${yellow}#####################################
     ${blue}Installing Peeping Tom
-    ${nc}SMBExec will be used to take snapshots of Webpages
+    ${nc}PeepingTom will be used to take snapshots of Webpages
     "
     PeepingTomDir=/opt/peepingtom
     if [ ! -d ${PeepingTomDir} ];then
@@ -42,7 +226,7 @@ function install_peeping_tom() {
             python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
         fi
 
-        echo -e "${green}Peeping Tom installation is complete"
+        echo -e "${green}Peeping Tom installation is complete${nc}"
     else
         # directory exists.
         echo -e "A folder named ${red}PeepingTom already exist!${nc} Choose your options:
@@ -74,14 +258,44 @@ function install_peeping_tom() {
             echo -e "${green}Peeping Tom installation is complete"
         fi
     fi
-    return
 }
 
 #----------------------------------------
 #Eye Witness
 #----------------------------------------
 function install_eye_witness() {
-    echo "Eye Witness"
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing Eye Witness
+    ${nc}Eye Witness will be used to take snapshots of Webpages
+    "
+    EyeWitnessDir=/opt/EyeWitness
+    if [ ! -d ${EyeWitnessDir} ];then
+        # install EyeWitness
+        cd /opt/ && git clone https://github.com/ChrisTruncer/EyeWitness.git
+        chmod a+x /opt/EyeWitness/setup/setup.sh
+        cd /opt/EyeWitness/setup && ./setup.sh
+        echo -e "${green}Peeping Tom installation is complete${nc}"
+    else
+        # directory exists.
+        echo -e "A folder named ${red}EyeWitness already exist!${nc} Choose your options:
+        1) EyeWitness is already installed. ${green}Move on!${nc}
+        2) ${red}Remove the EyeWitness folder,${nc}Install fresh"
+        read -p "Please Choose between [1,2] : " user_option
+        echo ""
+        if (($user_option == 1 ));then
+            echo -e "${green}Moving on...${nc}"
+            return #return to the calling function
+        else
+            echo -e "Removing ${red}OLD EyeWitness${nc}"
+            rm -rf /opt/EyeWitness/
+            # install EyeWitness
+            cd /opt/ && git clone https://github.com/ChrisTruncer/EyeWitness.git
+            chmod a+x /opt/EyeWitness/setup/setup.sh
+            cd /opt/EyeWitness/setup && ./setup.sh
+            echo -e "${green}Eye Witness installation is complete${nc}"
+        fi
+    fi
 }
 
 #----------------------------------------
@@ -106,6 +320,7 @@ function peeping_tom_issue() {
         install_peeping_tom
         install_eye_witness
     fi
+    nmap_script
 }
 
 
