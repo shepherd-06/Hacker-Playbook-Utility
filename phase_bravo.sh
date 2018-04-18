@@ -79,7 +79,13 @@ function clone_script() {
 
     if [ ! -d ${directory} ];then
         # install the script
-        cd /opt/ && git clone ${3}
+        if (( ${2} == 8 )); then
+            # Special Case
+            # Social Engineering ToolKit (SET)
+            cd /opt/ && git clone ${3} set/
+        else
+            cd /opt/ && git clone ${3}
+        fi
         echo -e "${green}${5} installation is complete${nc}"
     else
         # directory exists.
@@ -101,316 +107,17 @@ function clone_script() {
 }
 
 
-
-
-
-
-#exit 255
-#----------------------------------------
-#Installing Beef and Fuzzing List--------
-#----------------------------------------
-function beef_fuzzing() {
-    echo -e "
-    ${yellow}#####################################
-    ${blue}Installing BeEF
-    ${nc}BeFF will be used as an cross-site scripting attack framework
-    "
-    #TODO: will install beef later
-    #TODO: beef requires Ruby2.3 to run.
-    #TODO: clone and install beef cloning their github page
-
-
-    echo -e "
-    ${yellow}#####################################
-    ${blue}Installing Fuzzling Lists (SecLists)
-    ${nc}These are scripts to use with Burp to Fuzz Parameters
-    "
-    fuzzDir=/opt/SecLists
-    if [ ! -d ${fuzzDir} ];then
-        # install Fuzzing Lists
-        cd /opt/ && git clone http://github.com/danielmiessler/SecLists.git
-        echo -e "${green}Fuzzing Lists installation is complete${nc}"
-    else
-        # directory exists.
-        echo -e "A folder named ${red}SecLists already exist!${nc} Choose your options:
-        1) Fuzzing Lists (SecLists) is already installed. ${green}Move on!${nc}
-        2) ${red}Remove the SecLists folder,${nc}Install fresh"
-        read -p "Please Choose between [1,2] : " user_option
-        echo ""
-        if (($user_option == 1 ));then
-            echo -e "${green}Moving on...${nc}"
-        else
-            echo -e "Removing ${red}OLD SecLists${nc}"
-            rm -rf /opt/SecLists/
-            # install fuzzing lists
-            cd /opt/ && git clone http://github.com/danielmiessler/SecLists.git
-            echo -e "${green}Fuzzing Lists installation is complete${nc}"
-        fi
-    fi
-}
-
-#----------------------------------------
-#Installing bypassUAC--------------------
-#TODO: Need Metepreter. Test and write in KALI
-#----------------------------------------
-function bypassUAC() {
-    echo -e "
-    ${yellow}#####################################
-    ${blue}Installing bypassuac
-    ${nc}will be used to bypass UAC in post exploitation.
-    "
-    beef_fuzzing
-}
-
-#----------------------------------------
-#Installing Social Engineering Toolkit---
-#----------------------------------------
-function social_engineering_toolkit() {
-    echo -e "
-    ${yellow}#####################################
-    ${blue}Installing Social Engineering Toolkit [SET]
-    ${nc}SET will be used for Social Engineering Campagin
-    "
-    setDir=/opt/set
-    if [ ! -d ${setDir} ];then
-        # install set
-        cd /opt/ && git clone http://github.com/trustedsec/social-engineer-toolkit/ set/
-        cd /opt/set/ && chmod a+x setup.py
-        cd /opt/set/ && python setup.py install
-        echo -e "${green}SET installation is complete${nc}"
-    else
-        # directory exists.
-        echo -e "A folder named ${red}SET already exist!${nc} Choose your options:
-        1) SET is already installed. ${green}Move on!${nc}
-        2) ${red}Remove the SET folder,${nc}Install fresh"
-        read -p "Please Choose between [1,2] : " user_option
-        echo ""
-        if (($user_option == 1 ));then
-            echo -e "${green}Moving on...${nc}"
-        else
-            echo -e "Removing ${red}OLD SET${nc}"
-            rm -rf /opt/set/
-            # install set
-            cd /opt/ && git clone http://github.com/trustedsec/social-engineer-toolkit/ set/
-            cd /opt/set/ && chmod a+x setup.py
-            cd /opt/set/ && python setup.py install
-            echo -e "${green}SET installation is complete${nc}"
-        fi
-    fi
-    bypassUAC
-}
-
-
-#----------------------------------------
-#Installing PowerSploit
-#----------------------------------------
-function responder() {
-    echo -e "
-    ${yellow}#####################################
-    ${blue}Installing Responder
-    ${nc}Responder will be used to gain NTLM challenge/response hashes
-    "
-    responderDir=/opt/Responder
-    if [ ! -d ${responderDir} ];then
-        # install Responder
-        cd /opt/ && git clone http://github.com/SpiderLabs/Responder.git
-        echo -e "${green}Responder installation is complete${nc}"
-    else
-        # directory exists.
-        echo -e "A folder named ${red}Responder already exist!${nc} Choose your options:
-        1) Responder is already installed. ${green}Move on!${nc}
-        2) ${red}Remove the Responder folder,${nc}Install fresh"
-        read -p "Please Choose between [1,2] : " user_option
-        echo ""
-        if (($user_option == 1 ));then
-            echo -e "${green}Moving on...${nc}"
-        else
-            echo -e "Removing ${red}OLD Responder${nc}"
-            rm -rf /opt/Responder/
-            # install Responder
-            cd /opt/ && git clone http://github.com/SpiderLabs/Responder.git
-            echo -e "${green}Responder installation is complete${nc}"
-        fi
-    fi
-    social_engineering_toolkit
-}
-
-
-
-#----------------------------------------
-#Installing PowerSploit
-#----------------------------------------
-function powersploit() {
-    echo -e "
-    ${yellow}#####################################
-    ${blue}Installing PowerSploit
-    ${nc}PowerSploit are PowerShell scripts for post exploitation
-    "
-    PowerSploitDir=/opt/PowerSploit
-    if [ ! -d ${PowerSploitDir} ];then
-        # install PowerSploit
-        cd /opt/ && git clone http://github.com/mattifestation/PowerSploit.git
-        cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py
-        cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py
-        echo -e "${green}PowerSploit installation is complete${nc}"
-    else
-        # directory exists.
-        echo -e "A folder named ${red}PowerSploit already exist!${nc} Choose your options:
-        1) PowerSploit is already installed. ${green}Move on!${nc}
-        2) ${red}Remove the PowerSploit folder,${nc}Install fresh"
-        read -p "Please Choose between [1,2] : " user_option
-        echo ""
-        if (($user_option == 1 ));then
-            echo -e "${green}Moving on...${nc}"
-        else
-            echo -e "Removing ${red}OLD PowerSploit${nc}"
-            rm -rf /opt/PowerSploit/
-            # install PowerSploit
-            cd /opt/ && git clone http://github.com/mattifestation/PowerSploit.git
-            cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py
-            cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py
-            echo -e "${green}PowerSploit installation is complete${nc}"
-        fi
-    fi
-    responder
-}
-
-#----------------------------------------
-#Installing NMap Script
-#----------------------------------------
-function nmap_script() {
-    echo -e "
-    ${yellow}#####################################
-    ${blue}Downloading Banner Plus Script
-    ${nc}Banner Plus Script will be used for quicker scanning and smarter identification.
-    "
-    cd /usr/share/nmap/scripts/ && wget http://raw.github.com/hdm/scan-tools/master/nse/banner-plus.nse
-    return
-}
-
-
-#----------------------------------------
-#Peeping Tom
-#----------------------------------------
-function install_peeping_tom() {
-    echo -e "
-    ${yellow}#####################################
-    ${blue}Installing Peeping Tom
-    ${nc}PeepingTom will be used to take snapshots of Webpages
-    "
-    PeepingTomDir=/opt/peepingtom
-    if [ ! -d ${PeepingTomDir} ];then
-        # install PeepingTom
-        cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
-        cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
-
-        if (($(getconf LONG_BIT) == 64));then
-            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
-            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-        else
-            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
-            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
-            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-        fi
-
-        echo -e "${green}Peeping Tom installation is complete${nc}"
-    else
-        # directory exists.
-        echo -e "A folder named ${red}PeepingTom already exist!${nc} Choose your options:
-        1) PeepingTom is already installed. ${green}Move on!${nc}
-        2) ${red}Remove the PeepingTom folder,${nc}Install fresh"
-        read -p "Please Choose between [1,2] : " user_option
-        echo ""
-        if (($user_option == 1 ));then
-            echo -e "${green}Moving on...${nc}"
-            return #return to the calling function
-        else
-            echo -e "Removing ${red}OLD PeepingTom${nc}"
-            rm -rf /opt/peepingtom/
-            # install PeepingTom
-            cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
-            cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
-
-            if (($(getconf LONG_BIT) == 64));then
-                cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-                tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
-                chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-                python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-            else
-                cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
-                tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
-                chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-                python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-            fi
-            echo -e "${green}Peeping Tom installation is complete"
-        fi
-    fi
-}
-
-#----------------------------------------
-#Eye Witness
-#----------------------------------------
-function install_eye_witness() {
-    echo -e "
-    ${yellow}#####################################
-    ${blue}Installing Eye Witness
-    ${nc}Eye Witness will be used to take snapshots of Webpages
-    "
-    EyeWitnessDir=/opt/EyeWitness
-    if [ ! -d ${EyeWitnessDir} ];then
-        # install EyeWitness
-        cd /opt/ && git clone https://github.com/ChrisTruncer/EyeWitness.git
-        chmod a+x /opt/EyeWitness/setup/setup.sh
-        cd /opt/EyeWitness/setup && ./setup.sh
-        echo -e "${green}Peeping Tom installation is complete${nc}"
-    else
-        # directory exists.
-        echo -e "A folder named ${red}EyeWitness already exist!${nc} Choose your options:
-        1) EyeWitness is already installed. ${green}Move on!${nc}
-        2) ${red}Remove the EyeWitness folder,${nc}Install fresh"
-        read -p "Please Choose between [1,2] : " user_option
-        echo ""
-        if (($user_option == 1 ));then
-            echo -e "${green}Moving on...${nc}"
-            return #return to the calling function
-        else
-            echo -e "Removing ${red}OLD EyeWitness${nc}"
-            rm -rf /opt/EyeWitness/
-            # install EyeWitness
-            cd /opt/ && git clone https://github.com/ChrisTruncer/EyeWitness.git
-            chmod a+x /opt/EyeWitness/setup/setup.sh
-            cd /opt/EyeWitness/setup && ./setup.sh
-            echo -e "${green}Eye Witness installation is complete${nc}"
-        fi
-    fi
-}
-
-#----------------------------------------
-#Peeping Tom or Eye Witness
-#----------------------------------------
-function peeping_tom_issue() {
-    echo -e "${red}########### CAUTION ########### Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${yellow}Eye Witness${nc}
-    ${blue}1) Would you like to continue installing Peeping Tom?${nc}
-    ${blue}2) Would you like to install Eye Witness instead?${nc}
-    ${blue}3) Would you like to install both?${nc}
-    ${green}Both Peeping Tom and Eye Witness does the same job, Eye Witness just does it better. ${yellow} According to Tim Tomes (Creator of Peeping Tom)${nc}"
-    read -n1 -p "Please Choose between [1,2,3] : " user_choice
-
-    if (($user_choice == 1));then
-        echo -e "${red}CAUTION ${nc} You are installing PeepingTom which is out of support for a long time."
-        peeping_tom_issue
-    elif (($user_choice == 2));then
-        echo -e "Installing ${cyan}Eye Witness${nc}"
-        install_eye_witness
-    else
-        echo -e "Installing BOTH ${cyan}Eye Witness${nc} and ${cyan}Peeping Tom.${red}You really should not play around with OLD tools${nc}"
-        install_peeping_tom
-        install_eye_witness
-    fi
-    nmap_script
+function end_message() {
+    #################################
+    #### END MESSAGE ################
+    #################################
+    echo -e "${lightPurple}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~That's It!! Happy coding :)~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ${nc}"
 }
 
 
@@ -442,8 +149,11 @@ function little_wget_magic() {
     # ---------------------------------------------------------
     #Mimikatz
     # ---------------------------------------------------------
-    echo -e "${blue} Download Mimikatz ${nc}.
-    Mimikatz will be used to pull password from memory."
+    echo -e "
+    ${yellow}-------------------------------${nc}
+    ${blue} Download Mimikatz ${nc}.
+    Mimikatz will be used to pull password from memory.
+    ${yellow}-------------------------------${nc}"
     cd ~/Desktop/ && wget http://blog.gentilkiwi.com/downloads/mimikatz_trunk.zip
     unzip -d ~/Desktop/mimikatz mimikatz_trunk.zip
     if [ ! -d ${backup_directory} ];then
@@ -460,8 +170,10 @@ function little_wget_magic() {
 
     custom_password_directory=~/Desktop/password_list/
     custom_password_bk=~/backup_wget/password_list/
-    echo -e "${blue}Download Custom Password list.${nc}
-    First. Rock you of Skull Security"
+    echo -e "${yellow}-------------------------------${nc}
+    ${blue}Download Custom Password list.${nc}
+    First. Rock you of Skull Security
+    {yellow}-------------------------------${nc}"
     if [ ! -d ${custom_password_directory} ];then
         mkdir ~/Desktop/password_list/
     fi
@@ -478,8 +190,10 @@ function little_wget_magic() {
     # CrackStation Portion.
     # ---------------------------------------------------------
     echo -e "${green}Downloaded Rock you file of Skull Security${nc}
+    ${yellow}-------------------------------${nc}
     ${blue}Downloading Human password list of CrackStation${nc}
     ${cyan}The list is free however, CrackStation has a donation page running for whatever amount you wish. If you feel, follow this url: ${yellow} https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm${nc}
+    ${yellow}-------------------------------${nc}
 
     Do you want to Download ${blue}CrackStation password list ${nc} using Torrent or HTTP Mirror? It's a ${blue}247 MB${nc} of GZIP compressed file.
     ${blue}Choose 1, if you want Torrent (Fast).
@@ -521,10 +235,196 @@ function little_wget_magic() {
     echo -e "${blue} CrackStation has a rather long (15 gigs uncompressed) password. Check them out on their website{$nc}"
     # ---------------------------------------------------------
     # ---------------------------------------------------------
+    # NMAP Scripts
     # ---------------------------------------------------------
-    peeping_tom_issue # moving to peeping tom because it's going to take a while there.
-    # peeping tom stop upgrading their repo because of Eye Witness.
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Downloading Banner Plus Script
+    ${nc}Banner Plus Script will be used for quicker scanning and smarter identification.
+    ${yellow}###################################### ${nc}
+    "
+    cd /usr/share/nmap/scripts/ && wget http://raw.github.com/hdm/scan-tools/master/nse/banner-plus.nse
+    sleep 2s # wait b4 next shot.
+
+    end_message # last function call
 }
+
+
+
+#----------------------------------------
+#Fuzzing List----------------------------
+#----------------------------------------
+function fuzzing() {
+    script_name="Fuzzing Lists (SecLists)"
+    extra_message="SET will be used for Social Engineering Campagin"
+    short_name="Fuzzing Lists"
+
+    #calling clone script with addition parameters
+    clone_script "${script_name}" 9 http://github.com/danielmiessler/SecLists.git "${extra_message} ${short_name}"
+
+    sleep 2s #almost there
+    little_wget_magic # its a long wget call.
+}
+
+#exit 255
+#----------------------------------------
+#Installing Beef and Fuzzing List--------
+#----------------------------------------
+function beEF() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing BeEF
+    ${nc}BeFF will be used as an cross-site scripting attack framework
+    "
+    #TODO: will install beef later
+    #TODO: beef requires Ruby2.3 to run.
+    #TODO: clone and install beef cloning their github page
+    fuzzing
+}
+#----------------------------------------
+#Installing bypassUAC--------------------
+#TODO: Need Metepreter. Test and write in KALI
+#----------------------------------------
+function bypassUAC() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing bypassuac {Need MeteSploit framework}
+    ${nc}will be used to bypass UAC in post exploitation.
+    ${yellow}#####################################${nc}
+    "
+    beEF
+}
+
+#----------------------------------------
+#Installing Social Engineering Toolkit---
+#----------------------------------------
+function social_engineering_toolkit() {
+    script_name="Social Engineering Toolkit [SET]"
+    extra_message="SET will be used for Social Engineering Campagin"
+    short_name="SET"
+
+    #calling clone script with addition parameters
+    clone_script "${script_name}" 8 http://github.com/trustedsec/social-engineer-toolkit/ "${extra_message} ${short_name}"
+
+    cd /opt/set/ && chmod a+x setup.py
+    cd /opt/set/ && python setup.py install
+
+    sleep 2s # sleeping 2s b4 doing anything else.
+    bypassUAC
+}
+
+
+#----------------------------------------
+#Installing PowerSploit
+#----------------------------------------
+function responder() {
+    script_name="Responder"
+    extra_message="Responder will be used to gain NTLM challenge/response hashes"
+    short_name="Responder"
+
+    #calling clone script with addition parameters
+    clone_script "${script_name}" 7 http://github.com/SpiderLabs/Responder.git "${extra_message} ${short_name}"
+
+    sleep 2s #sleeping....
+    social_engineering_toolkit
+}
+
+
+
+#----------------------------------------
+#Installing PowerSploit
+#----------------------------------------
+function powersploit() {
+    script_name="PowerSploit"
+    extra_message="PowerSploit are PowerShell scripts for post exploitation"
+    short_name="PowerSploit"
+
+    #calling clone script with addition parameters
+    clone_script "${script_name}" 6 http://github.com/mattifestation/PowerSploit.git "${extra_message} ${short_name}"
+
+    cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py
+    cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py
+    echo -e "${green}${script_name} installation is complete${nc}"
+
+    sleep 2s #wait 2seconds b4 doing anything stupid! :p
+    responder
+}
+
+#----------------------------------------
+#Peeping Tom
+#----------------------------------------
+function install_peeping_tom() {
+    script_name="Peeping Tom"
+    extra_message="PeepingTom will be used to take snapshots of Webpages"
+    short_name="Peeping Tom"
+
+    #calling clone script with addition parameters
+    clone_script "${script_name}" 4 http://bitbucket.org/LaNMaSteR53/peepingtom.git "${extra_message} ${short_name}"
+    # install PeepingTom
+    cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
+    cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
+    if (($(getconf LONG_BIT) == 64));then
+        cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+        tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
+        chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+        python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+    else
+        cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
+        tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
+        chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+        python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+    fi
+
+    echo -e "${green}Peeping Tom installation is complete${nc}"
+    sleep 2s # sleep 2s before doing anything else
+    return 0
+}
+
+#----------------------------------------
+#Eye Witness
+#----------------------------------------
+function install_eye_witness() {
+    script_name="Eye Witness"
+    extra_message="PeepingTom will be used to take snapshots of Webpages"
+    short_name="Eye Witness"
+
+    #calling clone script with addition parameters
+    clone_script "${script_name}" 5 https://github.com/ChrisTruncer/EyeWitness.git "${extra_message} ${short_name}"
+
+    chmod a+x /opt/EyeWitness/setup/setup.sh
+    cd /opt/EyeWitness/setup && ./setup.sh
+    echo -e "${green}${script_name} installation is complete${nc}"
+    sleep 2s # sleep 2s before doing anything else
+    return 0
+}
+
+#----------------------------------------
+#Peeping Tom or Eye Witness
+#@caution: Peeping Tom is unsupported for over a year!
+#----------------------------------------
+function peeping_tom_issue() {
+    echo -e "${red}########### CAUTION ########### Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${yellow}Eye Witness${nc}
+    ${blue}1) Would you like to continue installing Peeping Tom?${nc}
+    ${blue}2) Would you like to install Eye Witness instead?${nc}
+    ${blue}3) Would you like to install both?${nc}
+    ${green}Both Peeping Tom and Eye Witness does the same job, Eye Witness just does it better. ${yellow} According to Tim Tomes (Creator of Peeping Tom)${nc}"
+    read -n1 -p "Please Choose between [1,2,3] : " user_choice
+
+    if (($user_choice == 1));then
+        echo -e "${red}CAUTION ${nc} You are installing PeepingTom which is out of support for a long time."
+        peeping_tom_issue
+    elif (($user_choice == 2));then
+        echo -e "Installing ${cyan}Eye Witness${nc}"
+        install_eye_witness
+    else
+        echo -e "Installing BOTH ${cyan}Eye Witness${nc} and ${cyan}Peeping Tom.${red}You really should not play around with OLD tools${nc}"
+        install_peeping_tom
+        install_eye_witness
+    fi
+    sleep 2s # sleep 2s before doing anything else
+    powersploit
+}
+
 
 #----------------------------------------
 #Veil version 3.0 Installation!
@@ -559,7 +459,7 @@ function Veil() {
     prinf " -- ${green}Complete\n${nc}"
 
     sleep 2s
-    little_wget_magic
+    peeping_tom_issue
 }
 
 
@@ -601,5 +501,9 @@ function discover() {
 }
 
 
-discover #discover will be called first.
+#---------------------------------------------------------------
+#---------------------------------------------------------------
+#---------------------------------------------------------------
+#---------------------------------------------------------------
+discover #Beginning of everything.
 #In order to keep the flow intact discover will call the later functions accordingly
