@@ -13,7 +13,101 @@ echo -e "${lightPurple}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !Running Phase BRAVO Installation!
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{nc}"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${nc}"
+
+#----------------------------------------
+#Peeping Tom
+#----------------------------------------
+function install_peeping_tom() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing Peeping Tom
+    ${nc}SMBExec will be used to take snapshots of Webpages
+    "
+    PeepingTomDir=/opt/peepingtom
+    if [ ! -d ${PeepingTomDir} ];then
+        # install PeepingTom
+        cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
+        cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
+
+        if (($(getconf LONG_BIT) == 64));then
+            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
+            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+        else
+            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
+            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
+            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+        fi
+
+        echo -e "${green}Peeping Tom installation is complete"
+    else
+        # directory exists.
+        echo -e "A folder named ${red}PeepingTom already exist!${nc} Choose your options:
+        1) PeepingTom is already installed. ${green}Move on!${nc}
+        2) ${red}Remove the PeepingTom folder,${nc}Install fresh"
+        read -p "Please Choose between [1,2] : " user_option
+        echo ""
+        if (($user_option == 1 ));then
+            echo -e "${green}Moving on...${nc}"
+            return #return to the calling function
+        else
+            echo -e "Removing ${red}OLD PeepingTom${nc}"
+            rm -rf /opt/peepingtom/
+            # install PeepingTom
+            cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
+            cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
+
+            if (($(getconf LONG_BIT) == 64));then
+                cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+                tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
+                chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+                python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+            else
+                cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
+                tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
+                chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+                python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+            fi
+            echo -e "${green}Peeping Tom installation is complete"
+        fi
+    fi
+    return
+}
+
+#----------------------------------------
+#Eye Witness
+#----------------------------------------
+function install_eye_witness() {
+    echo "Eye Witness"
+}
+
+#----------------------------------------
+#Peeping Tom or Eye Witness
+#----------------------------------------
+function peeping_tom_issue() {
+    echo -e "${red}########### CAUTION ########### Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${yellow}Eye Witness${nc}
+    ${blue}1) Would you like to continue installing Peeping Tom?${nc}
+    ${blue}2) Would you like to install Eye Witness instead?${nc}
+    ${blue}3) Would you like to install both?${nc}
+    ${green}Both Peeping Tom and Eye Witness does the same job, Eye Witness just does it better. ${yellow} According to Tim Tomes (Creator of Peeping Tom)${nc}"
+    read -n1 -p "Please Choose between [1,2,3] : " user_choice
+
+    if (($user_choice == 1));then
+        echo -e "${red}CAUTION ${nc} You are installing PeepingTom which is out of support for a long time."
+        peeping_tom_issue
+    elif (($user_choice == 2));then
+        echo -e "Installing ${cyan}Eye Witness${nc}"
+        install_eye_witness
+    else
+        echo -e "Installing BOTH ${cyan}Eye Witness${nc} and ${cyan}Peeping Tom.${red}You really should not play around with OLD tools${nc}"
+        install_peeping_tom
+        install_eye_witness
+    fi
+}
+
 
 #----------------------------------------
 #Downloading Different files using WGET
@@ -26,7 +120,9 @@ function little_wget_magic() {
 
     backup_directory=~/backup_wget
 
+    # ---------------------------------------------------------
     # WCE
+    # ---------------------------------------------------------
     echo -e "${blue} Download WCE (Windows Credential Editor) ${nc}.
     Windows Credential Editor will be used to pull password from memory."
     cd ~/Desktop/ && wget http://www.ampliasecurity.com/research/wce_v1_41beta_universal.zip
@@ -38,7 +134,9 @@ function little_wget_magic() {
     echo -e "${green}WCE is downloaded and unzipped in ~/Desktop/wce. zipped backup is kept in ~/backup_wget/ directory${nc}"
 
 
+    # ---------------------------------------------------------
     #Mimikatz
+    # ---------------------------------------------------------
     echo -e "${blue} Download Mimikatz ${nc}.
     Mimikatz will be used to pull password from memory."
     cd ~/Desktop/ && wget http://blog.gentilkiwi.com/downloads/mimikatz_trunk.zip
@@ -50,22 +148,30 @@ function little_wget_magic() {
     echo -e "${green}Mimikatz is downloaded and unzipped. A backup is kept as well.${nc}"
 
 
+    # ---------------------------------------------------------
     # --------- Custom Password list ---------
     # Skill Security
+    # ---------------------------------------------------------
 
     custom_password_directory=~/Desktop/password_list/
     custom_password_bk=~/backup_wget/password_list/
     echo -e "${blue}Download Custom Password list.${nc}
     First. Rock you of Skull Security"
-    cd ~/Desktop/ && wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
     if [ ! -d ${custom_password_directory} ];then
         mkdir ~/Desktop/password_list/
     fi
-    bzip2 rockyou.txt.bz2
+    cd ~/Desktop/password_list && wget http://downloads.skullsecurity.org/passwords/rockyou.txt.bz2
+    bzip2 ~/Desktop/password_list/rockyou.txt.bz2
     if [ ! -d ${custom_password_bk} ];then
         mkdir ~/backup_wget/password_list/
     fi
-    mv ~/Desktop/password_list/ ~/backup_wget/password_list/
+    mv ~/Desktop/password_list/rockyou.txt.bz2 ~/backup_wget/password_list/
+
+
+    # ---------------------------------------------------------
+    # ---------------------------------------------------------
+    # CrackStation Portion.
+    # ---------------------------------------------------------
     echo -e "${green}Downloaded Rock you file of Skull Security${nc}
     ${blue}Downloading Human password list of CrackStation${nc}
     ${cyan}The list is free however, CrackStation has a donation page running for whatever amount you wish. If you feel, follow this url: ${yellow} https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm${nc}
@@ -81,19 +187,38 @@ function little_wget_magic() {
         if [ $? -eq 0 ];then
             transmission-gtk ~/Desktop/crackstation-human-only.txt.gz.torrent
             sleep 5s # sleep 5 seconds for this command to finish
-            echo "${green}I am guessing Transmission is downloading the crackstation's file. Moving on... ${nc}"
+            echo -e "${green}I am guessing Transmission is downloading the crackstation's file. Moving on... ${nc}"
         else
-            #TODO  --------- --------- --------- --------- --------- ---------
-            echo "TODO: Transmission is not installed. Tell the user to Download via HTTP mirror or Use any other torrent manager."
+            echo -e "${red}Transmission is not installed or not found.${nc} Do you want to download it via ${green}1) HTTP Mirror ${nc} or 2) you will do it by yourself?"
+            read -n1 -p "Please Choose between [1,2] : " user_option
+            if (( $user_option == 1));then
+                echo -e  "${green} Downloading Crackstation password list via HTTP Mirror. ${nc}"
+                if [ ! -d ${custom_password_directory} ];then
+                    mkdir ~/Desktop/password_list/
+                fi
+                cd ~/Desktop/password_list/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
+                gzip ~/Desktop/password_list/crackstation-human-only.txt.gz
+                mv ~/Desktop/password_list/crackstation-human-only.txt.gz ~/backup_wget/password_list/
+            else
+                echo -e "${green}Moving on...... ${nc}"
+            fi
         fi
     else
-        #TODO  --------- --------- --------- --------- --------- ---------
-        echo "HTTP Mirror | wget magic"
-        cd ~/Desktop/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
+        echo -e "${green} Downloading Crackstation password list via HTTP Mirror. ${nc}"
         if [ ! -d ${custom_password_directory} ];then
             mkdir ~/Desktop/password_list/
         fi
+        cd ~/Desktop/password_list/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
+        gzip ~/Desktop/password_list/crackstation-human-only.txt.gz
+        mv ~/Desktop/password_list/crackstation-human-only.txt.gz ~/backup_wget/password_list/
     fi
+
+    echo -e "${blue} CrackStation has a rather long (15 gigs uncompressed) password. Check them out on their website{$nc}"
+    # ---------------------------------------------------------
+    # ---------------------------------------------------------
+    # ---------------------------------------------------------
+    peeping_tom_issue # moving to peeping tom because it's going to take a while there.
+    # peeping tom stop upgrading their repo because of Eye Witness.
 }
 
 #----------------------------------------
@@ -102,7 +227,7 @@ function little_wget_magic() {
 #----------------------------------------
 function Veil() {
     echo -e "${yellow}-------------------------------
-    ${blue} Veil Evasion is not Longer supported. ${cyan}Currently running Veil 3.0.0
+    ${blue} Veil Evasion is no Longer supported. ${cyan}Currently running Veil 3.0.0
     ${blue} I am going to clone from ${yellow} https://github.com/Veil-Framework/Veil
     ${blue} Would you like to continue?${nc}"
 
