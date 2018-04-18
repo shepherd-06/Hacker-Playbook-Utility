@@ -15,7 +15,97 @@ echo -e "${lightPurple}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${nc}"
 
+#--------------------------------------------------------------------
+#Discover -> parameter val 1
+#SMBExec -> param val 2
+#Veil -> Param 3
+#PeepingTom -> param 4
+#EyeWitness -> param 5
+#PowerSploit -> param 6
+#Responder -> param 7
+#Social Engineering Toolkit (SET) -> param 8
+#Fuzzling Lists (SecLists) -> param 9
+#--------------------------------------------------------------------
+function filePath() {
+    if (( ${1} == 1 ));then
+        #discover
+        echo /opt/discover
+    elif (( ${1} == 2 )); then
+        #SMBExec
+        echo /opt/smbexec
+    elif (( ${1} == 3 )); then
+        #Veil
+        echo /opt/Veil
+    elif (( ${1} == 4 )); then
+        # Peeping Tom
+        echo /opt/peepingtom
+    elif (( ${1} == 5 )); then
+        # Eye Witness
+        echo /opt/EyeWitness
+    elif (( ${1} == 6 )); then
+        # PowerSploit
+        echo /opt/PowerSploit
+    elif (( ${1} == 7 )); then
+        #Responder
+        echo /opt/Responder
+    elif (( ${1} == 8 )); then
+        # Social Engineering ToolKit (SET)
+        echo /opt/set
+    elif (( ${1} == 9 )); then
+        # Fuzzing Lists (SecLists)
+        echo /opt/SecLists
+    else
+        # Invalid Parameter
+        exit
+    fi
+}
 
+#--------------------------------------------------------------------
+# Parameter 1) script/filename. ${1}
+# Parameter 2) filePath ${2}
+# Parameter 3) url ${3}
+# Parameter 4) extra message {during installation period}
+# Parameter 5) Short name (For mentioning phases)
+# Other files and installation will be done from the calling function.
+#--------------------------------------------------------------------
+function clone_script() {
+    echo -e "
+    ${yellow}#####################################
+    ${blue}Installing ${1}
+    ${cyan}${4}
+    ${yellow}#####################################${nc}
+    "
+    local directory=$(filePath ${2})
+
+    if [ ! -d ${directory} ];then
+        # install the script
+        cd /opt/ && git clone ${3}
+        echo -e "${green}${5} installation is complete${nc}"
+    else
+        # directory exists.
+        echo -e "A folder named ${red}${5} already exist!${nc} Choose your options:
+        1) ${5} is already installed. ${green}Move on!${nc}
+        2) ${red}Remove the ${5} ${nc}Install fresh"
+        read -p "Please Choose between [1,2] : " user_option
+        echo ""
+        if (($user_option == 1 ));then
+            echo -e "${green}Moving on...${nc}"
+        else
+            echo -e "Removing ${red}OLD ${5}${nc}"
+            rm -rf ${directory}
+            # installing fresh
+            cd /opt/ && git clone ${3}
+            echo -e "${green}${5} installation is complete${nc}"
+        fi
+    fi
+}
+
+
+
+
+
+
+#exit 255
 #----------------------------------------
 #Installing Beef and Fuzzing List--------
 #----------------------------------------
@@ -442,70 +532,34 @@ function little_wget_magic() {
 #----------------------------------------
 function Veil() {
     echo -e "${yellow}-------------------------------
-    ${blue} Veil Evasion is no Longer supported. ${cyan}Currently running Veil 3.0.0
-    ${blue} I am going to clone from ${yellow} https://github.com/Veil-Framework/Veil
-    ${blue} Would you like to continue?${nc}"
+    ${red} Veil Evasion is no Longer supported. ${cyan}Currently running Veil 3.0
+    ${blue} Cloning from ${yellow} https://github.com/Veil-Framework/Veil
+    ${blue} Would you like to continue?
+    ${yellow}-------------------------------${nc}"
 
     read -n1 -p "Choose y for yes, n for no : " user_option
     echo ""
     if [ "$user_option" = "n" ] || [ "$user_option" = "N" ];then
-        echo -e "${red}Terminating the script. ${green}Good luck! :)${nc}"
-        exit -1
+        echo -e "${blue}Proceeding Forward$ :)${nc}"
+        sleep 3s
+        little_wget_magic
     fi
 
-    Veil_Directory=/opt/Veil
-    if [ ! -d ${Veil_Directory} ];then
-        # install Veil
-        cd /opt/ && git clone https://github.com/Veil-Framework/Veil
-        chmod a+x /opt/Veil/Veil.py
-        chmod a+x /opt/Veil/config/update-config.py
-        printf "${green}Successfully cloned Veil.${nc} Updating Configuration now..."
-        cd /opt/Veil/config && ./update-config.py
-        printf "${green}Done.\n${nc}Running installation now."
-        cd /opt/Veil && ./Veil.py --setup
-        prinf " -- ${green}Complete\n${nc}"
-        little_wget_magic # go to Someplace else
-    else
-        # directory exists.
-        echo -e "${red}A folder named Veil already exist!${nc} Choose your options:
-        1) Veil is already installed. ${green}Move on!${nc}
-        2) ${red}Remove${nc} the Veil folder, Re-clone and Install fresh
-        3) Do not Remove Veil. ${green}Re-configure and Re-install${nc} again
-        4) I need to figure this out. ${red}Stop this script${nc}"
-        read -n1 -p "Please Choose between [1,2,3]" user_option
-        echo "
-        "
-        if (($user_option == 1 ));then
-            echo -e "${green}Moving on...${nc}"
-            little_wget_magic # go to Other places from here to execute from there.
-        elif (($user_option == 2));then
-            echo -e "Removing OLD Veil and cloning again from github"
-            rm -rf /opt/Veil/
-            cd /opt/ && git clone https://github.com/Veil-Framework/Veil
-            chmod a+x /opt/Veil/Veil.py
-            chmod a+x /opt/Veil/config/update-config.py
-            printf "${green}Successfully cloned Veil.${nc} Updating Configuration now... "
-            cd /opt/Veil/config && ./update-config.py
-            printf "${green}Done.${nc} \nRunning installation now."
-            cd /opt/Veil && ./Veil.py --setup
-            prinf " -- ${green}Complete${nc}\n"
-            little_wget_magic # go to Someplace else
-        elif (($user_option == 3));then
-            chmod a+x /opt/Veil/Veil.py
-            chmod a+x /opt/Veil/config/update-config.py
-            printf "${blue}Running Configuration again...${nc}"
-            cd /opt/Veil/config && ./update-config.py
-            printf "${green}Done.${nc} \nRunning installation again."
-            cd /opt/Veil && ./Veil.py --setup
-            prinf " -- ${green}Complete${nc}\nVeil has been successfully re-configured and re-installed!"
-            little_wget_magic # go to next phase
-        else
-            echo -e "${red} Terminating the script. ${blue} Superheroes need help too. :) ${nc}"
-            exit -1
-            # user choose to terminate the script.
-            # no new function will be called from here.
-        fi
-    fi
+    script_name="Veil"
+    extra_message="Veil will be used to create Python based Meterpreter executable"
+    short_name="Veil"
+
+    #calling clone script with addition parameters
+    clone_script "${script_name}" 3 https://github.com/Veil-Framework/Veil "${extra_message} ${short_name}"
+
+    printf "${green}Successfully cloned Veil.${nc} Updating Configuration now..."
+    cd /opt/Veil/config && ./update-config.py
+    printf "${green}Done.\n${nc}Running installation now."
+    cd /opt/Veil/ && ./Veil.py --setup
+    prinf " -- ${green}Complete\n${nc}"
+
+    sleep 2s
+    little_wget_magic
 }
 
 
@@ -513,57 +567,18 @@ function Veil() {
 #SMBExec Installation!
 #----------------------------------------
 function SMBExec() {
-    echo -e "
-    ${yellow}#####################################
-    ${blue}2) Installing SMBExec
-    ${nc}SMBExec will be used to grab hashes out of Domain Controller and reverse shells
-    "
-    SMBExec_directory=/opt/smbexec
-    if [ ! -d ${SMBExec_directory} ];then
-        # install SMBExec
-        cd /opt/ && git clone https://github.com/brav0hax/smbexec.git
-        chmod a+x /opt/smbexec/install.sh
-        echo -e "I am going to run the ${blue}install.sh script of SMBExec.${nc}
-        You will need to ${blue}choose Option 1 for step 1.${nc}
-        Then Choose your ${blue}current directory location (/opt/)${nc} by hitting ENTER key.
-        Finally Choose ${blue}number 4${nc}(for unknown/if needed request)"
-#        cd /opt/smbexec && ./install.sh
-        echo -e "${green}Hopefully you have successfully installed SMBExec. It's a bit tricky. Take help from the book, if needed. ${nc}"
-        Veil
-    else
-        # directory exists.
-        echo -e "A folder named ${red}SMBExec already exist!${nc} Choose your options:
-        1) SMBExec is already installed. ${green}Move on!${nc}
-        2) ${red}Remove the SMBExec folder,${nc} Re-clone and Install fresh
-        3) Do not Remove SMBExec. ${blue}Re-install again${nc}
-        4) I need to figure this out. ${red}Stop this script${nc}"
-        read -p "Please Choose between [1,2,3]" user_option
-        echo ""
-        if (($user_option == 1 ));then
-            echo -e "${green}Moving on...${nc}"
-            Veil # go to SMBExec to execute from there.
-        elif (($user_option == 2));then
-            echo -e "Removing ${red}OLD SMBExec${nc} and cloning again from github"
-            rm -rf /opt/smbexec/
-            cd /opt/ && git clone https://github.com/brav0hax/smbexec.git
-            echo -e "Successfully cloned from Github. Running ${blue}install.sh script. ${nc} This may take a while"
-            chmod a+x  /opt/smbexec/install.sh
-#            cd /opt/smbexec && ./install.sh
-            printf "Installing SMBExec -- ${green}DONE${nc}\n"
-            Veil # go to Veil. SMBExec is done.
-        elif (($user_option == 3));then
-            printf "Installing SMBExec again.. "
-            chmod a+x  /opt/smbexec/install.sh
-#            cd /opt/smbexec && ./install.sh
-            printf "${green}Done.${nc}\n"
-            Veil # go to Veil. SMBExec is done.
-        else
-            echo -e "${red} Terminating the script. ${blue} Superheroes need help too. :) ${nc}"
-            exit -1
-            # user choose to terminate the script.
-            # no new function will be called from here.
-        fi
-    fi
+    script_name="SMBExec"
+    extra_message="SMBExec will be used to grab hashes out of Domain Controller and reverse shells"
+    short_name="SMBExec"
+
+    #calling clone script with addition parameters
+    clone_script "${script_name}" 2 https://github.com/brav0hax/smbexec.git "${extra_message} ${short_name}"
+
+    chmod a+x /opt/smbexec/install.sh
+    echo -e "Follow the ${blue}book for Installation Procedure"
+    cd /opt/smbexec && ./install.sh
+    sleep 2s
+    Veil
 }
 
 
@@ -571,56 +586,18 @@ function SMBExec() {
 #Discover Installation!
 #----------------------------------------
 function discover() {
-    echo -e "
-    ${blue} Installing Discover Scripts.${nc} [Originally called Backtrack - Scripts
-    Discover is used for Passive Enumeration!"
+    script_name="Discover Scripts (Formerly known as backtrack Scrpts)"
+    extra_message="Discover is used for Passive Enumeration!"
+    short_name="Discover"
 
-    discover_directory=/opt/discover
-    if [ ! -d ${discover_directory} ];then
-        #    discover clone and install
-        cd /opt/ && git clone https://github.com/leebaird/discover.git
-        echo -e "
-        ${green} Successfully ${nc} cloned from Github. Running update.sh script. This may take a while"
-#         TODO: UNCOMMENT the following TWO LINE for production
-#        chmod a+x /opt/discover/update.sh
-#        cd /opt/discover && ./update.sh
-        echo -e "Updating Discover -- ${green} DONE$ {nc}"
-        SMBExec # go to SMBExec. Discover is done.
-    else
-        #   discover folder already exist.
-        echo ""
-        echo -e "${red} A folder named discover already exist! ${nc} Choose your options:
-        1) Discover is already installed. ${green}Move on!${nc}
-        2) ${red}Remove the Discover folder${nc}, Re-clone and Install
-        3) Do not Remove Discover. ${blue} Run the ${green}update script again${nc}
-        4) I need to figure this out. ${red}Stop this script${nc}"
-        read -p "Choose option.. [1,2,3,4] : " user_option
-        echo ""
-        if (($user_option == 1 ));then
-            echo -e "${green} Moving on... ${nc}"
-            SMBExec # go to SMBExec to execute from there.
-        elif (($user_option == 2));then
-            echo -e "Removing ${blue} OLD discover ${nc} and cloning again from github"
-            rm -rf /opt/discover/
-            cd /opt/ && git clone https://github.com/leebaird/discover.git
-            echo -e "${green} Successfully ${nc} cloned from Github. Running update.sh script. This may take a while"
-            chmod a+x /opt/discover/update.sh
-            cd /opt/discover && ./update.sh
-             echo -e "${blue} Updating Discover -- ${green} DONE ${nc}"
-            SMBExec # go to SMBExec. Discover is done.
-        elif (($user_option == 3));then
-            echo -e "Running ${blue} update.sh script. ${nc} This may take a while"
-            chmod a+x /opt/discover/update.sh
-            cd /opt/discover && ./update.sh
-            echo -e "${blue} Updating Discover -- ${green} DONE ${nc}"
-            SMBExec # go to SMBExec. Discover is done.
-        else
-            echo -e "${red} Terminating the script. ${blue} Superheroes need help too. :) ${nc}"
-            exit -1
-            # user choose to terminate the script.
-            # no new function will be called from here.
-        fi
-    fi
+    #calling clone script with addition parameters
+    clone_script "${script_name}" 1 https://github.com/leebaird/discover.git "${extra_message} ${short_name}"
+
+    chmod a+x /opt/discover/update.sh
+    cd /opt/discover && ./update.sh
+    echo -e "Installing ${short_name} -- ${green} DONE$ ${nc}"
+    sleep 2s # Wait 2 seconds before Running SMBExec
+    SMBExec
 }
 
 
