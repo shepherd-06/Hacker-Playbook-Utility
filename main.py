@@ -91,16 +91,43 @@ def install_phase_bravo():
 
 
 if __name__ == '__main__':
-    if sys.version_info < (3, 0, 0):
-        sys.stderr.write("You need python 3.0.0 or later to run this script\n")
-        exit(1)
-    if platform.dist()[0] != 'Kali':
-        print("Not Running in Kali Linux. Proceed with caution")
     if ask_sudo():
+        if platform.system() != 'Linux':
+            print("###############################################")
+            print("###############################################")
+            sys.stderr.write("This script must run in a Kali or any Linux distro.\nGood bye! :)\n")
+            print("###############################################")
+            print("###############################################")
+            exit(1)
+
+        if sys.version_info < (3, 0, 0):
+            print("###############################################")
+            print("###############################################")
+            sys.stderr.write("Need python3 to run this script\nGood bye! :)\n")
+            print("###############################################")
+            print("###############################################")
+            exit(1)
+
+        if platform.dist()[0] != 'Kali':
+            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            print("You are not using Kali OS! Please at least use these in a VirtualBOX so that you can roll back more "
+                  "easily!")
+            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
+
         system_update_upgrade()
         install_phase_alpha()
         install_phase_bravo()
-        print("\n\nDone? May be.....")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("~~~~~~~~~~~~~~That's a wrap baby!~~~~~~~~~~~~~~")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         sys.exit(0)  # The END
     else:
-        sys.exit("Permission Denied!")
+        print("###############################################")
+        print("###############################################")
+        print("You need to be a superuser or run this script in super user mode.\nGood bye. :)")
+        sys.exit("Permission Denied!\n###############################################\n"
+                 "###############################################")
+

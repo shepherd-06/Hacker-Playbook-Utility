@@ -12,15 +12,15 @@ lightPurple='\033[1;35m'
 ## Installing or managing PSQL##
 ## ===========================##
 ## ===========================##
-echo -e "${cyan} Escaping PostgreSQL Installation phase${nc}"
-exit 200 #### TODO REPLACE this line
+#echo -e "${cyan} Escaping PostgreSQL Installation phase${nc}"
+#exit 200 #### TODO REPLACE this line
 
 echo -e "${lightPurple}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~Checking PostgreSQL Status~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ${nc}"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~ PostgreSQL Status~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ${nc}"
 
 echo -e "${yellow}Checking if PostgreSQL is installed${nc}"
 #check if psql is installed.
@@ -48,8 +48,16 @@ if /usr/bin/pg_isready &> /dev/null;then #one final check if psql has been insta
     printf "It is running in ${yellow}default configuration.${nc} Necessary documentation regarding default configuration will be found googling/postgresql official website.\n"
 else
     #there is some error installing psql.
-    #TODO: NEED a fucking try catch block here. If things does not work accordingly. Turn the python program off!
-    echo -e "${red} There might be some problem with postgresql connection creation!"
-    echo -e "${red} Shutting down the script!${nc}"
-    kill $(pgrep -f 'main.py')
+    #throwing the job to user. Terminating the script.
+    echo -e "${red} There might be some problem with PostgreSQL connection creation!${nc}
+    Do you want to check this out or proceed? ${cyan} It's important that PostgreSQL server is properly configured before you doing anything else ${nc}
+    1) Check this out"
+    read -p "Please Choose between [1,2] : " user_option
+    echo ""
+        if (($user_option == 1 ));then
+            echo -e "${red}Shutting down the script!${nc}"
+            kill $(pgrep -f 'main.py')
+        else
+            echo -e "${cyan}Moving on.....${nc}"
+        fi
 fi
