@@ -17,8 +17,16 @@ echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${nc}"
 
 echo -e "${blue} Updating ${nc}"
+sleep 3s # wait before doing.
 sudo apt update
-echo -e "${green}update complete${nc}"
-echo -e "${blue} Upgrading ${nc}"
+echo -e "
+    ${cyan}-------------------------------------------${nc}
+    ${green}update complete${nc}
+    ${cyan}-------------------------------------------${nc}
+    ${blue} Upgrading ${nc}
+    ${cyan}-------------------------------------------${nc}"
+sleep 3s # wait before doing.
 sudo apt upgrade
-echo -e "${green}Upgrade Complete${nc}"
+echo -e "${cyan}-------------------------------------------${nc}
+    ${green}Upgrade Complete${nc}
+    ${cyan}-------------------------------------------${nc}"

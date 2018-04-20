@@ -12,8 +12,6 @@ lightPurple='\033[1;35m'
 ## Installing or managing PSQL##
 ## ===========================##
 ## ===========================##
-#echo -e "${cyan} Escaping PostgreSQL Installation phase${nc}"
-#exit 200 #### TODO REPLACE this line
 
 echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,15 +27,18 @@ if [ $? -eq 1 ] #returns 0 if psql is installed.
 then
     echo -e "${red}PostgreSQL is not installed${nc}" #install psql here.
     echo "${blue}Installing PostgreSQL....${nc}"
+    sleep 3s # wait before doing.
     apt install postgresql postgresql-contrib #psql installation command
 fi
 
 echo -e "${green}PostgreSQL is installed!${nc}"
 printf "Configuring PostgreSQL to start upon server boot"
+sleep 3s # wait before doing.
 update-rc.d postgresql enable #configured psql to start upon booting
 printf " -- ${green}Done${nc}\n"
 
 printf "Starting PostgreSQL.."
+sleep 3s # wait before doing.
 service postgresql start #starting the postgresql server for the first time.
 printf " -- ${green}Done${nc}\n"
 
@@ -52,6 +53,7 @@ else
     echo -e "${red} There might be some problem with PostgreSQL connection creation!${nc}
     Do you want to check this out or proceed? ${cyan} It's important that PostgreSQL server is properly configured before you doing anything else ${nc}
     1) Check this out"
+    sleep 5s # wait before doing.
     read -p "Please Choose between [1,2] : " user_option
     echo ""
         if (($user_option == 1 ));then

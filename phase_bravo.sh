@@ -506,5 +506,19 @@ function discover() {
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 #---------------------------------------------------------------
-discover #Beginning of everything.
-#In order to keep the flow intact discover will call the later functions accordingly
+which -a msfconsole
+if [ $? -eq 0 ];then
+    ## Metasploit is isntalled.
+    discover #Beginning of everything.
+else
+    echo -e "${red} Metasploit is not installed properly! or not found${blue} "$(which -a msfconsole)".${nc}Terminating script."
+    sleep 3s ## boom boom
+    exit 255 #leave scrupt
+fi
+
+
+
+##Task at hand.
+##enable sleeper so people can read wtf is happening.
+##how to run msfdb init command as a non-root user?!
+##how to check if a task is failed; and wt to do after that?
