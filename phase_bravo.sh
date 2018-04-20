@@ -509,6 +509,11 @@ function discover() {
 which -a msfconsole
 if [ $? -eq 0 ];then
     ## Metasploit is isntalled.
+    if [[ $EUID -ne 0 ]];then
+        echo "error !!! "
+        sudo su
+    fi
+    exit 255
     discover #Beginning of everything.
 else
     echo -e "${red} Metasploit is not installed properly! or not found${blue} "$(which -a msfconsole)".${nc}Terminating script."
@@ -520,5 +525,5 @@ fi
 
 ##Task at hand.
 ##enable sleeper so people can read wtf is happening.
-##how to run msfdb init command as a non-root user?!
 ##how to check if a task is failed; and wt to do after that?
+##Ask the user about re-configuring PostgreSQL upon server boot and restarting the postgreSQL service. Don't blindly start it.
