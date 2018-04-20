@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 green="\033[0;32m"
 red="\033[0;31m"
 cyan="\033[0;36m"
@@ -27,19 +28,24 @@ then
     echo ""
 
     if (($user_choice == 1));then
-        echo -e "${blue} Installing MetaSploit framework from ${yellow}'https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers' ${nc}"
+        echo -e "${blue} Installing Metasploit framework from ${yellow}'https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers' ${nc}"
         sleep 5s #sleeping 5 seconds before installation begin.
         curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
     else
-        echo ""
+        echo "${blue} Good bye ${nc}"
+        exit 255
     fi
-else
-    echo -e "${green}MetaSploit Framework is installed!${nc}
-    ${blue} Do you want to re-initializing the database (if already installed) or keep it as it is? ${nc}"
-    sleep 2s # sleeping b4 doing bullshit.
-    read -n1 -p "Choose 1 for initializing, any key if you want to move on... " user_choice
+fi
+### This portion of code works if Metasploit is already installed or jst installed.
+## if user choose to not install, then it will exit immediately using code 255.
 
-    if (($user_choice == 1));then
-        msfdb init
-    fi
+echo -e "${green}Metasploit Framework is installed!${nc}
+    ${blue} Do you want to re-initializing the database (if already installed) or keep it as it is? ${nc}"
+sleep 2s # sleeping b4 doing bullshit.
+read -n1 -p "Choose 1 for initializing, any key if you want to move on... " user_choice
+
+if (($user_choice == 1));then
+    msfdb init ##TODO --> run this command as a non root user. [Code fails here]
+else
+    echo -e "${blue} I guess Metasploit DB is already initialized...${green}Moving on!${nc}"
 fi

@@ -7,8 +7,6 @@ blue="\033[1;34m"
 yellow="\033[1;33m"
 lightPurple='\033[1;35m'
 
-#echo -e "${cyan} Escaping Update/Upgrade phase${nc}"
-
 echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

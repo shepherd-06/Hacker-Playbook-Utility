@@ -3,6 +3,7 @@ import sys
 import subprocess
 import stat
 import platform
+import time
 
 
 def ask_sudo():
@@ -118,6 +119,7 @@ if __name__ == '__main__':
         system_update_upgrade()
         install_phase_alpha()
         install_phase_bravo()
+        time.sleep(3)
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         print("~~~~~~~~~~~~~~That's a wrap baby!~~~~~~~~~~~~~~")
