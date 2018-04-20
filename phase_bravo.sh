@@ -526,4 +526,3 @@ fi
 ##Task at hand.
 ##enable sleeper so people can read wtf is happening.
 ##how to check if a task is failed; and wt to do after that?
-##Ask the user about re-configuring PostgreSQL upon server boot and restarting the postgreSQL service. Don't blindly start it.

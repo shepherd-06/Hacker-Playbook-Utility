@@ -32,15 +32,35 @@ then
 fi
 
 echo -e "${green}PostgreSQL is installed!${nc}"
-printf "Configuring PostgreSQL to start upon server boot"
-sleep 3s # wait before doing.
-update-rc.d postgresql enable #configured psql to start upon booting
-printf " -- ${green}Done${nc}\n"
+echo ""
+sleep 2s
 
-printf "Starting PostgreSQL.."
-sleep 3s # wait before doing.
-service postgresql start #starting the postgresql server for the first time.
-printf " -- ${green}Done${nc}\n"
+## checker 1
+echo -e "${blue}Do you want to configure PostgreSQL to start after server boots up?${nc}"
+echo ""
+read -n1 -p "Choose your option [y/n]: " user_choice
+echo ""
+
+if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
+    printf "Configuring PostgreSQL to start upon server boot"
+    sleep 3s # wait before doing.
+    update-rc.d postgresql enable #configured psql to start upon booting
+    printf " -- ${green}Done${nc}\n"
+fi
+
+
+## checker 2
+echo -e "${blue}Do you want to start PostgreSQL now?${nc}"
+echo ""
+read -n1 -p "Choose your option [y/n]: " user_choice
+echo ""
+
+if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
+    printf "Starting PostgreSQL.."
+    sleep 3s # wait before doing.
+    service postgresql start #starting the postgresql server for the first time.
+    printf " -- ${green}Done${nc}\n"
+fi
 
 
 ## checking postgresql connection status

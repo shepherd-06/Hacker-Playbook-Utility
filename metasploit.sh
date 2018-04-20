@@ -15,8 +15,6 @@ echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ${nc}"
 
-#    The following script invocation will import the Rapid7 signing key and setup the package for all supported Linux and OS X systems:
-
 which -a msfconsole
 if [ $? -eq 1 ] #returns 0 if psql is installed.
 then
@@ -28,7 +26,10 @@ then
     echo ""
 
     if (($user_choice == 1));then
-        echo -e "${blue} Installing Metasploit framework from ${yellow}'https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers' ${nc}"
+        echo -e "${blue} Installing Metasploit framework from ${yellow}'https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers'${nc}"
+        echo "
+        ${blue}The following script invocation will import the Rapid7 signing key and setup the package for all supported Linux and OS X systems
+        ${nc}"
         sleep 5s #sleeping 5 seconds before installation begin.
         curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
     else
@@ -36,6 +37,7 @@ then
         exit 255
     fi
 fi
+
 ### This portion of code works if Metasploit is already installed or jst installed.
 ## if user choose to not install, then it will exit immediately using code 255.
 
