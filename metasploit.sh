@@ -37,6 +37,7 @@ then
 
         if [ $? -ne 0 ];then
             ./terminator.sh 1 ## TODo: may be I can send a fkcing message thro here. I am too tired and sleepy. probably do this later.#
+            exit 255
         fi
     else
         echo "${blue} Good bye ${nc}"
@@ -105,6 +106,7 @@ else
     "
     sleep 2s
     ./terminator.sh 2
+    exit 255
 fi
 
 

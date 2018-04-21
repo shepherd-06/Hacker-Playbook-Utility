@@ -33,6 +33,7 @@ fi
 
 if [ $? -ne 0 ];then
     ./terminator.sh 1
+    exit 255
 fi
 
 echo -e "${green}PostgreSQL is installed!${nc}"
@@ -52,6 +53,7 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
 
     if [ $? -ne 0 ];then
     ./terminator.sh 1
+    exit 255
     fi
     printf " -- ${green}Done${nc}\n"
 fi
@@ -70,6 +72,7 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
 
     if [ $? -ne 0 ];then
     ./terminator.sh 1
+    exit 255
     fi
     printf " -- ${green}Done${nc}\n"
 fi
@@ -91,6 +94,7 @@ else
         if (($user_option == 1 ));then
             echo -e "${red}Shutting down the script!${nc}"
             ./terminator.sh 2
+            exit 255
         else
             echo -e "${cyan}Moving on.....${nc}"
         fi

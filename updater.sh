@@ -24,6 +24,7 @@ sudo apt update
 
 if [ $? -ne 0 ];then
     ./terminator.sh 1
+    exit 255
 fi
 
 echo -e "
@@ -38,6 +39,7 @@ sudo apt upgrade
 
 if [ $? -ne 0 ];then
     ./terminator.sh 1
+    exit 255
 fi
 
 echo -e "
