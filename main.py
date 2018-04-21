@@ -115,6 +115,11 @@ if __name__ == '__main__':
                   "easily!")
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
+        try:
+            file_status = os.stat('terminator.sh')
+            os.chmod('terminator.sh', file_status.st_mode | stat.S_IEXEC)
+        except OSError as err:
+            sys.exit((str(err)))
 
         system_update_upgrade()
         install_phase_alpha()

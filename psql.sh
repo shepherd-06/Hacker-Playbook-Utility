@@ -31,6 +31,10 @@ then
     apt install postgresql postgresql-contrib #psql installation command
 fi
 
+if [ $? -ne 0 ];then
+    ./terminator.sh 1
+fi
+
 echo -e "${green}PostgreSQL is installed!${nc}"
 echo ""
 sleep 2s
@@ -45,6 +49,10 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     printf "Configuring PostgreSQL to start upon server boot"
     sleep 3s # wait before doing.
     update-rc.d postgresql enable #configured psql to start upon booting
+
+    if [ $? -ne 0 ];then
+    ./terminator.sh 1
+    fi
     printf " -- ${green}Done${nc}\n"
 fi
 
@@ -59,6 +67,10 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     printf "Starting PostgreSQL.."
     sleep 3s # wait before doing.
     service postgresql start #starting the postgresql server for the first time.
+
+    if [ $? -ne 0 ];then
+    ./terminator.sh 1
+    fi
     printf " -- ${green}Done${nc}\n"
 fi
 
@@ -78,7 +90,7 @@ else
     echo ""
         if (($user_option == 1 ));then
             echo -e "${red}Shutting down the script!${nc}"
-            kill $(pgrep -f 'main.py')
+            ./terminator.sh 2
         else
             echo -e "${cyan}Moving on.....${nc}"
         fi

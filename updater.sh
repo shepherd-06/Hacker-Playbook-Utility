@@ -21,6 +21,11 @@ echo -e "
     "
 sleep 3s # wait before doing.
 sudo apt update
+
+if [ $? -ne 0 ];then
+    ./terminator.sh 1
+fi
+
 echo -e "
     ${cyan}-------------------------------------------${nc}
     ${green}Update complete${nc}
@@ -30,6 +35,11 @@ echo -e "
     "
 sleep 3s # wait before doing.
 sudo apt upgrade
+
+if [ $? -ne 0 ];then
+    ./terminator.sh 1
+fi
+
 echo -e "
     ${cyan}-------------------------------------------${nc}
     ${green}Upgrade Complete${nc}

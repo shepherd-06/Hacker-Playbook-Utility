@@ -8,6 +8,8 @@ blue="\033[1;34m"
 yellow="\033[1;33m"
 lightPurple='\033[1;35m'
 
+#TODO: Check this sh for possible failed important command. checker must. enable terminator to handle message.
+
 echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,6 +34,10 @@ then
         ${nc}"
         sleep 5s #sleeping 5 seconds before installation begin.
         curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
+
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 ## TODo: may be I can send a fkcing message thro here. I am too tired and sleepy. probably do this later.#
+        fi
     else
         echo "${blue} Good bye ${nc}"
         exit 255
@@ -98,7 +104,7 @@ else
     ------------------------------------
     "
     sleep 2s
-    kill $(pgrep -f 'main.py')
+    ./terminator.sh 2
 fi
 
 
