@@ -78,6 +78,7 @@ if (($user_choice == 1));then
     echo -e "${blue}Metasploit Framework db init${nc} needs to run as a ${blue}non-root user.${nc} You MAY need to provide your password... "
     echo ""
     sleep 1s #wait 1 second
+    ## TODO -> Error occurred HERE {user msfdb not found}
     sudo -u ${SUDO_USER} msfdb init
 
     ## if the previous commit failed to run.
@@ -134,7 +135,7 @@ read -n1 -p "Choose your option y/n: " user_choice
 echo ""
 if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     echo -e "${blue}Starting msf database ${nc}"
-    slepp 2s #sleep 2seconds before donning
+    sleep 2s #sleep 2seconds before donning
     sudo -u ${SUDO_USER} msfdb start
 
     ## if the previous commit failed to run.
