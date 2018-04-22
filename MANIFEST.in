@@ -1,0 +1,6 @@
+include *.md
+include *.py
+include *.txt
+include LICENSE
+
+global-exclude *.py[co]

@@ -60,10 +60,12 @@ def install_phase_alpha():
 
         metasploit_file = os.stat('metasploit.sh')
         os.chmod('metasploit.sh', metasploit_file.st_mode | stat.S_IEXEC)
-        if platform.dist()[0] != 'Kali':
+
+        if distro.linux_distribution(False) == 'kali':
             subprocess.call(['./metasploit.sh', 'Kali'])
         else:
             subprocess.call(['./metasploit.sh', 'Linux'])
+
     except IOError as error:
         sys.exit(str(error))
     except subprocess.CalledProcessError as error:
@@ -112,7 +114,16 @@ if __name__ == '__main__':
             print("###############################################")
             exit(1)
 
-        if platform.dist()[0] != 'Kali':
+        try:
+            import distro
+        except IOError as error:
+            sys.exit((str(error)))
+        except subprocess.CalledProcessError as error:
+            sys.exit((str(error)))
+        except UnicodeError as error:
+            sys.exit((str(error)))
+
+        if distro.linux_distribution(False) != 'kali':
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             print("You are not using Kali OS! Please at least use these in a VirtualBOX so that you can roll back more "
                   "easily!")
