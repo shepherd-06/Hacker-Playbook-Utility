@@ -705,3 +705,5 @@ fi
 ##Install or Write code for the following in Kali machine -> Veil, BypassUAC, BeEF {Important}
 ##might need to check if postgreSQL is installed TOO before calling discover.
 ##Need error checker in this script. {Placed} {Check if they actually work from Kali}
+##TODO -> Kali cant run this command -> sudo -u msfdb init. {no other users found I guess, Other than root.}
+##TODO -> for kali, this command, runs in sudo mode directly! cool.

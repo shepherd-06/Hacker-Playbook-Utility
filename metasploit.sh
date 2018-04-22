@@ -8,14 +8,14 @@ blue="\033[1;34m"
 yellow="\033[1;33m"
 lightPurple='\033[1;35m'
 
-#TODO: Check this sh for possible failed important command. checker must. enable terminator to handle message.
-
 echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~Metasploit Framework~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ${nc}"
+
+runningDistro=${1}
 
 which -a msfconsole
 if [ $? -eq 1 ] #returns 0 if psql is installed.
@@ -78,13 +78,21 @@ if (($user_choice == 1));then
     echo -e "${blue}Metasploit Framework db init${nc} needs to run as a ${blue}non-root user.${nc} You MAY need to provide your password... "
     echo ""
     sleep 1s #wait 1 second
-    ## TODO -> Error occurred HERE {user msfdb not found}
-    sudo -u ${SUDO_USER} msfdb init
 
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb init"
-        exit 255
+    if [ ${runningDistro} == 'Kali' ];then
+        msfdb init
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "msfdb init"
+            exit 255
+        fi
+    else
+        sudo -u ${SUDO_USER} msfdb init
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb init"
+            exit 255
+        fi
     fi
 
     echo -e "${green}Metasploit framework database initialization complete ${nc}"
@@ -93,12 +101,21 @@ elif (($user_choice == 2));then
     echo -e "${blue}Re-initializing the msf database${nc}"
     echo ""
     sleep 1s #wait 1 second
-    sudo -u ${SUDO_USER} msfdb reinit
 
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb reinit"
-        exit 255
+    if [ ${runningDistro} == 'Kali' ];then
+        msfdb reinit
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "msfdb reinit"
+            exit 255
+        fi
+    else
+        sudo -u ${SUDO_USER} msfdb reinit
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb reinit"
+            exit 255
+        fi
     fi
 
     echo -e "${green}Metasploit framework database re-initialization complete ${nc}"
@@ -136,12 +153,21 @@ echo ""
 if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     echo -e "${blue}Starting msf database ${nc}"
     sleep 2s #sleep 2seconds before donning
-    sudo -u ${SUDO_USER} msfdb start
 
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb start"
-        exit 255
+    if [ ${runningDistro} == 'Kali' ];then
+        msfdb start
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "msfdb start"
+            exit 255
+        fi
+    else
+        sudo -u ${SUDO_USER} msfdb start
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb start"
+            exit 255
+        fi
     fi
     echo -e "${green} -- Done"
 fi

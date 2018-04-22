@@ -12,7 +12,6 @@ lightPurple='\033[1;35m'
 ## Installing or managing PSQL##
 ## ===========================##
 ## ===========================##
-#./terminator.sh 1 "Testing"
 #exit 255
 
 echo -e "${lightPurple}
@@ -49,8 +48,10 @@ echo ""
 read -n1 -p "Choose your option [y/n]: " user_choice
 echo ""
 
+
+##TODO --> problem in this if else block. it access with 'n'!!!
 if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
-    printf "Configuring PostgreSQL to start upon server boot"
+    echo -e "Configuring PostgreSQL to start upon server boot"
     sleep 3s # wait before doing.
     update-rc.d postgresql enable #configured psql to start upon booting
 
@@ -58,7 +59,7 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     ./terminator.sh 1 "update-rc.d postgresql enable"
     exit 255
     fi
-    printf " -- ${green}Done${nc}\n"
+    echo -e "${green}Configuration Done${nc}"
 fi
 
 
@@ -69,7 +70,7 @@ read -n1 -p "Choose your option [y/n]: " user_choice
 echo ""
 
 if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
-    printf "Starting PostgreSQL.."
+    echo -e "Starting PostgreSQL.."
     sleep 3s # wait before doing.
     service postgresql start #starting the postgresql server for the first time.
 
@@ -77,20 +78,24 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     ./terminator.sh 1 "service postgresql start"
     exit 255
     fi
-    printf " -- ${green}Done${nc}\n"
+    echo -e "${green}PostgreSQL is running${nc}"
 fi
 
 
 ## checking postgresql connection status
 if /usr/bin/pg_isready &> /dev/null;then #one final check if psql has been installed successfully
     echo -e "${green}PostgreSQL database has been installed successfully and running properly!${nc}.
-It is running in ${yellow}default configuration.${nc} Necessary documentation regarding default configuration will be found googling/postgresql official website.\n"
+    It is running in ${yellow}default configuration.${nc}
+    Necessary documentation regarding default configuration will be found googling/postgresql official website."
 else
     #there is some error installing psql.
     #throwing the job to user. Terminating the script.
     echo -e "${red} There might be some problem with PostgreSQL connection creation!${nc}
-    Do you want to check this out or proceed? ${cyan} It's important that PostgreSQL server is properly configured before you doing anything else ${nc}
-    1) Check this out"
+    Do you want to check this out or proceed? ${cyan}
+    It's important that PostgreSQL server is properly configured before you doing anything else ${nc}
+    1) Check this out
+    2) Press any key otherwise..."
+
     sleep 5s # wait before doing.
     read -p "Please Choose between [1,2] : " user_option
     echo ""
@@ -99,6 +104,6 @@ else
             ./terminator.sh 2 ""
             exit 255
         else
-            echo -e "${cyan}Moving on.....${nc}"
+            echo -e "${yellow}Moving on.....${nc}"
         fi
 fi

@@ -60,7 +60,10 @@ def install_phase_alpha():
 
         metasploit_file = os.stat('metasploit.sh')
         os.chmod('metasploit.sh', metasploit_file.st_mode | stat.S_IEXEC)
-        subprocess.call(['./metasploit.sh'])
+        if platform.dist()[0] != 'Kali':
+            subprocess.call(['./metasploit.sh', 'Kali'])
+        else:
+            subprocess.call(['./metasploit.sh', 'Linux'])
     except IOError as error:
         sys.exit(str(error))
     except subprocess.CalledProcessError as error:
