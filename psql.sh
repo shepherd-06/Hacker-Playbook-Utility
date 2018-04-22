@@ -12,15 +12,18 @@ lightPurple='\033[1;35m'
 ## Installing or managing PSQL##
 ## ===========================##
 ## ===========================##
+#./terminator.sh 1 "Testing"
+#exit 255
 
 echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~ PostgreSQL Status~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ${nc}"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ${nc}"
 
-echo -e "${yellow}Checking if PostgreSQL is installed${nc}"
+echo -e "${blue}Checking if PostgreSQL is installed${nc}"
 #check if psql is installed.
 which -a psql
 if [ $? -eq 1 ] #returns 0 if psql is installed.
@@ -32,7 +35,7 @@ then
 fi
 
 if [ $? -ne 0 ];then
-    ./terminator.sh 1
+    ./terminator.sh 1 "apt install postgresql postgresql-contrib"
     exit 255
 fi
 
@@ -52,7 +55,7 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     update-rc.d postgresql enable #configured psql to start upon booting
 
     if [ $? -ne 0 ];then
-    ./terminator.sh 1
+    ./terminator.sh 1 "update-rc.d postgresql enable"
     exit 255
     fi
     printf " -- ${green}Done${nc}\n"
@@ -71,7 +74,7 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     service postgresql start #starting the postgresql server for the first time.
 
     if [ $? -ne 0 ];then
-    ./terminator.sh 1
+    ./terminator.sh 1 "service postgresql start"
     exit 255
     fi
     printf " -- ${green}Done${nc}\n"
@@ -80,8 +83,8 @@ fi
 
 ## checking postgresql connection status
 if /usr/bin/pg_isready &> /dev/null;then #one final check if psql has been installed successfully
-    printf "${green}Postgresql database has been installed successfully and running properly!${nc}\n"
-    printf "It is running in ${yellow}default configuration.${nc} Necessary documentation regarding default configuration will be found googling/postgresql official website.\n"
+    echo -e "${green}PostgreSQL database has been installed successfully and running properly!${nc}.
+It is running in ${yellow}default configuration.${nc} Necessary documentation regarding default configuration will be found googling/postgresql official website.\n"
 else
     #there is some error installing psql.
     #throwing the job to user. Terminating the script.
@@ -93,7 +96,7 @@ else
     echo ""
         if (($user_option == 1 ));then
             echo -e "${red}Shutting down the script!${nc}"
-            ./terminator.sh 2
+            ./terminator.sh 2 ""
             exit 255
         else
             echo -e "${cyan}Moving on.....${nc}"

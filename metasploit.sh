@@ -36,7 +36,7 @@ then
         curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
 
         if [ $? -ne 0 ];then
-            ./terminator.sh 1 ## TODo: may be I can send a fkcing message thro here. I am too tired and sleepy. probably do this later.#
+            ./terminator.sh 1 "curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall"
             exit 255
         fi
     else
@@ -75,37 +75,55 @@ sleep 5s ## stooping script for 5 seconds.
 
 if (($user_choice == 1));then
     #init the db
-    echo -e "${blue}Metasploit Framework db init${nc}needs to run as a ${blue}non-root user.${nc} You MAY need to provide your password... "
+    echo -e "${blue}Metasploit Framework db init${nc} needs to run as a ${blue}non-root user.${nc} You MAY need to provide your password... "
     echo ""
     sleep 1s #wait 1 second
     sudo -u ${SUDO_USER} msfdb init
-    echo -e "${green} Metasploit framework database initialization complete ${nc}"
+
+    ## if the previous commit failed to run.
+    if [ $? -ne 0 ];then
+        ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb init"
+        exit 255
+    fi
+
+    echo -e "${green}Metasploit framework database initialization complete ${nc}"
 elif (($user_choice == 2));then
     #reinit the db
     echo -e "${blue}Re-initializing the msf database${nc}"
     echo ""
     sleep 1s #wait 1 second
     sudo -u ${SUDO_USER} msfdb reinit
-    echo -e "${green} Metasploit framework database re-initialization complete ${nc}"
+
+    ## if the previous commit failed to run.
+    if [ $? -ne 0 ];then
+        ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb reinit"
+        exit 255
+    fi
+
+    echo -e "${green}Metasploit framework database re-initialization complete ${nc}"
 elif (($user_choice == 3));then
     #green
     echo -e "${green}Moving on${nc}"
 elif (($user_choice == 4));then
     echo -e "${red}Terminating the script!${nc}"
     sleep 2s
-    kill $(pgrep -f 'main.py')
+
+    ## Terminating command
+    ./terminator.sh 2 ""
+    exit 255
+
 else
     # unknown command. stop script.
     echo -e "
-    ------------------------------------
-    You have provided an unknown option.
-    This option is important necessary.
-    Please choose carefully again.
-    Terminating script.
-    ------------------------------------
+    ${yellow}------------------------------------
+    -${red}[Unknown option]${yellow}-------------------
+    -${blue}This is important${yellow}------------------
+    -${blue}Please choose carefully next time${yellow}--
+    -${red}Terminating script......${yellow}-----------
+    ------------------------------------${nc}
     "
     sleep 2s
-    ./terminator.sh 2
+    ./terminator.sh 2 ""
     exit 255
 fi
 
@@ -118,9 +136,11 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     echo -e "${blue}Starting msf database ${nc}"
     slepp 2s #sleep 2seconds before donning
     sudo -u ${SUDO_USER} msfdb start
+
+    ## if the previous commit failed to run.
+    if [ $? -ne 0 ];then
+        ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb start"
+        exit 255
+    fi
     echo -e "${green} -- Done"
 fi
-
-
-
-## MSFDB init , reinit -> start.

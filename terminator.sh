@@ -7,24 +7,18 @@ blue="\033[1;34m"
 yellow="\033[1;33m"
 lightPurple='\033[1;35m'
 
-
-function terminate() {
-    if (( ${1} == 1 ));then
+echo ${2}
+if (( ${1} == 1 ));then
         echo -e "
         ${yellow}----------------------------------
         ----------------------------------
         ----------------------------------
-        ${red}An Error occurred! Script terminated
+        ${red}An Error occurred while Running the following command
+        ${cyan}${2}
+        ${red}Script terminated
         ${yellow}----------------------------------
         ----------------------------------
         ----------------------------------${nc}
         "
-    fi
-    kill $(pgrep -f 'main.py')
-}
-
-if (( ${1} == 1));then
-    terminate ${1}
-elif (( ${1} == 2));then
-    terminate ${1}
 fi
+kill $(pgrep -f 'main.py')
