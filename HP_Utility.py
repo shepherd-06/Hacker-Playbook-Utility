@@ -96,7 +96,7 @@ def install_phase_bravo():
         return 1
 
 
-if __name__ == '__main__':
+def main():
     if ask_sudo():
         if platform.system() != 'Linux':
             print("###############################################")

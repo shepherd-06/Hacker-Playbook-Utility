@@ -22,7 +22,7 @@ setup(
     description='Python Script with bash to install. ',  # Required
     long_description=long_description,  # Optional
 
-    long_description_content_type='text/markdown',  # Optional (see note above)
+    long_description_content_type='text',  # Optional (see note above)
 
     url='https://github.com/ibtehaz-shawon/Hacker-Playbook-Utility',  # Optional
 
@@ -57,13 +57,12 @@ setup(
         'Operating System :: POSIX :: BSD :: OpenBSD',
     ],
     keywords='Setup tool for The Hacker Playbook',  # Optional
-    py_modules=["HP-Utility"],
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),  # Required
-    install_requires=['peppercorn', 'distro'],  # Optional
+    py_modules=["HP_Utility"],
+    packages=['HP-Utility'],  # Required
+    install_requires=['peppercorn', 'distro'],  # Optionalo
+
     entry_points={  # Optional
-        'console_scripts': [
-            'HP-Utility=HP-Utility:main',
-        ],
+        {'console_scripts': ['HP-Utility=HP_Utility:main']},
     },
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/ibtehaz-shawon/Hacker-Playbook-Utility/issues',
