@@ -80,6 +80,7 @@ if (($user_choice == 1));then
     sleep 1s #wait 1 second
 
     if [ ${runningDistro} == 'Kali' ];then
+        echo ${runningDistro}
         msfdb init
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
@@ -87,6 +88,7 @@ if (($user_choice == 1));then
             exit 255
         fi
     else
+        echo ${runningDistro}
         sudo -u ${SUDO_USER} msfdb init
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then

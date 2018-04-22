@@ -140,4 +140,3 @@ if __name__ == '__main__':
         print("You need to be a superuser or run this script in super user mode.\nGood bye. :)")
         sys.exit("Permission Denied!\n###############################################\n"
                  "###############################################")
-
