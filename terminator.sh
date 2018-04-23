@@ -21,4 +21,4 @@ if (( ${1} == 1 ));then
         ----------------------------------${nc}
         "
 fi
-kill $(pgrep -f 'main.py')
+kill $(pgrep -f 'HP-Utility')
