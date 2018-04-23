@@ -97,7 +97,7 @@ def install_phase_bravo():
         return 1
 
 
-def starter():
+def main():
     if ask_sudo():
         if platform.system() != 'Linux':
             print("###############################################")
@@ -120,12 +120,6 @@ def starter():
             print("You are not using Kali OS! Please at least use these in a VirtualBOX so that you can roll back more "
                   "easily!")
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        else:
-            print ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-                   "Helljadkjdakfdjfsdkfsdf"
-                   "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
-        sys.exit(255)  # The END
 
         try:
             file_status = os.stat('terminator.sh')
@@ -149,3 +143,7 @@ def starter():
         print("You need to be a superuser or run this script in super user mode.\nGood bye. :)")
         sys.exit("Permission Denied!\n###############################################\n"
                  "###############################################")
+
+
+if __name__ == '__main__':
+    main()

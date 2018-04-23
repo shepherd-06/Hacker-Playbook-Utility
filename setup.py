@@ -22,7 +22,7 @@ setup(
     description='Python Script with bash to install. ',  # Required
     long_description=long_description,  # Optional
 
-    long_description_content_type='text',  # Optional (see note above)
+    # long_description_content_type='text',  # Optional (see note above)
 
     url='https://github.com/ibtehaz-shawon/Hacker-Playbook-Utility',  # Optional
 
@@ -55,7 +55,7 @@ setup(
 
     entry_points={  # Optional
         'console_scripts': [
-            'HP-Utility=HP_Utility:starter',
+            'HP-Utility=HP_Utility:main',
         ],
     },
     project_urls={  # Optional
