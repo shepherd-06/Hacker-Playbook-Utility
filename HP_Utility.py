@@ -39,6 +39,7 @@ def system_update_upgrade():
         file_status = os.stat('updater.sh')
         os.chmod('updater.sh', file_status.st_mode | stat.S_IEXEC)
         subprocess.call(['./updater.sh'])
+        del file_status
     except IOError as error:
         sys.exit(str(error))
     except subprocess.CalledProcessError as error:
@@ -67,6 +68,8 @@ def install_phase_alpha():
         else:
             subprocess.call(['./metasploit.sh', 'Linux'])
 
+        del file_status
+        del metasploit_file
     except IOError as error:
         sys.exit(str(error))
     except subprocess.CalledProcessError as error:
@@ -87,6 +90,8 @@ def install_phase_bravo():
         file_status = os.stat('phase_bravo.sh')
         os.chmod('phase_bravo.sh', file_status.st_mode | stat.S_IEXEC)
         subprocess.call(['./phase_bravo.sh'])
+
+        del file_status
     except IOError as error:
         sys.exit(str(error))
     except subprocess.CalledProcessError as error:
@@ -124,6 +129,7 @@ def main():
         try:
             file_status = os.stat('terminator.sh')
             os.chmod('terminator.sh', file_status.st_mode | stat.S_IEXEC)
+            del file_status  # no needie anymore
         except OSError as err:
             sys.exit((str(err)))
 
