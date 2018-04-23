@@ -34,7 +34,7 @@ then
 fi
 
 if [ $? -ne 0 ];then
-    terminator.sh 1 "apt install postgresql postgresql-contrib"
+    ./terminator.sh 1 "apt install postgresql postgresql-contrib"
     exit 255
 fi
 
@@ -56,7 +56,7 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     update-rc.d postgresql enable #configured psql to start upon booting
 
     if [ $? -ne 0 ];then
-    terminator.sh 1 "update-rc.d postgresql enable"
+    ./terminator.sh 1 "update-rc.d postgresql enable"
     exit 255
     fi
     echo -e "${green}Configuration Done${nc}"
@@ -75,7 +75,7 @@ if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
     service postgresql start #starting the postgresql server for the first time.
 
     if [ $? -ne 0 ];then
-    terminator.sh 1 "service postgresql start"
+    ./terminator.sh 1 "service postgresql start"
     exit 255
     fi
     echo -e "${green}PostgreSQL is running${nc}"
@@ -101,7 +101,7 @@ else
     echo ""
         if (($user_option == 1 ));then
             echo -e "${red}Shutting down the script!${nc}"
-            terminator.sh 2 ""
+            ./terminator.sh 2 ""
             exit 255
         else
             echo -e "${yellow}Moving on.....${nc}"

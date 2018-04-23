@@ -28,7 +28,7 @@ sleep 3s # wait before doing.
 sudo apt update
 
 if [ $? -ne 0 ];then
-    terminator.sh 1 "sudo apt update"
+    ./terminator.sh 1 "sudo apt update"
     exit 255
 fi
 
@@ -43,7 +43,7 @@ sleep 3s # wait before doing.
 sudo apt upgrade
 
 if [ $? -ne 0 ];then
-    terminator.sh 1 "sudo apt upgrade"
+    ./terminator.sh 1 "sudo apt upgrade"
     exit 255
 fi
 
