@@ -4,6 +4,7 @@ import subprocess
 import stat
 import platform
 import time
+import distro
 
 
 def ask_sudo():
@@ -96,7 +97,7 @@ def install_phase_bravo():
         return 1
 
 
-def main():
+def starter():
     if ask_sudo():
         if platform.system() != 'Linux':
             print("###############################################")
@@ -114,20 +115,17 @@ def main():
             print("###############################################")
             exit(1)
 
-        try:
-            import distro
-        except IOError as error:
-            sys.exit((str(error)))
-        except subprocess.CalledProcessError as error:
-            sys.exit((str(error)))
-        except UnicodeError as error:
-            sys.exit((str(error)))
-
         if distro.linux_distribution(False) != 'kali':
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             print("You are not using Kali OS! Please at least use these in a VirtualBOX so that you can roll back more "
                   "easily!")
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        else:
+            print ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+                   "Helljadkjdakfdjfsdkfsdf"
+                   "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
+        sys.exit(255)  # The END
 
         try:
             file_status = os.stat('terminator.sh')

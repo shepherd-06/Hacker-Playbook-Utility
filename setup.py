@@ -15,9 +15,9 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     # $ pip install sampleproject
-    name='HP-Utility',  # Required
+    name='HP_Utility',  # Required
 
-    version='0.0.3rev3',  # Required
+    version='0.0.3post4',  # Required
 
     description='Python Script with bash to install. ',  # Required
     long_description=long_description,  # Optional
@@ -30,11 +30,7 @@ setup(
 
     author_email='ibtehaz.shawon@gmail.com',  # Optional
 
-    classifiers=[  # Optional
-        # How mature is this project? Common values are
-        #   3 - Alpha
-        #   4 - Beta
-        #   5 - Production/Stable
+    classifiers=[
         'Development Status :: 3 - Alpha',
 
         # Indicate who your project is intended for
@@ -43,9 +39,6 @@ setup(
 
         # Pick your license as you wish
         'License :: OSI Approved :: Apache Software License',
-
-        # Specify the Python versions you support here. In particular, ensure
-        # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
@@ -57,12 +50,13 @@ setup(
         'Operating System :: POSIX :: BSD :: OpenBSD',
     ],
     keywords='Setup tool for The Hacker Playbook',  # Optional
-    py_modules=["HP_Utility"],
-    packages=['HP-Utility'],  # Required
-    install_requires=['peppercorn', 'distro'],  # Optionalo
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),  # Required
+    install_requires=['peppercorn', 'distro', 'grin', 'argparse', 'setuptools'],  # Optionalo
 
     entry_points={  # Optional
-        {'console_scripts': ['HP-Utility=HP_Utility:main']},
+        'console_scripts': [
+            'HP-Utility=HP_Utility:starter',
+        ],
     },
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/ibtehaz-shawon/Hacker-Playbook-Utility/issues',
