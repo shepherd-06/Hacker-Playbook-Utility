@@ -62,7 +62,7 @@ def install_phase_alpha():
         metasploit_file = os.stat('metasploit.sh')
         os.chmod('metasploit.sh', metasploit_file.st_mode | stat.S_IEXEC)
 
-        if distro.linux_distribution(False) == 'kali':
+        if distro.linux_distribution(False)[0] == 'kali':
             subprocess.call(['./metasploit.sh', 'Kali'])
         else:
             subprocess.call(['./metasploit.sh', 'Linux'])
