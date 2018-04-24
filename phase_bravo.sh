@@ -574,12 +574,16 @@ function install_eye_witness() {
 #@caution: Peeping Tom is unsupported for over a year!
 #----------------------------------------
 function peeping_tom_issue() {
-    echo -e "${red}########### CAUTION ########### Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${yellow}Eye Witness${nc}
+    echo -e "${red}########### CAUTION ###########
+     Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${yellow}Eye Witness${nc}
     ${blue}1) Would you like to continue installing Peeping Tom?${nc}
     ${blue}2) Would you like to install Eye Witness instead?${nc}
     ${blue}3) Would you like to install both?${nc}
-    ${green}Both Peeping Tom and Eye Witness does the same job, Eye Witness just does it better. ${yellow} According to Tim Tomes (Creator of Peeping Tom)${nc}"
+    ${green}Both Peeping Tom and Eye Witness does the same job, Eye Witness just does it better. ${yellow} According to Tim Tomes (Creator of Peeping Tom)${nc}
+    "
+
     read -n1 -p "Please Choose between [1,2,3] : " user_choice
+    echo ""
 
     if (($user_choice == 1));then
         echo -e "${red}CAUTION ${nc} You are installing PeepingTom which is out of support for a long time."
@@ -656,6 +660,9 @@ function Veil() {
         fi
         cd /opt/Veil/config && ./setup.sh --force --silent ##force overwrite everything, silent does not user attention (worth to take a look later)
         ## if the previous commit failed to run.
+        echo "------------------------
+        Exit status of Veil --> $?}
+        ------------------------"
         if [ $? -ne 0 ];then
             ./terminator.sh 1 "cd /opt/Veil/config && ./setup.sh --force --silent"
             exit 255
@@ -770,3 +777,4 @@ fi
 ##Install or Write code for the following in Kali machine -> Veil, BypassUAC, BeEF {Important}
 ##might need to check if postgreSQL is installed TOO before calling discover.
 ##Need error checker in this script. {Placed} {Check if they actually work from Kali}
+##PeepingTom has an issue in installation. Peeping tom has been installed b4hand.
