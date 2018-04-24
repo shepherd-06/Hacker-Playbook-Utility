@@ -114,7 +114,7 @@ function clone_script() {
         2) Run ${5} installation again.
         3) ${red}Remove the ${5} ${nc}Clone again.."
         sleep 2s ## sleep sleep sleep
-        read -n1 -p "Please Choose between [1,2] : " user_option
+        read -n1 -p "Please Choose between [1,2,3] : " user_option
         echo ""
         if (($user_option == 1 ));then
             echo -e "${green}Moving on...${nc}"
@@ -603,27 +603,25 @@ function peeping_tom_issue() {
 
 #----------------------------------------
 #Veil version 3.0 Installation!
-#TODO: Need to check Veil from Kali------
 #----------------------------------------
 function Veil() {
     echo -e "${yellow}-------------------------------
-    ${red} Veil Evasion is no Longer supported. ${cyan}Currently running Veil 3.0
+    ${red} Veil Evasion is no Longer supported, ${cyan}Installing Veil 3.0 instad
     ${blue} Cloning from ${yellow} https://github.com/Veil-Framework/Veil
-    ${blue} Would you like to continue?
     ${yellow}-------------------------------${nc}"
 
-    read -n1 -p "Choose y for yes, n for no : " user_option
-    echo ""
-    if [ "$user_option" = "n" ] || [ "$user_option" = "N" ];then
-        echo -e "${blue}Proceeding Forward$ :)${nc}"
-        sleep 3s
-        peeping_tom_issue
-    fi
+#    Script will directly move to Install Veil 3.0, less clutter.
+#    read -n1 -p "Choose y for yes, n for no : " user_option
+#    echo ""
+#    if [ "$user_option" == "n" ] || [ "$user_option" == "N" ];then
+#        echo -e "${blue}Ignoring Veil. Moving Forward... :)${nc}"
+#        sleep 3s
+#        peeping_tom_issue
+#    fi
 
     script_name="Veil"
     extra_message="Veil will be used to create Python based Meterpreter executable"
     short_name="Veil 3.0"
-
     #calling clone script with addition parameters
     clone_script "${script_name}" 3 https://github.com/Veil-Framework/Veil "${extra_message}" "${short_name}"
 
@@ -631,26 +629,6 @@ function Veil() {
     ## install for 0, 20, 30
     ## no install for 10
     if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
-    # the following commented code is probably no needed for Veil (github page)
-    # installation probably changed. Need Test
-#        echo -e "${green}Successfully cloned Veil.${nc} Updating Configuration now..."
-#        cd /opt/Veil/config && ./update-config.py
-#        ## if the previous commit failed to run.
-#        if [ $? -ne 0 ];then
-#            ./terminator.sh 1 "cd /opt/Veil/config && ./update-config.py"
-#            exit 255
-#        fi
-#
-#        sleep 2s ##
-#        echo -e "${green}${short_name} Configuration Done.
-#        ${nc}Running installation now."
-#
-#        cd /opt/Veil/ && ./Veil.py --setup
-#        ## if the previous commit failed to run.
-#        if [ $? -ne 0 ];then
-#            ./terminator.sh 1 "cd /opt/Veil/ && ./Veil.py --setup"
-#            exit 255
-#        fi
         echo -e "${green}Successfully cloned Veil.${nc} Running Installation  now..."
         chmod a+x /opt/Veil/config/setup.sh
         ## if the previous commit failed to run.
@@ -660,15 +638,24 @@ function Veil() {
         fi
         cd /opt/Veil/config && ./setup.sh --force --silent ##force overwrite everything, silent does not user attention (worth to take a look later)
         ## if the previous commit failed to run.
-        echo "------------------------
-        Exit status of Veil --> $?}
-        ------------------------"
+
         if [ $? -ne 0 ];then
             ./terminator.sh 1 "cd /opt/Veil/config && ./setup.sh --force --silent"
             exit 255
         fi
-        echo -e "${green}${short_name} Complete.${nc}"
 
+        echo -e "If there's an ${red}error${nc}, do you want to ${blue} nuke the wine folder option?${nc}"
+        echo ""
+        sleep 1s
+        read -n1 -p "Confirm [y/n] : " user_choice
+        echo ""
+
+        if [ "${user_choice}" == "Y" ] || [ "${user_choice}" == "y" ];then
+            echo -e "${blue}Nuking the wine..${nc}"
+            cd /opt/Veil/ && ./Veil.py --setup
+        fi
+        sleep 1s
+        echo -e "${green}${short_name} Complete.${nc}"
     fi
 
     sleep 2s
@@ -759,7 +746,7 @@ if [ $? -eq 0 ];then
     ## Metasploit is isntalled.
     if [[ $EUID -ne 0 ]];then
         echo -e "${cyan}This script needs to run in super-user mode... ${nc}"
-        sudo su
+        sudo su # script will ask user for password to sudo mode.
     fi
 
     ## TODO: might need to check if postgreSQL is installed TOO.
@@ -768,7 +755,7 @@ if [ $? -eq 0 ];then
 else
     echo -e "${red} Metasploit is not installed properly! or not found${blue} "$(which -a msfconsole)".${nc}Terminating script."
     sleep 3s ## boom boom
-    exit 255 #leave scrupt
+    ./terminator.sh 2 ""
 fi
 
 
