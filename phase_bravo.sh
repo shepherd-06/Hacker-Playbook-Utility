@@ -112,10 +112,11 @@ function clone_script() {
         echo -e "A folder named ${red}${5} already exist!${nc} Choose your options:
         1) ${5} is already installed. ${green}Move on!${nc}
         2) Run ${5} installation again.
-        3) ${red}Remove the ${5} ${nc}Clone again.."
-        sleep 2s ## sleep sleep sleep
+        3) ${red}Remove the ${5} ${nc}Clone again..
+        "
         read -n1 -p "Please Choose between [1,2,3] : " user_option
         echo ""
+        sleep 2s ## sleep sleep sleep
         if (($user_option == 1 ));then
             echo -e "${green}Moving on...${nc}"
             sleep 2s ## sleep sleep sleep
@@ -444,14 +445,14 @@ function install_peeping_tom() {
     ## install for 0, 20, 30
     ## no install for 10
     if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
-        # install PeepingTom
-        cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
-
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            ./terminator.sh 1 "cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git"
-            exit 255
-        fi
+#        # install PeepingTom
+#        cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
+#
+#        ## if the previous commit failed to run.
+#        if [ $? -ne 0 ];then
+#            ./terminator.sh 1 "cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git"
+#            exit 255
+#        fi
 
         cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
 
@@ -574,8 +575,9 @@ function install_eye_witness() {
 #@caution: Peeping Tom is unsupported for over a year!
 #----------------------------------------
 function peeping_tom_issue() {
-    echo -e "${red}########### CAUTION ###########
-     Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${yellow}Eye Witness${nc}
+    echo -e "
+    ${red}########### CAUTION ###########
+     Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${cyan}Eye Witness${nc}
     ${blue}1) Would you like to continue installing Peeping Tom?${nc}
     ${blue}2) Would you like to install Eye Witness instead?${nc}
     ${blue}3) Would you like to install both?${nc}
@@ -605,10 +607,7 @@ function peeping_tom_issue() {
 #Veil version 3.0 Installation!
 #----------------------------------------
 function Veil() {
-    echo -e "${yellow}-------------------------------
-    ${red} Veil Evasion is no Longer supported, ${cyan}Installing Veil 3.0 instad
-    ${blue} Cloning from ${yellow} https://github.com/Veil-Framework/Veil
-    ${yellow}-------------------------------${nc}"
+    echo -e "${yellow}Veil Evasion is no Longer supported, ${cyan}Installing Veil 3.0 instead. Cloning from ${blue} https://github.com/Veil-Framework/Veil${nc}"
 
 #    Script will directly move to Install Veil 3.0, less clutter.
 #    read -n1 -p "Choose y for yes, n for no : " user_option
