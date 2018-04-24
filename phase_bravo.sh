@@ -462,7 +462,7 @@ function install_peeping_tom() {
             exit 255
         fi
 
-        if (($(getconf LONG_BIT) == 64));then
+        if (( $(getconf LONG_BIT) == 64 ));then
             cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
 
                 ## if the previous commit failed to run.
