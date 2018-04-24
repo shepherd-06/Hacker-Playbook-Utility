@@ -68,6 +68,11 @@ function filePath() {
 # Parameter 4) extra message {during installation period}
 # Parameter 5) Short name (For mentioning phases)
 # Other files and installation will be done from the calling function.
+# :return
+# first install -> 0
+# success (move on)[NO INSTALL] -> 10
+# keep old, run the installation again -> 20
+# rm old, fresh clone -> 30
 #--------------------------------------------------------------------
 function clone_script() {
     echo -e "
@@ -99,17 +104,23 @@ function clone_script() {
         fi
         echo -e "${green}${5} installation is complete${nc}"
         sleep 2s ## sleep sleep sleep
+
+        return 0 ## fresh first install
     else
         # directory exists.
         echo -e "A folder named ${red}${5} already exist!${nc} Choose your options:
         1) ${5} is already installed. ${green}Move on!${nc}
-        2) ${red}Remove the ${5} ${nc}Install fresh"
+        2) Run ${5} installation again.
+        2) ${red}Remove the ${5} ${nc}Clone again.."
         sleep 2s ## sleep sleep sleep
         read -p "Please Choose between [1,2] : " user_option
         echo ""
         if (($user_option == 1 ));then
             echo -e "${green}Moving on...${nc}"
             sleep 2s ## sleep sleep sleep
+            return 10 # green green. nothing to do.
+        elif (($user_option == 2));then
+            return 20 ## running installation
         else
             echo -e "Removing ${red}OLD ${5}${nc}"
             rm -rf ${directory}
@@ -125,8 +136,8 @@ function clone_script() {
                 ./terminator.sh 1 "cd /opt/ && git clone ${3}"
                 exit 255
             fi
-            echo -e "${green}${5} installation is complete${nc}"
             sleep 2s ## sleep sleep sleep
+            return 30 ## cloned fresh, need to run installation again!
         fi
     fi
 }
@@ -296,7 +307,7 @@ function fuzzing() {
     short_name="Fuzzing Lists"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 9 http://github.com/danielmiessler/SecLists.git "${extra_message} ${short_name}"
+    clone_script "${script_name}" 9 http://github.com/danielmiessler/SecLists.git "${extra_message}" "${short_name}"
 
     sleep 2s #almost there
     little_wget_magic # its a long wget call.
@@ -340,20 +351,25 @@ function social_engineering_toolkit() {
     short_name="SET"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 8 http://github.com/trustedsec/social-engineer-toolkit/ "${extra_message} ${short_name}"
+    clone_script "${script_name}" 8 http://github.com/trustedsec/social-engineer-toolkit/ "${extra_message}" "${short_name}"
 
-    cd /opt/set/ && chmod a+x setup.py
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/set/ && chmod a+x setup.py"
-        exit 255
-    fi
+    status=$?
+    ## install for 0, 20, 30
+    ## no install for 10
+    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
+        cd /opt/set/ && chmod a+x setup.py
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/set/ && chmod a+x setup.py"
+            exit 255
+        fi
 
-    cd /opt/set/ && python setup.py install
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/set/ && python setup.py install"
-        exit 255
+        cd /opt/set/ && python setup.py install
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/set/ && python setup.py install"
+            exit 255
+        fi
     fi
 
     sleep 2s # sleeping 2s b4 doing anything else.
@@ -370,7 +386,7 @@ function responder() {
     short_name="Responder"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 7 http://github.com/SpiderLabs/Responder.git "${extra_message} ${short_name}"
+    clone_script "${script_name}" 7 http://github.com/SpiderLabs/Responder.git "${extra_message}" "${short_name}"
 
     sleep 2s #sleeping....
     social_engineering_toolkit
@@ -387,21 +403,26 @@ function powersploit() {
     short_name="PowerSploit"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 6 http://github.com/mattifestation/PowerSploit.git "${extra_message} ${short_name}"
+    clone_script "${script_name}" 6 http://github.com/mattifestation/PowerSploit.git "${extra_message}" "${short_name}"
 
-    cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py"
-        exit 255
+    status=$?
+    ## install for 0, 20, 30
+    ## no install for 10
+    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
+        cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py"
+            exit 255
+        fi
+        cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py"
+            exit 255
+        fi
+        echo -e "${green}${script_name} installation is complete${nc}"
     fi
-    cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py"
-        exit 255
-    fi
-    echo -e "${green}${script_name} installation is complete${nc}"
 
     sleep 2s #wait 2seconds b4 doing anything stupid! :p
     responder
@@ -416,91 +437,97 @@ function install_peeping_tom() {
     short_name="Peeping Tom"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 4 http://bitbucket.org/LaNMaSteR53/peepingtom.git "${extra_message} ${short_name}"
-    # install PeepingTom
-    cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
+    clone_script "${script_name}" 4 http://bitbucket.org/LaNMaSteR53/peepingtom.git "${extra_message}" "${short_name}"
 
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git"
-        exit 255
-    fi
+    status=$?
+    ## install for 0, 20, 30
+    ## no install for 10
+    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
+        # install PeepingTom
+        cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
 
-    cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git"
+            exit 255
+        fi
 
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl"
-        exit 255
-    fi
+        cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
 
-    if (($(getconf LONG_BIT) == 64));then
-        cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl"
+            exit 255
+        fi
+
+        if (($(getconf LONG_BIT) == 64));then
+            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+
+                ## if the previous commit failed to run.
+            if [ $? -ne 0 ];then
+                ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2"
+                exit 255
+            fi
+
+            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
 
             ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2"
-            exit 255
+            if [ $? -ne 0 ];then
+                ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2"
+                exit 255
+            fi
+
+            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+
+            ## if the previous commit failed to run.
+            if [ $? -ne 0 ];then
+                ./terminator.sh 1 "chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
+                exit 255
+            fi
+
+            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+
+            ## if the previous commit failed to run.
+            if [ $? -ne 0 ];then
+                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
+                exit 255
+            fi
+        else
+            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
+
+            ## if the previous commit failed to run.
+            if [ $? -ne 0 ];then
+                ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2"
+                exit 255
+            fi
+
+            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
+
+            ## if the previous commit failed to run.
+            if [ $? -ne 0 ];then
+                ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2"
+                exit 255
+            fi
+
+            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+
+            ## if the previous commit failed to run.
+            if [ $? -ne 0 ];then
+                ./terminator.sh 1 "chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
+                exit 255
+            fi
+
+            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+
+            ## if the previous commit failed to run.
+            if [ $? -ne 0 ];then
+                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
+                exit 255
+            fi
         fi
-
-        tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
-
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2"
-            exit 255
-        fi
-
-        chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            ./terminator.sh 1 "chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
-            exit 255
-        fi
-
-        python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
-            exit 255
-        fi
-    else
-        cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
-
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2"
-            exit 255
-        fi
-
-        tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
-
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2"
-            exit 255
-        fi
-
-        chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            ./terminator.sh 1 "chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
-            exit 255
-        fi
-
-        python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
-            exit 255
-        fi
+        echo -e "${green}Peeping Tom installation is complete${nc}"
     fi
 
-    echo -e "${green}Peeping Tom installation is complete${nc}"
     sleep 2s # sleep 2s before doing anything else
     return 0
 }
@@ -514,25 +541,29 @@ function install_eye_witness() {
     short_name="Eye Witness"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 5 https://github.com/ChrisTruncer/EyeWitness.git "${extra_message} ${short_name}"
+    clone_script "${script_name}" 5 https://github.com/ChrisTruncer/EyeWitness.git "${extra_message}" "${short_name}"
 
-    chmod a+x /opt/EyeWitness/setup/setup.sh
+    status=$?
+    ## install for 0, 20, 30
+    ## no install for 10
+    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
+        chmod a+x /opt/EyeWitness/setup/setup.sh
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "chmod a+x /opt/EyeWitness/setup/setup.sh"
+            exit 255
+        fi
 
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "chmod a+x /opt/EyeWitness/setup/setup.sh"
-        exit 255
+        cd /opt/EyeWitness/setup && ./setup.sh
+
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/EyeWitness/setup && ./setup.sh"
+            exit 255
+        fi
+        echo -e "${green}${script_name} installation is complete${nc}"
     fi
 
-    cd /opt/EyeWitness/setup && ./setup.sh
-
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/EyeWitness/setup && ./setup.sh"
-        exit 255
-    fi
-
-    echo -e "${green}${script_name} installation is complete${nc}"
     sleep 2s # sleep 2s before doing anything else
     return 0
 }
@@ -589,27 +620,33 @@ function Veil() {
     short_name="Veil 3.0"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 3 https://github.com/Veil-Framework/Veil "${extra_message} ${short_name}"
+    clone_script "${script_name}" 3 https://github.com/Veil-Framework/Veil "${extra_message}" "${short_name}"
 
-    echo -e "${green}Successfully cloned Veil.${nc} Updating Configuration now..."
-    cd /opt/Veil/config && ./update-config.py
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/Veil/config && ./update-config.py"
-        exit 255
+    status=$?
+    ## install for 0, 20, 30
+    ## no install for 10
+    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
+        echo -e "${green}Successfully cloned Veil.${nc} Updating Configuration now..."
+        cd /opt/Veil/config && ./update-config.py
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/Veil/config && ./update-config.py"
+            exit 255
+        fi
+
+        sleep 2s ##
+        echo -e "${green}${short_name} Configuration Done.
+        ${nc}Running installation now."
+
+        cd /opt/Veil/ && ./Veil.py --setup
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/Veil/ && ./Veil.py --setup"
+            exit 255
+        fi
+        echo -e "${green}${short_name} Complete.${nc}"
     fi
 
-    sleep 2s ##
-    echo -e "${green}${short_name} Configuration Done.
-    ${nc}Running installation now."
-
-    cd /opt/Veil/ && ./Veil.py --setup
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/Veil/ && ./Veil.py --setup"
-        exit 255
-    fi
-    echo -e "${green}${short_name} Complete.${nc}"
     sleep 2s
     peeping_tom_issue
 }
@@ -624,23 +661,28 @@ function SMBExec() {
     short_name="SMBExec"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 2 https://github.com/brav0hax/smbexec.git "${extra_message} ${short_name}"
+    clone_script "${script_name}" 2 https://github.com/brav0hax/smbexec.git "${extra_message}" "${short_name}"
 
-    chmod a+x /opt/smbexec/install.sh
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "chmod a+x /opt/smbexec/install.sh"
-        exit 255
-    fi
-    echo -e "Follow the ${blue}book for Installation Procedure"
+    status=$?
+    ## install for 0, 20, 30
+    ## no install for 10
+    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
+        chmod a+x /opt/smbexec/install.sh
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "chmod a+x /opt/smbexec/install.sh"
+            exit 255
+        fi
+        echo -e "Follow the ${blue}book for Installation Procedure"
 
-    cd /opt/smbexec && ./install.sh
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/smbexec && ./install.sh"
-        exit 255
+        cd /opt/smbexec && ./install.sh
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/smbexec && ./install.sh"
+            exit 255
+        fi
+        echo -e "Installing ${short_name} -- ${green} DONE$ ${nc}"
     fi
-    echo -e "Installing ${short_name} -- ${green} DONE$ ${nc}"
     sleep 2s
     Veil
 }
@@ -655,22 +697,30 @@ function discover() {
     short_name="Discover"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 1 https://github.com/leebaird/discover.git "${extra_message} ${short_name}"
+    clone_script "${script_name}" 1 https://github.com/leebaird/discover.git "${extra_message}" "${short_name}"
 
-    chmod a+x /opt/discover/update.sh
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "chmod a+x /opt/discover/update.sh"
-        exit 255
+    status=$?
+    ## install for 0, 20, 30
+    ## no install for 10
+
+    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
+        #nothing to do
+        chmod a+x /opt/discover/update.sh
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "chmod a+x /opt/discover/update.sh"
+            exit 255
+        fi
+
+        cd /opt/discover && ./update.sh
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "cd /opt/discover && ./update.sh"
+            exit 255
+        fi
+        echo -e "Installing ${short_name} -- ${green} DONE$ ${nc}"
     fi
 
-    cd /opt/discover && ./update.sh
-    ## if the previous commit failed to run.
-    if [ $? -ne 0 ];then
-        ./terminator.sh 1 "cd /opt/discover && ./update.sh"
-        exit 255
-    fi
-    echo -e "Installing ${short_name} -- ${green} DONE$ ${nc}"
     sleep 2s # Wait 2 seconds before Running SMBExec
     SMBExec
 }
@@ -700,10 +750,6 @@ fi
 
 
 ##TODO: Task at hand.
-##enable sleeper so people can read wtf is happening. {Somewhat complete.}
-##how to check if a task is failed; and wt to do after that?
 ##Install or Write code for the following in Kali machine -> Veil, BypassUAC, BeEF {Important}
 ##might need to check if postgreSQL is installed TOO before calling discover.
 ##Need error checker in this script. {Placed} {Check if they actually work from Kali}
-##TODO -> Kali cant run this command -> sudo -u msfdb init. {no other users found I guess, Other than root.}
-##TODO -> for kali, this command, runs in sudo mode directly! cool.

@@ -43,14 +43,14 @@ echo ""
 sleep 2s
 
 ## checker 1
-echo -e "${blue}Do you want to configure PostgreSQL to start after server boots up?${nc}"
+echo -e "${blue}Configure PostgreSQL to start after server boots up?${nc}"
 echo ""
 read -n1 -p "Choose your option [y/n]: " user_choice
 echo ""
 
 
 ##TODO --> problem in this if else block. it access with 'n'!!!
-if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
+if [ "${user_choice}" == "y" ] || [ "${user_choice}" == "Y" ]; then
     echo -e "Configuring PostgreSQL to start upon server boot"
     sleep 3s # wait before doing.
     update-rc.d postgresql enable #configured psql to start upon booting
@@ -64,12 +64,12 @@ fi
 
 
 ## checker 2
-echo -e "${blue}Do you want to start PostgreSQL now?${nc}"
+echo -e "${blue}Start PostgreSQL now?${nc}"
 echo ""
 read -n1 -p "Choose your option [y/n]: " user_choice
 echo ""
 
-if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
+if [ "${user_choice}" == "y" ] || [ "${user_choice}" == "Y" ]; then
     echo -e "Starting PostgreSQL.."
     sleep 3s # wait before doing.
     service postgresql start #starting the postgresql server for the first time.
