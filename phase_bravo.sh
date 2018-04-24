@@ -112,7 +112,7 @@ function clone_script() {
         echo -e "A folder named ${red}${5} already exist!${nc} Choose your options:
         1) ${5} is already installed. ${green}Move on!${nc}
         2) Run ${5} installation again.
-        2) ${red}Remove the ${5} ${nc}Clone again.."
+        3) ${red}Remove the ${5} ${nc}Clone again.."
         sleep 2s ## sleep sleep sleep
         read -n1 -p "Please Choose between [1,2] : " user_option
         echo ""
@@ -627,25 +627,41 @@ function Veil() {
     ## install for 0, 20, 30
     ## no install for 10
     if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
-        echo -e "${green}Successfully cloned Veil.${nc} Updating Configuration now..."
-        cd /opt/Veil/config && ./update-config.py
+    # the following commented code is probably no needed for Veil (github page)
+    # installation probably changed. Need Test
+#        echo -e "${green}Successfully cloned Veil.${nc} Updating Configuration now..."
+#        cd /opt/Veil/config && ./update-config.py
+#        ## if the previous commit failed to run.
+#        if [ $? -ne 0 ];then
+#            ./terminator.sh 1 "cd /opt/Veil/config && ./update-config.py"
+#            exit 255
+#        fi
+#
+#        sleep 2s ##
+#        echo -e "${green}${short_name} Configuration Done.
+#        ${nc}Running installation now."
+#
+#        cd /opt/Veil/ && ./Veil.py --setup
+#        ## if the previous commit failed to run.
+#        if [ $? -ne 0 ];then
+#            ./terminator.sh 1 "cd /opt/Veil/ && ./Veil.py --setup"
+#            exit 255
+#        fi
+        echo -e "${green}Successfully cloned Veil.${nc} Running Installation  now..."
+        chmod a+x /opt/Veil/config/setup.sh
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            ./terminator.sh 1 "cd /opt/Veil/config && ./update-config.py"
+            ./terminator.sh 1 "chmod a+x /opt/Veil/config/setup.sh"
             exit 255
         fi
-
-        sleep 2s ##
-        echo -e "${green}${short_name} Configuration Done.
-        ${nc}Running installation now."
-
-        cd /opt/Veil/ && ./Veil.py --setup
+        cd /opt/Veil/config && ./setup.sh --force --silent ##force overwrite everything, silent does not user attention (worth to take a look later)
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            ./terminator.sh 1 "cd /opt/Veil/ && ./Veil.py --setup"
+            ./terminator.sh 1 "cd /opt/Veil/config && ./setup.sh --force --silent"
             exit 255
         fi
         echo -e "${green}${short_name} Complete.${nc}"
+
     fi
 
     sleep 2s
