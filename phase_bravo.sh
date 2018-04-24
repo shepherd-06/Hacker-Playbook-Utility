@@ -62,6 +62,7 @@ function filePath() {
 }
 
 #--------------------------------------------------------------------
+# :param
 # Parameter 1) script/filename. ${1}
 # Parameter 2) filePath ${2}
 # Parameter 3) url ${3}
@@ -113,7 +114,7 @@ function clone_script() {
         2) Run ${5} installation again.
         2) ${red}Remove the ${5} ${nc}Clone again.."
         sleep 2s ## sleep sleep sleep
-        read -p "Please Choose between [1,2] : " user_option
+        read -n1 -p "Please Choose between [1,2] : " user_option
         echo ""
         if (($user_option == 1 ));then
             echo -e "${green}Moving on...${nc}"

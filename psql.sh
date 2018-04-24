@@ -48,8 +48,6 @@ echo ""
 read -n1 -p "Choose your option [y/n]: " user_choice
 echo ""
 
-
-##TODO --> problem in this if else block. it access with 'n'!!!
 if [ "${user_choice}" == "y" ] || [ "${user_choice}" == "Y" ]; then
     echo -e "Configuring PostgreSQL to start upon server boot"
     sleep 3s # wait before doing.

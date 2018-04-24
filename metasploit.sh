@@ -152,7 +152,7 @@ echo -e "${blue}Do you want to start the Metasploit Framework database? ${nc}"
 echo ""
 read -n1 -p "Choose your option y/n: " user_choice
 echo ""
-if (( $user_choice == "y" )) || (( $user_choice == "Y")); then
+if [ "${user_choice}" == "y" ] || [ "${user_choice}" == "Y" ]; then
     echo -e "${blue}Starting msf database ${nc}"
     sleep 2s #sleep 2seconds before donning
 
