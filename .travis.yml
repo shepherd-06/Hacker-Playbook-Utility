@@ -12,15 +12,15 @@ python:
 before_install:
  - sudo apt-get update
 
-install:
- - pip3 install grin
- - pip3 install distro
- - pip3 install peppercorn
- - pip3 install setuptools
- - pip3 install wheel
- - pip3 install argparse
+#install:
 
 script:
+  - pip3 install grin
+  - pip3 install distro
+  - pip3 install peppercorn
+  - pip3 install setuptools
+  - pip3 install wheel
+  - pip3 install argparse
   - sudo python3 -m unittest -v test_utility.py
 
 notifications:
