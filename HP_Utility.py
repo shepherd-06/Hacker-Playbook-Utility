@@ -32,7 +32,7 @@ class Utility:
             return is_root
 
     @staticmethod
-    def system_update_upgrade(is_test):
+    def system_update_upgrade(is_test=False):
         """
         :param is_test -> if true, upgrade command will run in force yes mode.
         run system update upgrade before doing anything.
