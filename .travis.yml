@@ -6,8 +6,8 @@ python:
   - "3.5"
   - "3.6"
 
-virtualenv:
-    system_site_package: true
+#virtualenv:
+#    system_site_package: true
 
 before_install:
  - sudo apt-get update
