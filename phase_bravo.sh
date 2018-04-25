@@ -439,6 +439,11 @@ function install_peeping_tom() {
     extra_message="PeepingTom will be used to take snapshots of Webpages"
     short_name="Peeping Tom"
 
+    echo -e " ----------------------------
+    ${lightPurple}Peepingtom has an issue handling phantomJS for now. Reverting...${nc}
+    ----------------------------"
+    return 255 #TODO - peeping tom phantomJS issue.
+
     #calling clone script with addition parameters
     clone_script "${script_name}" 4 http://bitbucket.org/LaNMaSteR53/peepingtom.git "${extra_message}" "${short_name}"
 
@@ -601,15 +606,6 @@ function peeping_tom_issue() {
 #----------------------------------------
 function Veil() {
     echo -e "${yellow}Veil Evasion is no Longer supported, ${cyan}Installing Veil 3.0 instead. Cloning from ${blue} https://github.com/Veil-Framework/Veil${nc}"
-
-#    Script will directly move to Install Veil 3.0, less clutter.
-#    read -n1 -p "Choose y for yes, n for no : " user_option
-#    echo ""
-#    if [ "$user_option" == "n" ] || [ "$user_option" == "N" ];then
-#        echo -e "${blue}Ignoring Veil. Moving Forward... :)${nc}"
-#        sleep 3s
-#        peeping_tom_issue
-#    fi
 
     script_name="Veil"
     extra_message="Veil will be used to create Python based Meterpreter executable"
