@@ -7,6 +7,7 @@ blue="\033[1;34m"
 yellow="\033[1;33m"
 lightPurple='\033[1;35m'
 
+isTest=${1}
 echo -e "${yellow}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,7 +41,13 @@ echo -e "
     ${yellow}-------------------------------------------${nc}
     "
 sleep 3s # wait before doing.
-sudo apt upgrade --fix-missing
+
+if [ ${runningDistro} == 'true' ];then
+    ## force Upgrades can break things. Use this on your own risk.
+    sudo apt upgrade -y --fix-missing ## running in force installation mode
+else
+    sudo apt upgrade --fix-missing
+fi
 
 if [ $? -ne 0 ];then
     ./terminator.sh 1 "sudo apt upgrade"

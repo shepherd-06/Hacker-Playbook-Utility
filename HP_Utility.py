@@ -32,30 +32,41 @@ class Utility:
             return is_root
 
     @staticmethod
-    def system_update_upgrade():
+    def system_update_upgrade(is_test):
         """
+        :param is_test -> if true, upgrade command will run in force yes mode.
         run system update upgrade before doing anything.
         :return:
         """
+        is_error = False
         try:
             file_status = os.stat('updater.sh')
             os.chmod('updater.sh', file_status.st_mode | stat.S_IEXEC)
-            subprocess.call(['./updater.sh'])
+            if is_test:
+                subprocess.call(['./updater.sh', 'true'])
+            else:
+                subprocess.call(['./updater.sh', 'false'])
             del file_status
         except IOError as error:
+            is_error = True
             sys.exit(str(error))
         except subprocess.CalledProcessError as error:
+            is_error = True
             sys.exit(str(error))
         except OSError as error:
+            is_error = True
             sys.exit((str(error)))
         finally:
-            return 1
+            if is_error:
+                return 1
+            else:
+                return 0
 
     @staticmethod
     def install_phase_alpha():
         """
         Install Postgresql and Metasploit Framework related stuff
-        :return:
+        :return: 0 / 1
         """
         try:
             file_status = os.stat('psql.sh')
