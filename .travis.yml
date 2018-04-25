@@ -13,12 +13,12 @@ before_install:
  - sudo apt-get update
 
 install:
- - pip install grin
- - pip install distro
- - pip install peppercorn
- - pip install setuptools
- - pip install wheel
- - pip install argparse
+ - pip3 install grin
+ - pip3 install distro
+ - pip3 install peppercorn
+ - pip3 install setuptools
+ - pip3 install wheel
+ - pip3 install argparse
 
 script:
   - sudo python3 -m unittest -v test_utility.py
