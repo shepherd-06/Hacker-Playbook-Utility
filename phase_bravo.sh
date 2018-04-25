@@ -445,14 +445,6 @@ function install_peeping_tom() {
     ## install for 0, 20, 30
     ## no install for 10
     if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
-#        # install PeepingTom
-#        cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git
-#
-#        ## if the previous commit failed to run.
-#        if [ $? -ne 0 ];then
-#            ./terminator.sh 1 "cd /opt/ && git clone http://bitbucket.org/LaNMaSteR53/peepingtom.git"
-#            exit 255
-#        fi
 
         cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
 
@@ -511,19 +503,19 @@ function install_peeping_tom() {
                 exit 255
             fi
 
-            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py
 
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                ./terminator.sh 1 "chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
+                ./terminator.sh 1 "chmod a+x /opt/phantomjs-2.1.1-linux-i686/build.py"
                 exit 255
             fi
 
-            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+            python /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py
 
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
+                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py"
                 exit 255
             fi
         fi

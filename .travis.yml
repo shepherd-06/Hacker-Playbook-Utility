@@ -3,3 +3,6 @@ sudo: enabled
 os: linux
 python:
   - "3.5"
+
+script:
+  - tests/test_HP_Utilitypy
