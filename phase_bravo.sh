@@ -439,7 +439,8 @@ function install_peeping_tom() {
     extra_message="PeepingTom will be used to take snapshots of Webpages"
     short_name="Peeping Tom"
 
-    echo -e " ----------------------------
+    echo -e "
+    ----------------------------
     ${lightPurple}Peepingtom has an issue handling phantomJS for now. Reverting...${nc}
     ----------------------------"
     return 255 #TODO - peeping tom phantomJS issue.

@@ -1,5 +1,4 @@
 from unittest import TestCase
-from HP_Utility import Utility
 
 
 class TestUtility(TestCase):
