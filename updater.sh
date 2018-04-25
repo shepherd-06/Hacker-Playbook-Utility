@@ -40,7 +40,7 @@ echo -e "
     ${yellow}-------------------------------------------${nc}
     "
 sleep 3s # wait before doing.
-sudo apt upgrade
+sudo apt upgrade --fix-missing
 
 if [ $? -ne 0 ];then
     ./terminator.sh 1 "sudo apt upgrade"
