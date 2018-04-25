@@ -42,7 +42,7 @@ echo -e "
     "
 sleep 3s # wait before doing.
 
-if [ ${runningDistro} == 'true' ];then
+if [ ${isTest} == 'true' ];then
     ## force Upgrades can break things. Use this on your own risk.
     sudo apt upgrade -y --fix-missing ## running in force installation mode
 else
