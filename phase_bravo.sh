@@ -57,6 +57,7 @@ function filePath() {
         echo /opt/SecLists
     else
         # Invalid Parameter
+
         exit
     fi
 }

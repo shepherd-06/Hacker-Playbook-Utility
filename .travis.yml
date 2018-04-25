@@ -1,8 +1,15 @@
 language: python
-sudo: enabled
 os: linux
+sudo: required
 python:
   - "3.5"
 
+virtualenv:
+    system_site_package: true
+
+before_install:
+ - sudo apt-get update
+ - pip install -r requirements.txt
+
 script:
-  - tests/test_HP_Utilitypy
+  - python3 -m unittest -v test_utility.py
