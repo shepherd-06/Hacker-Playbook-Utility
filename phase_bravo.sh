@@ -457,75 +457,110 @@ function install_peeping_tom() {
 
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            ./terminator.sh 1 "cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl"
+            ./terminator.sh 1 "error in downloading gnmap.pl from github gist"
             exit 255
         fi
 
-        if (( $(getconf LONG_BIT) == 64 ));then
-            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-
-                ## if the previous commit failed to run.
-            if [ $? -ne 0 ];then
-                ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2"
-                exit 255
-            fi
-
-            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
-
-            ## if the previous commit failed to run.
-            if [ $? -ne 0 ];then
-                ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2"
-                exit 255
-            fi
-
-            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-
-            ## if the previous commit failed to run.
-            if [ $? -ne 0 ];then
-                ./terminator.sh 1 "chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
-                exit 255
-            fi
-
-            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-
-            ## if the previous commit failed to run.
-            if [ $? -ne 0 ];then
-                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
-                exit 255
-            fi
-        else
-            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
-
-            ## if the previous commit failed to run.
-            if [ $? -ne 0 ];then
-                ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2"
-                exit 255
-            fi
-
-            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
-
-            ## if the previous commit failed to run.
-            if [ $? -ne 0 ];then
-                ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2"
-                exit 255
-            fi
-
-            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py
-
-            ## if the previous commit failed to run.
-            if [ $? -ne 0 ];then
-                ./terminator.sh 1 "chmod a+x /opt/phantomjs-2.1.1-linux-i686/build.py"
-                exit 255
-            fi
-
-            python /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py
-
-            ## if the previous commit failed to run.
-            if [ $? -ne 0 ];then
-                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py"
-                exit 255
-            fi
+        git clone git://github.com/ariya/phantomjs.git
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "error in cloning phantomJS from github"
+            exit 255
         fi
+
+        cd phantomjs && git checkout 2.1.1
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "error in git checkout"
+            exit 255
+        fi
+
+        cd phantomjs && git submodule init
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "error in initializing the git submodule"
+            exit 255
+        fi
+
+        cd phantomjs && git submodule update
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "error in git submodule update"
+            exit 255
+        fi
+
+        cd phantomjs && python build.py
+        ## if the previous commit failed to run.
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "error in running the phantomJS build file."
+            exit 255
+        fi
+
+#        if (( $(getconf LONG_BIT) == 64 ));then
+#            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+#
+#                ## if the previous commit failed to run.
+#            if [ $? -ne 0 ];then
+#                ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2"
+#                exit 255
+#            fi
+#
+#            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
+#
+#            ## if the previous commit failed to run.
+#            if [ $? -ne 0 ];then
+#                ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2"
+#                exit 255
+#            fi
+#
+#            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+#
+#            ## if the previous commit failed to run.
+#            if [ $? -ne 0 ];then
+#                ./terminator.sh 1 "chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
+#                exit 255
+#            fi
+#
+#            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
+#
+#            ## if the previous commit failed to run.
+#            if [ $? -ne 0 ];then
+#                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
+#                exit 255
+#            fi
+#        else
+#            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
+#
+#            ## if the previous commit failed to run.
+#            if [ $? -ne 0 ];then
+#                ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2"
+#                exit 255
+#            fi
+#
+#            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
+#
+#            ## if the previous commit failed to run.
+#            if [ $? -ne 0 ];then
+#                ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2"
+#                exit 255
+#            fi
+#
+#            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py
+#
+#            ## if the previous commit failed to run.
+#            if [ $? -ne 0 ];then
+#                ./terminator.sh 1 "chmod a+x /opt/phantomjs-2.1.1-linux-i686/build.py"
+#                exit 255
+#            fi
+#
+#            python /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py
+#
+#            ## if the previous commit failed to run.
+#            if [ $? -ne 0 ];then
+#                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py"
+#                exit 255
+#            fi
+#        fi
         echo -e "${green}Peeping Tom installation is complete${nc}"
     fi
 

@@ -58,6 +58,11 @@ setup(
             'HP-Utility=HP_Utility:main',
         ],
     },
+
+    scripts=[
+        'HP_Utility.py'
+    ],
+
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/ibtehaz-shawon/Hacker-Playbook-Utility/issues',
         'Source': 'https://github.com/ibtehaz-shawon/Hacker-Playbook-Utility/',
