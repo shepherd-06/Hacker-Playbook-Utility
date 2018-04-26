@@ -1,6 +1,7 @@
 language: python
 os: linux
-sudo: required
+sudo: true
+dist: precise
 python:
   - "3.4"
   - "3.5"
@@ -13,10 +14,10 @@ before_install:
  - sudo apt-get update
 
 install:
- - pip install -r requirements.txt
+ - sudo pip install -r requirements.txt
 
 script:
-  - python3 -m unittest -v test_utility.py
+  - sudo python3 -m unittest -v test_utility.py
 
 notifications:
   email:
