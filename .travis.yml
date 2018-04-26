@@ -1,14 +1,14 @@
 language: python
 os: linux
 sudo: true
-dist: precise
+dist: trusty
 python:
   - "3.4"
   - "3.5"
   - "3.6"
 
 virtualenv:
-    system_site_package: true
+    system_site_package: false
 
 before_install:
  - sudo apt-get update
