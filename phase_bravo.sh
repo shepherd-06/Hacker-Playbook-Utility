@@ -118,13 +118,13 @@ function clone_script() {
         read -n1 -p "Please Choose between [1,2,3] : " user_option
         echo ""
         sleep 2s ## sleep sleep sleep
-        if (($user_option == 1 ));then
+        if (( $user_option == 1 ));then
             echo -e "${green}Moving on...${nc}"
-            sleep 2s ## sleep sleep sleep
+            sleep 1s ## sleep sleep sleep
             return 10 # green green. nothing to do.
-        elif (($user_option == 2));then
+        elif (( $user_option == 2 ));then
             return 20 ## running installation
-        else
+        elif (( $user_option == 3 ));then
             echo -e "Removing ${red}OLD ${5}${nc}"
             rm -rf ${directory}
             ## if the previous commit failed to run.
@@ -141,6 +141,10 @@ function clone_script() {
             fi
             sleep 2s ## sleep sleep sleep
             return 30 ## cloned fresh, need to run installation again!
+        else
+            ./terminator.sh 1 "Wrong option for ${short_name} installation!"
+            sleep 2s ## boom boom booooooooom!
+            exit 255
         fi
     fi
 }
@@ -326,22 +330,42 @@ function beEF() {
     ${blue}Installing BeEF
     ${nc}BeFF will be used as an cross-site scripting attack framework
     "
-    #TODO: will install beef later
-    #TODO: beef requires Ruby2.3 to run.
-    #TODO: clone and install beef cloning their github page
+    sudo apt install software-properties-common
+    sleep 2s
+    sudo apt-add-repository -y ppa:brightbox/ruby-ng
+    sleep 2s
+    sudo apt update
+    sleep 2s
+    git clone https://github.com/beefproject/beef
+    sleep 2s
+    cd beef && ./install
+    sleep 2s
+
+    ## if the previous commit failed to run.
+    if [ $? -ne 0 ];then
+        ./terminator.sh 1 "cd beef && ./install"
+        exit 255
+    fi
+    echo -e "${green} beEF installation is complete"
+
     fuzzing
 }
 #----------------------------------------
 #Installing bypassUAC--------------------
-#TODO: Need Metepreter. Test and write in KALI
+#TODO -> need testng in real. Old command wont work.
+#TODO -> Metasploit probably come with this exploit by default in v4
 #----------------------------------------
 function bypassUAC() {
     echo -e "
-    ${yellow}#####################################
-    ${blue}Installing bypassuac {Need MeteSploit framework}
-    ${nc}will be used to bypass UAC in post exploitation.
-    ${yellow}#####################################${nc}
-    "
+    ${lightPurple}#####################################
+    #####################################
+    #####################################
+    ${cyan}# Skipping bypassUAC on this version ##
+    ${lightPurple}#####################################
+    #####################################
+    #####################################
+    ${nc}"
+
     beEF
 }
 
@@ -439,10 +463,10 @@ function install_peeping_tom() {
     extra_message="PeepingTom will be used to take snapshots of Webpages"
     short_name="Peeping Tom"
 
-    echo -e "
-    ----------------------------
-    ${lightPurple}Peepingtom has an issue handling phantomJS for now. Reverting...${nc}
-    ----------------------------"
+#    echo -e "
+#    ----------------------------
+#    ${lightPurple}Peepingtom has an issue handling phantomJS for now. Reverting...${nc}
+#    ----------------------------"
 #    return 255 #TODO - peeping tom phantomJS issue.
 
     #calling clone script with addition parameters
