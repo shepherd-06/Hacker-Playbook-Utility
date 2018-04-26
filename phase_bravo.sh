@@ -443,7 +443,7 @@ function install_peeping_tom() {
     ----------------------------
     ${lightPurple}Peepingtom has an issue handling phantomJS for now. Reverting...${nc}
     ----------------------------"
-    return 255 #TODO - peeping tom phantomJS issue.
+#    return 255 #TODO - peeping tom phantomJS issue.
 
     #calling clone script with addition parameters
     clone_script "${script_name}" 4 http://bitbucket.org/LaNMaSteR53/peepingtom.git "${extra_message}" "${short_name}"
