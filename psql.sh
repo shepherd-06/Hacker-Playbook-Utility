@@ -49,7 +49,7 @@ sleep 2s
 if [ ${isTest} == 'true' ];then
     echo -e "${blue}Configure PostgreSQL to start after server boots up?${nc}"
     echo ""
-    update-rc.d postgresql enable #configured psql to start upon booting
+    sudo update-rc.d postgresql enable #configured psql to start upon booting
     if [ $? -ne 0 ];then
         ./terminator.sh 1 "update-rc.d postgresql enable"
         exit 255
@@ -82,7 +82,7 @@ if [ ${isTest} == 'true' ];then
     echo -e "${blue}Start PostgreSQL now?${nc}"
     echo ""
     sleep 3s # wait before doing.
-    service postgresql start #starting the postgresql server for the first time.
+    sudo service postgresql start #starting the postgresql server for the first time.
 
     if [ $? -ne 0 ];then
         ./terminator.sh 1 "service postgresql start"

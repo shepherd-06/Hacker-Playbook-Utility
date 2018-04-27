@@ -32,7 +32,7 @@ then
         ${blue}Script invocation will import the Rapid7 signing key and setup the package for all supported Linux and OS X systems
         ${nc}"
         sleep 5s #sleeping 5 seconds before installation begin.
-        curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
+        sudo curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
 
         if [ $? -ne 0 ];then
             ./terminator.sh 1 "Metasploit framework installation command failed!"
@@ -81,14 +81,15 @@ if [ ${isTest} == 'true' ];then
     sleep 1s #wait 1 second
 
     if [ ${runningDistro} == 'Kali' ];then
-        msfdb reinit
+        sudo msfdb reinit
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
             ./terminator.sh 1 "msfdb reinit"
             exit 255
         fi
     else
-        sudo -u ${SUDO_USER} msfdb reinit
+#        sudo -u ${SUDO_USER} msfdb reinit
+        sudo msfdb reinit
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
             ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb reinit"
@@ -197,14 +198,15 @@ if [ ${isTest} == 'true' ];then
     sleep 2s #sleep 2seconds before donning
 
     if [ ${runningDistro} == 'Kali' ];then
-        msfdb start
+        sudo msfdb start
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
             ./terminator.sh 1 "msfdb start"
             exit 255
         fi
     else
-        sudo -u ${SUDO_USER} msfdb start
+#        sudo -u ${SUDO_USER} msfdb start
+        sudo msfdb start
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
             ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb start"
