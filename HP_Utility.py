@@ -66,26 +66,35 @@ class Utility:
     def install_phase_alpha(is_test=False):
         """
         Install Postgresql and Metasploit Framework related stuff
-        :return: 0 / 1
+        :return: 0 on success
         """
-        is_error=False
+        is_error = False
         try:
             file_status = os.stat('psql.sh')
             os.chmod('psql.sh', file_status.st_mode | stat.S_IEXEC)
-            subprocess.call(['./psql.sh'])
+            if is_test:
+                subprocess.call(['./psql.sh', 'true'])
+            else:
+                subprocess.call(['./psql.sh', 'false'])
 
-            metasploit_file = os.stat('metasploit.sh')
-            os.chmod('metasploit.sh', metasploit_file.st_mode | stat.S_IEXEC)
+            metasploit = os.stat('metasploit.sh')
+            os.chmod('metasploit.sh', metasploit.st_mode | stat.S_IEXEC)
 
             if distro.linux_distribution(False)[0] == 'kali':
-                subprocess.call(['./metasploit.sh', 'Kali'])
+                if is_test:
+                    subprocess.call(['./metasploit.sh', 'Kali', 'true'])
+                else:
+                    subprocess.call(['./metasploit.sh', 'Kali', 'false'])
             else:
-                subprocess.call(['./metasploit.sh', 'Linux'])
+                if is_test:
+                    subprocess.call(['./metasploit.sh', 'Linux', 'true'])
+                else:
+                    subprocess.call(['./metasploit.sh', 'Linux', 'false'])
 
             del file_status
-            del metasploit_file
+            del metasploit
         except IOError as error:
-            is_error=True
+            is_error = True
             sys.exit(str(error))
         except subprocess.CalledProcessError as error:
             is_error = True
@@ -140,6 +149,7 @@ def main():
             print("###############################################")
             print("###############################################")
             exit(1)
+
 
         if distro.linux_distribution(False)[0] != 'kali':
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")

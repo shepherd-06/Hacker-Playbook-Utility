@@ -13,6 +13,7 @@ lightPurple='\033[1;35m'
 ## ===========================##
 ## ===========================##
 #exit 255
+isTest=${1}
 
 echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -42,41 +43,69 @@ echo -e "${green}PostgreSQL is installed!${nc}"
 echo ""
 sleep 2s
 
-## checker 1
-echo -e "${blue}Configure PostgreSQL to start after server boots up?${nc}"
-echo ""
-read -n1 -p "Choose your option [y/n]: " user_choice
-echo ""
 
-if [ "${user_choice}" == "y" ] || [ "${user_choice}" == "Y" ]; then
-    echo -e "Configuring PostgreSQL to start upon server boot"
-    sleep 3s # wait before doing.
+### Test script for Unit Testing - Start postgresql after booting up
+## Silent mode enabled
+if [ ${isTest} == 'true' ];then
+    echo -e "${blue}Configure PostgreSQL to start after server boots up?${nc}"
+    echo ""
     update-rc.d postgresql enable #configured psql to start upon booting
-
     if [ $? -ne 0 ];then
-    ./terminator.sh 1 "update-rc.d postgresql enable"
-    exit 255
+        ./terminator.sh 1 "update-rc.d postgresql enable"
+        exit 255
     fi
     echo -e "${green}Configuration Done${nc}"
+else
+    ## checker 1 for postgresl boot up after server start
+    echo -e "${blue}Configure PostgreSQL to start after server boots up?${nc}"
+    echo ""
+    read -n1 -p "Choose your option [y/n]: " user_choice
+    echo ""
+
+    if [ "${user_choice}" == "y" ] || [ "${user_choice}" == "Y" ]; then
+        echo -e "Configuring PostgreSQL to start upon server boot"
+        sleep 3s # wait before doing.
+        update-rc.d postgresql enable #configured psql to start upon booting
+
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "update-rc.d postgresql enable"
+            exit 255
+        fi
+        echo -e "${green}Configuration Done${nc}"
+    fi
 fi
 
 
-## checker 2
-echo -e "${blue}Start PostgreSQL now?${nc}"
-echo ""
-read -n1 -p "Choose your option [y/n]: " user_choice
-echo ""
-
-if [ "${user_choice}" == "y" ] || [ "${user_choice}" == "Y" ]; then
-    echo -e "Starting PostgreSQL.."
+### Test script for Unit Testing PostgreSQL start
+## Silent Mode enabled.
+if [ ${isTest} == 'true' ];then
+    echo -e "${blue}Start PostgreSQL now?${nc}"
+    echo ""
     sleep 3s # wait before doing.
     service postgresql start #starting the postgresql server for the first time.
 
     if [ $? -ne 0 ];then
-    ./terminator.sh 1 "service postgresql start"
-    exit 255
+        ./terminator.sh 1 "service postgresql start"
+        exit 255
     fi
     echo -e "${green}PostgreSQL is running${nc}"
+else
+    ## checker 2 - for normal user
+    echo -e "${blue}Start PostgreSQL now?${nc}"
+    echo ""
+    read -n1 -p "Choose your option [y/n]: " user_choice
+    echo ""
+    if [ "${user_choice}" == "y" ] || [ "${user_choice}" == "Y" ]; then
+        echo -e "Starting PostgreSQL.."
+        sleep 3s # wait before doing.
+        service postgresql start #starting the postgresql server for the first time.
+
+        if [ $? -ne 0 ];then
+            ./terminator.sh 1 "service postgresql start"
+            exit 255
+        fi
+        echo -e "${green}PostgreSQL is running${nc}"
+    fi
 fi
 
 
@@ -91,12 +120,20 @@ else
     echo -e "${red} There might be some problem with PostgreSQL connection creation!${nc}
     Do you want to check this out or proceed? ${cyan}
     It's important that PostgreSQL server is properly configured before you doing anything else ${nc}
-    1) Check this out
+    1) Terminate script
     2) Press any key otherwise..."
 
     sleep 5s # wait before doing.
-    read -p "Please Choose between [1,2] : " user_option
-    echo ""
+
+    ### Test script for Unit Testing
+    ## Silent Test Mode.
+    if [ ${isTest} == 'true' ];then
+        echo -e "${red}Shutting down the script!${nc}"
+        ./terminator.sh 2 ""
+        exit 255
+    else
+        read -p "Please Choose between [1,2] : " user_option
+        echo ""
         if (($user_option == 1 ));then
             echo -e "${red}Shutting down the script!${nc}"
             ./terminator.sh 2 ""
@@ -104,4 +141,5 @@ else
         else
             echo -e "${yellow}Moving on.....${nc}"
         fi
+    fi
 fi
