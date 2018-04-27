@@ -811,5 +811,5 @@ fi
 ##TODO: Task at hand.
 ##Install or Write code for the following in Kali machine -> Veil, BypassUAC, BeEF {Important}
 ##might need to check if postgreSQL is installed TOO before calling discover.
-##Need error checker in this script. {Placed} {Check if they actually work from Kali}
-##PeepingTom has an issue in installation. Peeping tom has been installed b4hand.
+##Install it without pip support or anything. update, upgrade will check the requirement
+##Support python 2.7 if necessary
