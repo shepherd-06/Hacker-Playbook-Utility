@@ -13,7 +13,8 @@ class TestUtility(TestCase):
         # self.assertEqual(Utility.system_update_upgrade(True), 0)
 
     def test_install_phase_alpha(self):
-        self.assertTrue(True, "Success - True")
+        # self.assertTrue(True, "Success - True")
+        self.assertEqual(Utility.install_phase_alpha(True), 0)
 
     def test_install_phase_bravo(self):
         self.assertTrue(True, "Success - True")

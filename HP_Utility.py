@@ -63,11 +63,12 @@ class Utility:
                 return 0
 
     @staticmethod
-    def install_phase_alpha():
+    def install_phase_alpha(is_test=False):
         """
         Install Postgresql and Metasploit Framework related stuff
         :return: 0 / 1
         """
+        is_error=False
         try:
             file_status = os.stat('psql.sh')
             os.chmod('psql.sh', file_status.st_mode | stat.S_IEXEC)
@@ -84,13 +85,19 @@ class Utility:
             del file_status
             del metasploit_file
         except IOError as error:
+            is_error=True
             sys.exit(str(error))
         except subprocess.CalledProcessError as error:
+            is_error = True
             sys.exit(str(error))
         except OSError as error:
+            is_error = True
             sys.exit((str(error)))
         finally:
-            return 1
+            if is_error:
+                return 1
+            else:
+                return 0
 
     @staticmethod
     def install_phase_bravo():
