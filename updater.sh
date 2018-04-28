@@ -29,7 +29,6 @@ sleep 3s # wait before doing.
 sudo apt update
 
 if [ $? -ne 0 ];then
-    ./terminator.sh 1 "sudo apt update"
     exit 255
 fi
 
@@ -50,7 +49,6 @@ else
 fi
 
 if [ $? -ne 0 ];then
-    ./terminator.sh 1 "sudo apt upgrade"
     exit 255
 fi
 
@@ -59,3 +57,4 @@ echo -e "
     ${green}Upgrade Complete${nc}
     ${yellow}-------------------------------------------${nc}
     "
+exit 0 ##success

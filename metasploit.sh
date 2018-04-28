@@ -35,7 +35,6 @@ then
         sudo curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
 
         if [ $? -ne 0 ];then
-            ./terminator.sh 1 "Metasploit framework installation command failed!"
             exit 255
         fi
     else
@@ -50,7 +49,6 @@ then
             curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
 
             if [ $? -ne 0 ];then
-                ./terminator.sh 1 "Metasploit framework installation command failed!"
                 exit 255
             fi
         else
@@ -84,7 +82,6 @@ if [ ${isTest} == 'true' ];then
         sudo msfdb reinit
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            ./terminator.sh 1 "msfdb reinit"
             exit 255
         fi
     else
@@ -92,7 +89,6 @@ if [ ${isTest} == 'true' ];then
         sudo msfdb reinit
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb reinit"
             exit 255
         fi
     fi
@@ -125,7 +121,6 @@ else
             msfdb init
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                ./terminator.sh 1 "msfdb init"
                 exit 255
             fi
         else
@@ -133,7 +128,6 @@ else
             sudo -u ${SUDO_USER} msfdb init
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb init"
                 exit 255
             fi
         fi
@@ -149,14 +143,12 @@ else
             msfdb reinit
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                ./terminator.sh 1 "msfdb reinit"
                 exit 255
             fi
         else
             sudo -u ${SUDO_USER} msfdb reinit
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb reinit"
                 exit 255
             fi
         fi
@@ -168,9 +160,7 @@ else
     elif (($user_choice == 4));then
         echo -e "${red}Terminating the script!${nc}"
         sleep 2s
-
         ## Terminating command
-        ./terminator.sh 2 ""
         exit 255
 
     else
@@ -184,7 +174,6 @@ else
         ------------------------------------${nc}
         "
         sleep 2s
-        ./terminator.sh 2 ""
         exit 255
     fi
 fi
@@ -201,7 +190,6 @@ if [ ${isTest} == 'true' ];then
         sudo msfdb start
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            ./terminator.sh 1 "msfdb start"
             exit 255
         fi
     else
@@ -209,7 +197,6 @@ if [ ${isTest} == 'true' ];then
         sudo msfdb start
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb start"
             exit 255
         fi
     fi
@@ -226,17 +213,17 @@ else
             msfdb start
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                ./terminator.sh 1 "msfdb start"
                 exit 255
             fi
         else
             sudo -u ${SUDO_USER} msfdb start
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                ./terminator.sh 1 "sudo -u ${SUDO_USER} msfdb start"
                 exit 255
             fi
         fi
         echo -e "${green} -- Done"
     fi
 fi
+
+exit 0 ## total success

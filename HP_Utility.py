@@ -24,6 +24,7 @@ class Utility:
         except IOError as e:
             if 'Permission denied' in str(e):
                 print("You need root permissions to do this (O_o)")
+            Utility().terminate("Permission Denied!")
         finally:
             if os.path.exists('/etc/foo'):
                 os.rmdir('/etc/foo')
@@ -32,84 +33,111 @@ class Utility:
             return is_root
 
     @staticmethod
-    def system_update_upgrade(is_test=False):
+    def system_upgrade(is_test=False):
         """
         :param is_test -> if true, upgrade command will run in force yes mode.
         run system update upgrade before doing anything.
         :return:
         """
-        is_error = False
+        return_code = 0
         try:
             file_status = os.stat('updater.sh')
             os.chmod('updater.sh', file_status.st_mode | stat.S_IEXEC)
             if is_test:
-                subprocess.call(['./updater.sh', 'true'])
+                result = subprocess.Popen(['./updater.sh', 'true'])
             else:
-                subprocess.call(['./updater.sh', 'false'])
+                result = subprocess.Popen(['./updater.sh', 'false'])
+            return_code = result.returncode
             del file_status
         except IOError as error:
-            is_error = True
+            return_code = 255
             sys.exit(str(error))
         except subprocess.CalledProcessError as error:
-            is_error = True
+            return_code = 255
             sys.exit(str(error))
         except OSError as error:
-            is_error = True
+            return_code = 255
             sys.exit((str(error)))
         finally:
-            if is_error:
-                return 1
+            if return_code != 0:
+                # error occurred in the process
+                Utility().terminate("An Error Occurred during system update!")
+                return 255
             else:
                 return 0
 
     @staticmethod
-    def install_phase_alpha(is_test=False):
+    def install_psql(is_test=False):
         """
         Install Postgresql and Metasploit Framework related stuff
         :return: 0 on success
         """
-        is_error = False
+        return_code = 0
         try:
             file_status = os.stat('psql.sh')
             os.chmod('psql.sh', file_status.st_mode | stat.S_IEXEC)
             if is_test:
-                subprocess.call(['./psql.sh', 'true'])
+                result = subprocess.Popen(['./psql.sh', 'true'])
             else:
-                subprocess.call(['./psql.sh', 'false'])
+                result = subprocess.Popen(['./psql.sh', 'false'])
 
+            return_code = result.returncode
+
+            del file_status
+        except IOError as error:
+            return_code = 255
+            sys.exit(str(error))
+        except subprocess.CalledProcessError as error:
+            return_code = 255
+            sys.exit(str(error))
+        except OSError as error:
+            return_code = 255
+            sys.exit((str(error)))
+        finally:
+            if return_code != 0:
+                Utility().terminate("Error occurred in PostgreSQL installation!")
+                return 255
+            else:
+                return 0
+
+    @staticmethod
+    def install_metasploit(is_test=False):
+        return_code = 0
+        try:
             metasploit = os.stat('metasploit.sh')
             os.chmod('metasploit.sh', metasploit.st_mode | stat.S_IEXEC)
 
             if distro.linux_distribution(False)[0] == 'kali':
                 if is_test:
-                    subprocess.call(['./metasploit.sh', 'Kali', 'true'])
+                    result = subprocess.Popen(['./metasploit.sh', 'Kali', 'true'])
                 else:
-                    subprocess.call(['./metasploit.sh', 'Kali', 'false'])
+                    result = subprocess.Popen(['./metasploit.sh', 'Kali', 'false'])
             else:
                 if is_test:
-                    subprocess.call(['./metasploit.sh', 'Linux', 'true'])
+                    result = subprocess.Popen(['./metasploit.sh', 'Linux', 'true'])
                 else:
-                    subprocess.call(['./metasploit.sh', 'Linux', 'false'])
+                    result = subprocess.Popen(['./metasploit.sh', 'Linux', 'false'])
 
-            del file_status
+            return_code = result.returncode
             del metasploit
         except IOError as error:
-            is_error = True
+            return_code = 255
             sys.exit(str(error))
         except subprocess.CalledProcessError as error:
-            is_error = True
+            return_code = 255
             sys.exit(str(error))
         except OSError as error:
-            is_error = True
+            return_code = 255
             sys.exit((str(error)))
         finally:
-            if is_error:
-                return 1
+            if return_code != 0:
+                Utility().terminate("Error occurred in Metasploit Framework!")
+                return 255
             else:
                 return 0
 
     @staticmethod
-    def install_phase_bravo():
+    def install_scripts():
         """
         Installing scripts and apps inside /opt/
         Discover, SMBExec, Veil (new)
@@ -118,7 +146,7 @@ class Utility:
         try:
             file_status = os.stat('phase_bravo.sh')
             os.chmod('phase_bravo.sh', file_status.st_mode | stat.S_IEXEC)
-            subprocess.call(['./phase_bravo.sh'])
+            subprocess.Popen(['./phase_bravo.sh'])
 
             del file_status
         except IOError as error:
@@ -129,6 +157,13 @@ class Utility:
             sys.exit((str(error)))
         finally:
             return 1
+
+    @classmethod
+    def terminate(cls, message=None):
+        try:
+            sys.exit(message)
+        except SystemExit:
+            pass
 
 
 def main():
@@ -150,7 +185,6 @@ def main():
             print("###############################################")
             exit(1)
 
-
         if distro.linux_distribution(False)[0] != 'kali':
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
             print("You are not using Kali OS! Please at least use these in a VirtualBOX so that you can roll back more "
@@ -165,9 +199,10 @@ def main():
             sys.exit((str(err)))
 
         # call the utility functions
-        util.system_update_upgrade()
-        util.install_phase_alpha()
-        util.install_phase_bravo()
+        util.system_upgrade()
+        util.install_psql()
+        util.install_metasploit()
+        util.install_scripts()
 
         time.sleep(3)
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
