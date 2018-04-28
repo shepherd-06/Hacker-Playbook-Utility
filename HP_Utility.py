@@ -49,6 +49,7 @@ class Utility:
                 result = subprocess.Popen(['./updater.sh', 'false'])
             return_code = result.returncode
             del file_status
+            del result
         except IOError as error:
             return_code = 255
             sys.exit(str(error))
