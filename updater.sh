@@ -21,7 +21,8 @@ echo -e "${yellow}
 #exit 255
 if [ ${isTest} == 'true' ];then
     echo "Sudo mode??? "
-    sudo -s ### going to the root enabled directly
+#    sudo -s ### going to the root enabled directly
+    apt update
 fi
 
 echo -e "
@@ -30,7 +31,7 @@ echo -e "
     ${yellow}-------------------------------------------${nc}
     "
 sleep 3s # wait before doing.
-sudo apt update
+#sudo apt update
 
 if [ $? -ne 0 ];then
     exit 255
@@ -47,7 +48,7 @@ sleep 3s # wait before doing.
 
 if [ ${isTest} == 'true' ];then
     ## force Upgrades can break things. Use this on your own risk.
-    sudo apt upgrade -y --fix-missing ## running in force installation mode
+    apt upgrade -y --fix-missing ## running in force installation mode
 else
     sudo apt upgrade --fix-missing
 fi

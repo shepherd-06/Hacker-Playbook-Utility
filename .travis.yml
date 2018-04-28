@@ -13,9 +13,11 @@ virtualenv:
 
 before_install:
  - sudo apt-get update
-
-install:
  - pip install -r requirements.txt
+
+#
+#install:
+# -
 
 script:
   - python3 -m unittest -v test_utility.py
