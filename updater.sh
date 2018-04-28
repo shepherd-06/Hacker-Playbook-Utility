@@ -20,7 +20,8 @@ echo -e "${yellow}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${nc}"
 #exit 255
 if [ ${isTest} == 'true' ];then
-    sudo su ### going to the root enabled directly
+    echo "Sudo mode??? "
+    sudo -s ### going to the root enabled directly
 fi
 
 echo -e "
