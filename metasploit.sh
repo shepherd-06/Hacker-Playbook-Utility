@@ -187,14 +187,14 @@ if [ ${isTest} == 'true' ];then
     sleep 2s #sleep 2seconds before donning
 
     if [ ${runningDistro} == 'Kali' ];then
-        sudo msfdb start
+        msfdb start
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
             exit 255
         fi
     else
 #        sudo -u ${SUDO_USER} msfdb start
-        sudo msfdb start
+        msfdb start
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
             exit 255
@@ -216,7 +216,8 @@ else
                 exit 255
             fi
         else
-            sudo -u ${SUDO_USER} msfdb start
+#            sudo -u ${SUDO_USER} msfdb start
+            msfdb start ## TODO : check later.
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
                 exit 255
