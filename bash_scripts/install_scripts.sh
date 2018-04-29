@@ -57,8 +57,8 @@ function filePath() {
         echo /opt/SecLists
     else
         # Invalid Parameter
-
-        exit
+        echo -e "${red}Invalid option!${nc}"
+        exit 255
     fi
 }
 
@@ -93,14 +93,14 @@ function clone_script() {
             cd /opt/ && git clone ${3} set/
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                terminator.sh 1 "cd /opt/ && git clone ${3} set/"
+                echo -e "${red} Error installing ${short_name}${nc}"
                 exit 255
             fi
         else
             cd /opt/ && git clone ${3}
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                terminator.sh 1 "cd /opt/ && git clone ${3}"
+                echo -e "${red} Error installing ${short_name}${nc}"
                 exit 255
             fi
         fi
@@ -129,20 +129,20 @@ function clone_script() {
             rm -rf ${directory}
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                terminator.sh 1 "rm -rf ${directory}"
+                echo -e "${red} Error installing ${short_name}${nc}"
                 exit 255
             fi
             # installing fresh
             cd /opt/ && git clone ${3}
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                terminator.sh 1 "cd /opt/ && git clone ${3}"
+                echo -e "${red} Error installing ${short_name}${nc}"
                 exit 255
             fi
             sleep 2s ## sleep sleep sleep
             return 30 ## cloned fresh, need to run installation again!
         else
-            terminator.sh 1 "Wrong option for ${short_name} installation!"
+            echo -e "${red} Wrong option : ${short_name}${nc}"
             sleep 2s ## boom boom booooooooom!
             exit 255
         fi
@@ -162,6 +162,7 @@ function end_message() {
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ${nc}"
     sleep 2s ## sleep sleep sleep
+    exit 0
 }
 
 
@@ -254,7 +255,7 @@ function little_wget_magic() {
             transmission-gtk ~/Desktop/crackstation-human-only.txt.gz.torrent
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
-                terminator.sh 1 "transmission-gtk ~/Desktop/crackstation-human-only.txt.gz.torrent"
+                echo -e "${red} Error running Transmission!${nc}"
                 exit 255
             fi
             sleep 5s # sleep 5 seconds for this command to finish
@@ -330,6 +331,7 @@ function beEF() {
     ${blue}Installing BeEF
     ${nc}BeFF will be used as an cross-site scripting attack framework
     "
+    ## TODO: lots of work and checker here.
     sudo apt install software-properties-common
     sleep 2s
     sudo apt-add-repository -y ppa:brightbox/ruby-ng
@@ -343,7 +345,7 @@ function beEF() {
 
     ## if the previous commit failed to run.
     if [ $? -ne 0 ];then
-        terminator.sh 1 "cd beef && ./install"
+        echo -e "${red} Error installing beEF${nc}"
         exit 255
     fi
     echo -e "${green} beEF installation is complete"
@@ -387,14 +389,14 @@ function social_engineering_toolkit() {
         cd /opt/set/ && chmod a+x setup.py
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "cd /opt/set/ && chmod a+x setup.py"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
         cd /opt/set/ && python setup.py install
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "cd /opt/set/ && python setup.py install"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
     fi
@@ -439,13 +441,13 @@ function powersploit() {
         cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "cd /opt/PowerSploit/ && wget http://raw.github.com/obscuresec/random/master/StartListener.py"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
         cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "cd /opt/PowerSploit/ && wget http://raw.github.com/darkoperator/powershell_scripts/master/ps_encoder.py"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
         echo -e "${green}${script_name} installation is complete${nc}"
@@ -481,42 +483,42 @@ function install_peeping_tom() {
 
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "error in downloading gnmap.pl from github gist"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
         git clone git://github.com/ariya/phantomjs.git
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "error in cloning phantomJS from github"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
         cd phantomjs && git checkout 2.1.1
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "error in git checkout"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
         cd phantomjs && git submodule init
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "error in initializing the git submodule"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
         cd phantomjs && git submodule update
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "error in git submodule update"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
         cd phantomjs && python build.py
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "error in running the phantomJS build file."
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
@@ -610,7 +612,7 @@ function install_eye_witness() {
         chmod a+x /opt/EyeWitness/setup/setup.sh
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "chmod a+x /opt/EyeWitness/setup/setup.sh"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
@@ -618,7 +620,7 @@ function install_eye_witness() {
 
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "cd /opt/EyeWitness/setup && ./setup.sh"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
         echo -e "${green}${script_name} installation is complete${nc}"
@@ -681,14 +683,14 @@ function Veil() {
         chmod a+x /opt/Veil/config/setup.sh
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "chmod a+x /opt/Veil/config/setup.sh"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
         cd /opt/Veil/config && ./setup.sh --force --silent ##force overwrite everything, silent does not user attention (worth to take a look later)
         ## if the previous commit failed to run.
 
         if [ $? -ne 0 ];then
-            terminator.sh 1 "cd /opt/Veil/config && ./setup.sh --force --silent"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
@@ -729,7 +731,7 @@ function SMBExec() {
         chmod a+x /opt/smbexec/install.sh
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "chmod a+x /opt/smbexec/install.sh"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
         echo -e "Follow the ${blue}book for Installation Procedure"
@@ -737,7 +739,7 @@ function SMBExec() {
         cd /opt/smbexec && ./install.sh
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "cd /opt/smbexec && ./install.sh"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
         echo -e "Installing ${short_name} -- ${green} DONE$ ${nc}"
@@ -767,14 +769,14 @@ function discover() {
         chmod a+x /opt/discover/update.sh
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "chmod a+x /opt/discover/update.sh"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
 
         cd /opt/discover && ./update.sh
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
-            terminator.sh 1 "cd /opt/discover && ./update.sh"
+            echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
         echo -e "Installing ${short_name} -- ${green} DONE$ ${nc}"
@@ -803,7 +805,7 @@ if [ $? -eq 0 ];then
 else
     echo -e "${red} Metasploit is not installed properly! or not found${blue} "$(which -a msfconsole)".${nc}Terminating script."
     sleep 3s ## boom boom
-    terminator.sh 2 ""
+    exit 255
 fi
 
 
