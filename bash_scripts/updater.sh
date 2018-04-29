@@ -27,6 +27,8 @@ echo -e "
 sleep 3s # wait before doing.
 if [ ${isTest} == 'true' ];then
     ## force Upgrades can break things. Use this on your own risk.
+    ## This does not run properly in travisCI
+    echo ""
     sudo apt update > /dev/null ## running in force installation mode
 else
     sudo apt update
@@ -48,7 +50,9 @@ sleep 3s # wait before doing.
 
 if [ ${isTest} == 'true' ];then
     ## force Upgrades can break things. Use this on your own risk.
-    sudo apt upgrade -y --fix-missing > /dev/null ## running in force installation mode
+    ## This does not run properly in travisCI
+    echo ""
+#    sudo apt upgrade -y --fix-missing > /dev/null ## running in force installation mode
 else
     sudo apt upgrade --fix-missing
 fi

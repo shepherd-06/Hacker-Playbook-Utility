@@ -148,9 +148,9 @@ class Utility:
         :return:
         """
         try:
-            file_status = os.stat('bash_scripts/phase_bravo.sh')
-            os.chmod('bash_scripts/phase_bravo.sh', file_status.st_mode | stat.S_IEXEC)
-            subprocess.call(['./bash_scripts/phase_bravo.sh'])
+            file_status = os.stat('bash_scripts/install_scripts.sh')
+            os.chmod('bash_scripts/install_scripts.sh', file_status.st_mode | stat.S_IEXEC)
+            subprocess.call(['./bash_scripts/install_scripts.sh'])
             del file_status
         except IOError as error:
             sys.exit(str(error))
@@ -203,9 +203,9 @@ def main():
 
         # call the utility functions
         util.system_upgrade()
-        # util.install_psql()
-        # util.install_metasploit()
-        # util.install_scripts()
+        util.install_psql()
+        util.install_metasploit()
+        util.install_scripts()
 
         time.sleep(3)
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -220,22 +220,6 @@ def main():
         print("You need to be a superuser or run this script in super user mode.\nGood bye. :)")
         sys.exit("Permission Denied!\n###############################################\n"
                  "###############################################")
-
-
-def controller(counter):
-    returnCode = -1
-
-    if counter == 1:
-        returnCode = Utility().system_upgrade()
-    elif counter == 2:
-        returnCode = Utility().install_psql()
-    elif counter == 3:
-        returnCode = Utility().install_metasploit()
-    elif counter == 4:
-        returnCode = Utility().install_scripts()
-    else:
-        pass
-    return returnCode
 
 
 if __name__ == '__main__':
