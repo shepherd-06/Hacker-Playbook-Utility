@@ -1,6 +1,6 @@
 language: python
 os: linux
-sudo: true
+sudo: required
 dist: trusty
 
 python:
@@ -13,11 +13,11 @@ virtualenv:
 
 before_install:
  - sudo apt-get update
- - pip install -r requirements.txt
+ - sudo apt-get upgrade
 
-#
-#install:
-# -
+
+install:
+ - pip install -r requirements.txt
 
 script:
   - python3 -m unittest -v test_utility.py

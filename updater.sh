@@ -22,7 +22,6 @@ echo -e "${yellow}
 if [ ${isTest} == 'true' ];then
     echo "Sudo mode??? "
 #    sudo -s ### going to the root enabled directly
-    apt update
 fi
 
 echo -e "
@@ -30,10 +29,11 @@ echo -e "
     ${blue}Updating ${nc}
     ${yellow}-------------------------------------------${nc}
     "
-sleep 3s # wait before doing.
-#sudo apt update
+#sleep 3s # wait before doing.
+sudo apt update
 
 if [ $? -ne 0 ];then
+    echo "update crashed"
     exit 255
 fi
 
