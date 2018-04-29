@@ -25,7 +25,7 @@ echo -e "
     ${yellow}-------------------------------------------${nc}
     "
 sleep 3s # wait before doing.
-if [ ${isTest} == 'true' ];then
+if [ ${isTest} == 'True' ];then
     ## force Upgrades can break things. Use this on your own risk.
     ## This does not run properly in travisCI
     echo ""
@@ -48,7 +48,7 @@ echo -e "
     "
 sleep 3s # wait before doing.
 
-if [ ${isTest} == 'true' ];then
+if [ ${isTest} == 'True' ];then
     ## force Upgrades can break things. Use this on your own risk.
     ## This does not run properly in travisCI
     echo ""

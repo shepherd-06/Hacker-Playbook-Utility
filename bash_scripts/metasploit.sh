@@ -19,15 +19,14 @@ runningDistro=${1}
 isTest=${2}
 
 which -a msfconsole
-if [ $? -eq 1 ] #returns 0 if psql is installed.
-then
+if [ $? -eq 1 ];then #returns 0 if metasploit framework is installed.
     echo -e "${red}Metasploit Framework is not installed${nc}
     Do you want this script to install the Metasploit framework?
     ${red}Caution: ${nc} This scripts and any other script won't work without Metasploit framework. ${nc}"
     sleep 3s # wait before doing.
 
     ### Test case for Metasploit Installation (in Silent Mode too)
-    if [ ${isTest} == 'true' ];then
+    if [ ${isTest} == 'True' ];then
         echo -e "${blue} Installing Metasploit framework from ${yellow}'https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers'
         ${blue}Script invocation will import the Rapid7 signing key and setup the package for all supported Linux and OS X systems
         ${nc}"
@@ -72,7 +71,7 @@ echo -e "
     "
 
 ### Test case for Metasploit Installation (in Silent Mode too)
-if [ ${isTest} == 'true' ];then
+if [ ${isTest} == 'True' ];then
     #reinit the db
     echo -e "${blue}Re-initializing the msf database${nc}"
     echo ""
@@ -182,7 +181,7 @@ echo -e "${blue}Do you want to start the Metasploit Framework database? ${nc}"
 echo ""
 
 ### Test case for Metasploit Installation (in Silent Mode too)
-if [ ${isTest} == 'true' ];then
+if [ ${isTest} == 'True' ];then
     echo -e "${blue}Starting msf database ${nc}"
     sleep 2s #sleep 2seconds before donning
 

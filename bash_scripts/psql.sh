@@ -45,7 +45,7 @@ sleep 2s
 
 ### Test script for Unit Testing - Start postgresql after booting up
 ## Silent mode enabled
-if [ ${isTest} == 'true' ];then
+if [ ${isTest} == 'True' ];then
     echo -e "${blue}Configure PostgreSQL to start after server boots up?${nc}"
     echo ""
     sudo update-rc.d postgresql enable #configured psql to start upon booting
@@ -75,7 +75,7 @@ fi
 
 ### Test script for Unit Testing PostgreSQL start
 ## Silent Mode enabled.
-if [ ${isTest} == 'true' ];then
+if [ ${isTest} == 'True' ];then
     echo -e "${blue}Start PostgreSQL now?${nc}"
     echo ""
     sleep 3s # wait before doing.
@@ -122,7 +122,7 @@ else
 
     ### Test script for Unit Testing
     ## Silent Test Mode.
-    if [ ${isTest} == 'true' ];then
+    if [ ${isTest} == 'True' ];then
         echo -e "${red}Shutting down the script!${nc}"
         exit 255
     else

@@ -110,7 +110,7 @@ function clone_script() {
         return 0 ## fresh first install
     else
         # directory exists.
-        if [ ${isTest} == 'true' ];then
+        if [ ${isTest} == 'True' ];then
             ### Testing running in 30 again.
             echo -e "Removing ${red}OLD ${5}${nc}"
             rm -rf ${directory}
@@ -192,7 +192,7 @@ function end_message() {
 #----------------------------------------
 function little_wget_magic() {
 
-    if [ ${isTest} == 'true' ];then
+    if [ ${isTest} == 'True' ];then
         ## TODO : need to customize the test function for this script.
         end_message
     fi
@@ -656,7 +656,7 @@ function install_eye_witness() {
 #@caution: Peeping Tom is unsupported for over a year!
 #----------------------------------------
 function peeping_tom_issue() {
-    if [ ${isTest} == 'true' ];then
+    if [ ${isTest} == 'True' ];then
         ## force Upgrades can break things. Use this on your own risk.
         ## This does not run properly in travisCI
         install_peeping_tom
@@ -722,7 +722,7 @@ function Veil() {
             exit 255
         fi
 
-        if [ ${isTest} == 'true' ];then
+        if [ ${isTest} == 'True' ];then
             ## force Upgrades can break things. Use this on your own risk.
             ## This does not run properly in travisCI
             cd /opt/Veil/ && ./Veil.py --setup
