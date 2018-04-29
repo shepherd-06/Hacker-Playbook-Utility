@@ -147,10 +147,13 @@ class Utility:
             del result
             del file_status
         except IOError as error:
+            return_code = 255
             sys.exit(str(error))
         except subprocess.CalledProcessError as error:
+            return_code = 255
             sys.exit(str(error))
         except OSError as error:
+            return_code = 255
             sys.exit((str(error)))
         finally:
             if return_code != 0:
