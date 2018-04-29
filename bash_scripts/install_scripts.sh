@@ -8,6 +8,8 @@ blue="\033[1;34m"
 yellow="\033[1;33m"
 lightPurple='\033[1;35m'
 
+isTest=${1}
+
 echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -835,21 +837,30 @@ function discover() {
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 #---------------------------------------------------------------
-which -a msfconsole
-if [ $? -eq 0 ];then
-    ## Metasploit is isntalled.
-    if [[ $EUID -ne 0 ]];then
-        echo -e "${cyan}This script needs to run in super-user mode... ${nc}"
-        sudo su # script will ask user for password to sudo mode.
+if [ ${isTest} == 'True' ];then
+    which -a msfconsole
+    if [ $? -eq 0 ];then
+        discover
+    else
+        echo "Metasploit is not installed!"
+        exit 255
     fi
-
-    ## TODO: might need to check if postgreSQL is installed TOO.
-    isTest=${1}
-    discover #Beginning of everything.
 else
-    echo -e "${red} Metasploit is not installed properly! or not found${blue} "$(which -a msfconsole)".${nc}Terminating script."
-    sleep 3s ## boom boom
-    exit 255
+    which -a msfconsole
+    if [ $? -eq 0 ];then
+        ## Metasploit is installed.
+        if [[ $EUID -ne 0 ]];then
+            echo -e "${cyan}This script needs to run in super-user mode... ${nc}"
+            sudo su # script will ask user for password to sudo mode.
+        fi
+
+        ## TODO: might need to check if postgreSQL is installed TOO.
+        discover #Beginning of everything.
+    else
+        echo -e "${red} Metasploit is not installed properly! or not found${blue} "$(which -a msfconsole)".${nc}Terminating script."
+        sleep 3s ## boom boom
+        exit 255
+    fi
 fi
 
 
@@ -857,5 +868,3 @@ fi
 ##TODO: Task at hand.
 ##Install or Write code for the following in Kali machine -> Veil, BypassUAC, BeEF {Important}
 ##might need to check if postgreSQL is installed TOO before calling discover.
-##Install it without pip support or anything. update, upgrade will check the requirement
-##Support python 2.7 if necessary
