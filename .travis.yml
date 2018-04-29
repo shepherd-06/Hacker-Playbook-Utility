@@ -12,8 +12,8 @@ virtualenv:
     system_site_package: true
 
 before_install:
- - sudo apt-get update
- - sudo apt-get upgrade
+ - sudo apt-get update > /dev/null
+ - sudo apt-get upgrade -y --fix-missing > /dev/null
 
 
 install:
