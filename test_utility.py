@@ -5,7 +5,8 @@ from HP_Utility import Utility
 class TestUtility(TestCase):
 
     def test_is_root(self):
-        pass
+        self.assertTrue(True)
+        # pass
         # TODO: How to test root access for script?
         # self.assertTrue(Utility().is_root(), "Script is not root enabled for the machine!")
 
