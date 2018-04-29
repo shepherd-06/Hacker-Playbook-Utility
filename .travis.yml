@@ -13,7 +13,7 @@ virtualenv:
 
 before_install:
  - sudo apt-get update > /dev/null
-
+ - sudo apt upgrade > /dev/null
 
 install:
  - pip install -r requirements.txt
