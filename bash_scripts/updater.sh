@@ -18,19 +18,19 @@ echo -e "${yellow}
     ${yellow}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${nc}"
-#exit 255
-if [ ${isTest} == 'true' ];then
-    echo "Sudo mode??? "
-#    sudo -s ### going to the root enabled directly
-fi
 
 echo -e "
     ${yellow}-------------------------------------------${nc}
     ${blue}Updating ${nc}
     ${yellow}-------------------------------------------${nc}
     "
-#sleep 3s # wait before doing.
-sudo apt update
+sleep 3s # wait before doing.
+if [ ${isTest} == 'true' ];then
+    ## force Upgrades can break things. Use this on your own risk.
+    sudo apt update > /dev/null ## running in force installation mode
+else
+    sudo apt update
+fi
 
 if [ $? -ne 0 ];then
     echo "update crashed"
@@ -48,12 +48,13 @@ sleep 3s # wait before doing.
 
 if [ ${isTest} == 'true' ];then
     ## force Upgrades can break things. Use this on your own risk.
-    apt upgrade -y --fix-missing ## running in force installation mode
+    sudo apt upgrade -y --fix-missing > /dev/null ## running in force installation mode
 else
     sudo apt upgrade --fix-missing
 fi
 
 if [ $? -ne 0 ];then
+    echo "System upgrade crashed"
     exit 255
 fi
 

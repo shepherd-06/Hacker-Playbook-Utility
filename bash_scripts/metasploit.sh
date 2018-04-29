@@ -79,14 +79,14 @@ if [ ${isTest} == 'true' ];then
     sleep 1s #wait 1 second
 
     if [ ${runningDistro} == 'Kali' ];then
-        sudo msfdb reinit
+        msfdb reinit
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
             exit 255
         fi
     else
 #        sudo -u ${SUDO_USER} msfdb reinit
-        sudo msfdb reinit
+        msfdb reinit
         ## if the previous commit failed to run.
         if [ $? -ne 0 ];then
             exit 255

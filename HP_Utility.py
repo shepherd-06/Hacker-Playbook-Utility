@@ -41,12 +41,13 @@ class Utility:
         """
         return_code = 0
         try:
-            file_status = os.stat('updater.sh')
-            os.chmod('updater.sh', file_status.st_mode | stat.S_IEXEC)
+            file_status = os.stat('bash_scripts/updater.sh')
+            os.chmod('bash_scripts/updater.sh', file_status.st_mode | stat.S_IEXEC)
             if is_test:
-                result = subprocess.Popen(['./updater.sh', 'true'])
+                result = subprocess.Popen(['./bash_scripts/updater.sh', 'true'])
             else:
-                result = subprocess.Popen(['./updater.sh', 'false'])
+                result = subprocess.Popen(['./bash_scripts/updater.sh', 'false'])
+            result.communicate()
             return_code = result.returncode
             del file_status
             del result
@@ -75,15 +76,16 @@ class Utility:
         """
         return_code = 0
         try:
-            file_status = os.stat('psql.sh')
-            os.chmod('psql.sh', file_status.st_mode | stat.S_IEXEC)
+            file_status = os.stat('bash_scripts/psql.sh')
+            os.chmod('bash_scripts/psql.sh', file_status.st_mode | stat.S_IEXEC)
             if is_test:
-                result = subprocess.Popen(['./psql.sh', 'true'])
+                result = subprocess.Popen(['./bash_scripts/psql.sh', 'true'])
             else:
-                result = subprocess.Popen(['./psql.sh', 'false'])
+                result = subprocess.Popen(['./bash_scripts/psql.sh', 'false'])
 
+            result.communicate()
             return_code = result.returncode
-
+            del result
             del file_status
         except IOError as error:
             return_code = 255
@@ -105,21 +107,22 @@ class Utility:
     def install_metasploit(is_test=False):
         return_code = 0
         try:
-            metasploit = os.stat('metasploit.sh')
-            os.chmod('metasploit.sh', metasploit.st_mode | stat.S_IEXEC)
+            metasploit = os.stat('bash_scripts/metasploit.sh')
+            os.chmod('bash_scripts/metasploit.sh', metasploit.st_mode | stat.S_IEXEC)
 
             if distro.linux_distribution(False)[0] == 'kali':
                 if is_test:
-                    result = subprocess.Popen(['./metasploit.sh', 'Kali', 'true'])
+                    result = subprocess.Popen(['./bash_scripts/metasploit.sh', 'Kali', 'true'])
                 else:
-                    result = subprocess.Popen(['./metasploit.sh', 'Kali', 'false'])
+                    result = subprocess.Popen(['./bash_scripts/metasploit.sh', 'Kali', 'false'])
             else:
                 if is_test:
-                    result = subprocess.Popen(['./metasploit.sh', 'Linux', 'true'])
+                    result = subprocess.Popen(['./bash_scripts/metasploit.sh', 'Linux', 'true'])
                 else:
-                    result = subprocess.Popen(['./metasploit.sh', 'Linux', 'false'])
-
+                    result = subprocess.Popen(['./bash_scripts/metasploit.sh', 'Linux', 'false'])
+            result.communicate()
             return_code = result.returncode
+            del result
             del metasploit
         except IOError as error:
             return_code = 255
@@ -145,10 +148,9 @@ class Utility:
         :return:
         """
         try:
-            file_status = os.stat('phase_bravo.sh')
-            os.chmod('phase_bravo.sh', file_status.st_mode | stat.S_IEXEC)
-            subprocess.Popen(['./phase_bravo.sh'])
-
+            file_status = os.stat('bash_scripts/phase_bravo.sh')
+            os.chmod('bash_scripts/phase_bravo.sh', file_status.st_mode | stat.S_IEXEC)
+            subprocess.call(['./bash_scripts/phase_bravo.sh'])
             del file_status
         except IOError as error:
             sys.exit(str(error))
@@ -193,17 +195,17 @@ def main():
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
         try:
-            file_status = os.stat('terminator.sh')
-            os.chmod('terminator.sh', file_status.st_mode | stat.S_IEXEC)
+            file_status = os.stat('bash_scripts/terminator.sh')
+            os.chmod('bash_scripts/terminator.sh', file_status.st_mode | stat.S_IEXEC)
             del file_status  # no needie anymore
         except OSError as err:
             sys.exit((str(err)))
 
         # call the utility functions
         util.system_upgrade()
-        util.install_psql()
-        util.install_metasploit()
-        util.install_scripts()
+        # util.install_psql()
+        # util.install_metasploit()
+        # util.install_scripts()
 
         time.sleep(3)
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -218,6 +220,22 @@ def main():
         print("You need to be a superuser or run this script in super user mode.\nGood bye. :)")
         sys.exit("Permission Denied!\n###############################################\n"
                  "###############################################")
+
+
+def controller(counter):
+    returnCode = -1
+
+    if counter == 1:
+        returnCode = Utility().system_upgrade()
+    elif counter == 2:
+        returnCode = Utility().install_psql()
+    elif counter == 3:
+        returnCode = Utility().install_metasploit()
+    elif counter == 4:
+        returnCode = Utility().install_scripts()
+    else:
+        pass
+    return returnCode
 
 
 if __name__ == '__main__':

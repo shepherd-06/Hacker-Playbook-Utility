@@ -2,5 +2,6 @@ include *.md
 include *.py
 include *.txt
 include LICENSE
+include *.sh
 
 global-exclude *.py[co]
