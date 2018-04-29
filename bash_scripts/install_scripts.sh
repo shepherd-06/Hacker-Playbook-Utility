@@ -57,7 +57,7 @@ function filePath() {
         echo /opt/SecLists
     else
         # Invalid Parameter
-        echo -e "${red}Invalid option!${nc}"
+        echo -e "${red}Invalid parameter for function!!${nc}"
         exit 255
     fi
 }
@@ -110,21 +110,8 @@ function clone_script() {
         return 0 ## fresh first install
     else
         # directory exists.
-        echo -e "A folder named ${red}${5} already exist!${nc} Choose your options:
-        1) ${5} is already installed. ${green}Move on!${nc}
-        2) Run ${5} installation again.
-        3) ${red}Remove the ${5} ${nc}Clone again..
-        "
-        read -n1 -p "Please Choose between [1,2,3] : " user_option
-        echo ""
-        sleep 2s ## sleep sleep sleep
-        if (( $user_option == 1 ));then
-            echo -e "${green}Moving on...${nc}"
-            sleep 1s ## sleep sleep sleep
-            return 10 # green green. nothing to do.
-        elif (( $user_option == 2 ));then
-            return 20 ## running installation
-        elif (( $user_option == 3 ));then
+        if [ ${isTest} == 'true' ];then
+            ### Testing running in 30 again.
             echo -e "Removing ${red}OLD ${5}${nc}"
             rm -rf ${directory}
             ## if the previous commit failed to run.
@@ -142,9 +129,42 @@ function clone_script() {
             sleep 2s ## sleep sleep sleep
             return 30 ## cloned fresh, need to run installation again!
         else
-            echo -e "${red} Wrong option : ${short_name}${nc}"
-            sleep 2s ## boom boom booooooooom!
-            exit 255
+            echo -e "A folder named ${red}${5} already exist!${nc} Choose your options:
+            1) ${5} is already installed. ${green}Move on!${nc}
+            2) Run ${5} installation again.
+            3) ${red}Remove the ${5} ${nc}Clone again..
+            "
+            read -n1 -p "Please Choose between [1,2,3] : " user_option
+            echo ""
+            sleep 2s ## sleep sleep sleep
+            if (( $user_option == 1 ));then
+                echo -e "${green}Moving on...${nc}"
+                sleep 1s ## sleep sleep sleep
+                return 10 # green green. nothing to do.
+            elif (( $user_option == 2 ));then
+                return 20 ## running installation
+            elif (( $user_option == 3 ));then
+                echo -e "Removing ${red}OLD ${5}${nc}"
+                rm -rf ${directory}
+                ## if the previous commit failed to run.
+                if [ $? -ne 0 ];then
+                    echo -e "${red} Error installing ${short_name}${nc}"
+                    exit 255
+                fi
+                # installing fresh
+                cd /opt/ && git clone ${3}
+                ## if the previous commit failed to run.
+                if [ $? -ne 0 ];then
+                    echo -e "${red} Error installing ${short_name}${nc}"
+                    exit 255
+                fi
+                sleep 2s ## sleep sleep sleep
+                return 30 ## cloned fresh, need to run installation again!
+            else
+                echo -e "${red} Wrong option : ${short_name}${nc}"
+                sleep 2s ## boom boom booooooooom!
+                exit 255
+            fi
         fi
     fi
 }
@@ -171,6 +191,12 @@ function end_message() {
 #Downloading Different files using WGET
 #----------------------------------------
 function little_wget_magic() {
+
+    if [ ${isTest} == 'true' ];then
+        ## TODO : need to customize the test function for this script.
+        end_message
+    fi
+
     echo -e "${yellow}-------------------------------
     ${blue} Running a little WGET magic to download ${cyan}WCE (Windows Credential Editor), Mimikatz, Custom Password Lists, PeepingTom, NMap Script, PowerSploit, Responder, SET (Social Engineering Toolkit), BypassUAC and Fuzzing Lists.
     ${blue} This list is so f**king long, I know....
@@ -465,11 +491,6 @@ function install_peeping_tom() {
     extra_message="PeepingTom will be used to take snapshots of Webpages"
     short_name="Peeping Tom"
 
-#    echo -e "
-#    ----------------------------
-#    ${lightPurple}Peepingtom has an issue handling phantomJS for now. Reverting...${nc}
-#    ----------------------------"
-#    return 255 #TODO - peeping tom phantomJS issue.
 
     #calling clone script with addition parameters
     clone_script "${script_name}" 4 http://bitbucket.org/LaNMaSteR53/peepingtom.git "${extra_message}" "${short_name}"
@@ -635,28 +656,35 @@ function install_eye_witness() {
 #@caution: Peeping Tom is unsupported for over a year!
 #----------------------------------------
 function peeping_tom_issue() {
-    echo -e "
-    ${red}########### CAUTION ###########
-     Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${cyan}Eye Witness${nc}
-    ${blue}1) Would you like to continue installing Peeping Tom?${nc}
-    ${blue}2) Would you like to install Eye Witness instead?${nc}
-    ${blue}3) Would you like to install both?${nc}
-    ${green}Both Peeping Tom and Eye Witness does the same job, Eye Witness just does it better. ${yellow} According to Tim Tomes (Creator of Peeping Tom)${nc}
-    "
-
-    read -n1 -p "Please Choose between [1,2,3] : " user_choice
-    echo ""
-
-    if (($user_choice == 1));then
-        echo -e "${red}CAUTION ${nc} You are installing PeepingTom which is out of support for a long time."
-        peeping_tom_issue
-    elif (($user_choice == 2));then
-        echo -e "Installing ${cyan}Eye Witness${nc}"
-        install_eye_witness
-    else
-        echo -e "Installing BOTH ${cyan}Eye Witness${nc} and ${cyan}Peeping Tom.${red}You really should not play around with OLD tools${nc}"
+    if [ ${isTest} == 'true' ];then
+        ## force Upgrades can break things. Use this on your own risk.
+        ## This does not run properly in travisCI
         install_peeping_tom
         install_eye_witness
+    else
+        echo -e "
+        ${red}########### CAUTION ###########
+         Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${cyan}Eye Witness${nc}
+        ${blue}1) Would you like to continue installing Peeping Tom?${nc}
+        ${blue}2) Would you like to install Eye Witness instead?${nc}
+        ${blue}3) Would you like to install both?${nc}
+        ${green}Both Peeping Tom and Eye Witness does the same job, Eye Witness just does it better. ${yellow} According to Tim Tomes (Creator of Peeping Tom)${nc}
+        "
+
+        read -n1 -p "Please Choose between [1,2,3] : " user_choice
+        echo ""
+
+        if (($user_choice == 1));then
+            echo -e "${red}CAUTION ${nc} You are installing PeepingTom which is out of support for a long time."
+            peeping_tom_issue
+        elif (($user_choice == 2));then
+            echo -e "Installing ${cyan}Eye Witness${nc}"
+            install_eye_witness
+        else
+            echo -e "Installing BOTH ${cyan}Eye Witness${nc} and ${cyan}Peeping Tom.${red}You really should not play around with OLD tools${nc}"
+            install_peeping_tom
+            install_eye_witness
+        fi
     fi
     sleep 2s # sleep 2s before doing anything else
     powersploit
@@ -694,17 +722,33 @@ function Veil() {
             exit 255
         fi
 
-        echo -e "If there's an ${red}error${nc}, do you want to ${blue} nuke the wine folder option?${nc}"
-        echo ""
-        sleep 1s
-        read -n1 -p "Confirm [y/n] : " user_choice
-        echo ""
-
-        if [ "${user_choice}" == "Y" ] || [ "${user_choice}" == "y" ];then
-            echo -e "${blue}Nuking the wine..${nc}"
+        if [ ${isTest} == 'true' ];then
+            ## force Upgrades can break things. Use this on your own risk.
+            ## This does not run properly in travisCI
             cd /opt/Veil/ && ./Veil.py --setup
+            if [ $? -ne 0 ];then
+                echo -e "${red} Error installing ${short_name}${nc}"
+                exit 255
+            fi
+        else
+            echo -e "If there's an ${red}error${nc}, do you want to ${blue} nuke the wine folder option?${nc}"
+            echo ""
+            sleep 1s
+            read -n1 -p "Confirm [y/n] : " user_choice
+            echo ""
+
+            if [ "${user_choice}" == "Y" ] || [ "${user_choice}" == "y" ];then
+                echo -e "${blue}Nuking the wine..${nc}"
+                cd /opt/Veil/ && ./Veil.py --setup
+
+                if [ $? -ne 0 ];then
+                    echo -e "${red} Error installing ${short_name}${nc}"
+                    exit 255
+                fi
+            fi
+            sleep 1s
         fi
-        sleep 1s
+
         echo -e "${green}${short_name} Complete.${nc}"
     fi
 
@@ -800,7 +844,7 @@ if [ $? -eq 0 ];then
     fi
 
     ## TODO: might need to check if postgreSQL is installed TOO.
-
+    isTest=${1}
     discover #Beginning of everything.
 else
     echo -e "${red} Metasploit is not installed properly! or not found${blue} "$(which -a msfconsole)".${nc}Terminating script."

@@ -165,10 +165,6 @@ class Utility:
         :return: none
         """
         sys.exit(message)
-        # try:
-        #     sys.exit(message)
-        # except SystemExit:
-        #     pass
 
 
 def main():
