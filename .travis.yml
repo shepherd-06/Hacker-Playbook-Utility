@@ -13,7 +13,6 @@ virtualenv:
 
 before_install:
  - sudo apt-get update > /dev/null
- - sudo apt-get upgrade -y --fix-missing > /dev/null
 
 
 install:
