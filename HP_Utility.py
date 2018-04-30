@@ -48,7 +48,6 @@ class Utility:
             file_status = os.stat('bash_scripts/updater.sh')
             os.chmod('bash_scripts/updater.sh', file_status.st_mode | stat.S_IEXEC)
             result = subprocess.Popen(['./bash_scripts/updater.sh', str(is_test)])
-            print(result.stderr)
             result.communicate()
             return_code = result.returncode
             del file_status

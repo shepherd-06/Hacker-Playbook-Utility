@@ -80,7 +80,7 @@ function filePath() {
 #--------------------------------------------------------------------
 function clone_script() {
     echo -e "
-    ${yellow}#####################################
+    ${yellow}#####################################${nc}
     Installing ${1}
     ${4}
     ${yellow}#####################################${nc}
@@ -132,9 +132,9 @@ function clone_script() {
             return 30 ## cloned fresh, need to run installation again!
         else
             echo -e "A folder named ${5} already exist!Choose your options:
-            ${yellow}1)${nc} ${5} is already installed. Move on!
-            ${yellow}2)${nc} Run ${5} installation again.
-            ${yellow}3)${nc} Remove the ${5} and Clone again..
+            ${blue}1)${nc} ${5} is already installed. Move on!
+            ${blue}2)${nc} Run ${5} installation again.
+            ${blue}3)${nc} Remove the ${5} and Clone again..
             "
 
             for (( ; ; )) do
@@ -534,64 +534,64 @@ function powersploit() {
 #Peeping Tom
 #----------------------------------------
 function install_peeping_tom() {
-    script_name="Peeping Tom"
-    extra_message="PeepingTom will be used to take snapshots of Webpages"
-    short_name="Peeping Tom"
-
-
-    #calling clone script with addition parameters
-    clone_script "${script_name}" 4 http://bitbucket.org/LaNMaSteR53/peepingtom.git "${extra_message}" "${short_name}"
-
-    status=$?
-    ## install for 0, 20, 30
-    ## no install for 10
-    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
-
-        cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
-
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            echo -e "${red} Error installing ${short_name}${nc}"
-            exit 255
-        fi
-
-        git clone git://github.com/ariya/phantomjs.git
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            echo -e "${red} Error installing ${short_name}${nc}"
-            exit 255
-        fi
-
-        cd phantomjs && git checkout 2.1.1
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            echo -e "${red} Error installing ${short_name}${nc}"
-            exit 255
-        fi
-
-        cd phantomjs && git submodule init
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            echo -e "${red} Error installing ${short_name}${nc}"
-            exit 255
-        fi
-
-        cd phantomjs && git submodule update
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            echo -e "${red} Error installing ${short_name}${nc}"
-            exit 255
-        fi
-
-        cd phantomjs && python build.py
-        ## if the previous commit failed to run.
-        if [ $? -ne 0 ];then
-            echo -e "${red} Error installing ${short_name}${nc}"
-            exit 255
-        fi
-        echo -e "${green}Peeping Tom installation is complete${nc}"
-    fi
-
+#    script_name="Peeping Tom"
+#    extra_message="PeepingTom will be used to take snapshots of Webpages"
+#    short_name="Peeping Tom"
+#
+#
+#    #calling clone script with addition parameters
+#    clone_script "${script_name}" 4 http://bitbucket.org/LaNMaSteR53/peepingtom.git "${extra_message}" "${short_name}"
+#
+#    status=$?
+#    ## install for 0, 20, 30
+#    ## no install for 10
+#    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
+#
+#        cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
+#
+#        ## if the previous commit failed to run.
+#        if [ $? -ne 0 ];then
+#            echo -e "${red}Error installing ${short_name}${nc}"
+#            exit 255
+#        fi
+#
+#        git clone git://github.com/ariya/phantomjs.git
+#        ## if the previous commit failed to run.
+#        if [ $? -ne 0 ];then
+#            echo -e "${red}Error installing ${short_name}${nc}"
+#            exit 255
+#        fi
+#
+#        cd phantomjs && git checkout 2.1.1
+#        ## if the previous commit failed to run.
+#        if [ $? -ne 0 ];then
+#            echo -e "${red}Error installing ${short_name}${nc}"
+#            exit 255
+#        fi
+#
+#        cd phantomjs && git submodule init
+#        ## if the previous commit failed to run.
+#        if [ $? -ne 0 ];then
+#            echo -e "${red}Error installing ${short_name}${nc}"
+#            exit 255
+#        fi
+#
+#        cd phantomjs && git submodule update
+#        ## if the previous commit failed to run.
+#        if [ $? -ne 0 ];then
+#            echo -e "${red}Error installing ${short_name}${nc}"
+#            exit 255
+#        fi
+#
+#        cd phantomjs && python build.py
+#        ## if the previous commit failed to run.
+#        if [ $? -ne 0 ];then
+#            echo -e "${red}Error installing ${short_name}${nc}"
+#            exit 255
+#        fi
+#        echo -e "${green}Peeping Tom installation is complete${nc}"
+#    fi
+    echo -e "Ignoring Peeping Tom for now! Error in PhantomJS installation!"
     sleep 2s # sleep 2s before doing anything else
     return 0
 }
@@ -644,12 +644,11 @@ function peeping_tom_issue() {
         install_eye_witness
     else
         echo -e "
-        ${red}########### CAUTION ###########
-         Peeping Tom is no Longer supported from ${nc}July 01, 2016${red} due to the success of ${cyan}Eye Witness${nc}
-        ${blue}1) Would you like to continue installing Peeping Tom?${nc}
-        ${blue}2) Would you like to install Eye Witness instead?${nc}
-        ${blue}3) Would you like to install both?${nc}
-        ${green}Both Peeping Tom and Eye Witness does the same job, Eye Witness just does it better. ${yellow} According to Tim Tomes (Creator of Peeping Tom)${nc}
+         Peeping Tom is no Longer supported from July 01, 2016.
+        ${blue}1)${nc} Would you like to continue installing Peeping Tom?$
+        ${blue}2)${nc} Would you like to install Eye Witness instead?
+        ${blue}3)${nc} Would you like to install both?$
+        Both Peeping Tom and Eye Witness does the same job.
         "
 
         for (( ; ; )) do
@@ -659,15 +658,18 @@ function peeping_tom_issue() {
             if (( $user_choice == 1 ));then
                 echo -e "${red}CAUTION ${nc} You are installing PeepingTom which is out of support for a long time."
                 peeping_tom_issue
+                break
             elif (( $user_choice == 2 ));then
                 echo -e "Installing ${cyan}Eye Witness${nc}"
                 install_eye_witness
+                break
             elif (( $user_choice == 3 ));then
                 echo -e "Installing BOTH ${cyan}Eye Witness${nc} and ${cyan}Peeping Tom.${red}You really should not play around with OLD tools${nc}"
                 install_peeping_tom
                 install_eye_witness
+                break
             else
-                echo -e "${red} Wrong choice.${nc} Please try again!"
+                echo -e "${red}Wrong choice.${nc} Please try again!"
             fi
         done
     fi
@@ -680,7 +682,7 @@ function peeping_tom_issue() {
 #Veil version 3.0 Installation!
 #----------------------------------------
 function Veil() {
-    echo -e "${yellow}Veil Evasion is no Longer supported, ${cyan}Installing Veil 3.0 instead. Cloning from ${blue} https://github.com/Veil-Framework/Veil${nc}"
+    echo -e "${yellow}Veil Evasion is no Longer supported, Installing Veil 3.0 instead. Cloning from ${blue} https://github.com/Veil-Framework/Veil${nc}"
 
     script_name="Veil"
     extra_message="Veil will be used to create Python based Meterpreter executable"
