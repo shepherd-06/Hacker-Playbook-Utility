@@ -14,8 +14,8 @@ class Utility:
     @staticmethod
     def is_root():
         """
-
-        :return: if the current user has root privileges or not!
+        if the current user has root privileges or not!
+        :return: boolean
         """
         is_root = False
         try:

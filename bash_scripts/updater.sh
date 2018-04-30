@@ -31,7 +31,7 @@ if [ ${isTest} == 'True' ];then
     echo ""
     sudo apt update > /dev/null ## running in force installation mode
 else
-    sudo apt update
+    sudo apt update > /dev/null
 fi
 
 if [ $? -ne 0 ];then

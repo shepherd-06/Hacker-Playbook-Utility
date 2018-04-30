@@ -81,8 +81,8 @@ function filePath() {
 function clone_script() {
     echo -e "
     ${yellow}#####################################
-    ${blue}Installing ${1}
-    ${cyan}${4}
+    Installing ${1}
+    ${4}
     ${yellow}#####################################${nc}
     "
     local directory=$(filePath ${2})
@@ -106,7 +106,7 @@ function clone_script() {
                 exit 255
             fi
         fi
-        echo -e "${green}${5} installation is complete${nc}"
+        echo -e "${green}${5} installation is complete.${nc}"
         sleep 2s ## sleep sleep sleep
 
         return 0 ## fresh first install
@@ -114,7 +114,7 @@ function clone_script() {
         # directory exists.
         if [ ${isTest} == 'True' ];then
             ### Testing running in 30 again.
-            echo -e "Removing ${red}OLD ${5}${nc}"
+            echo -e "Removing old directory of ${5}${nc}"
             rm -rf ${directory}
             ## if the previous commit failed to run.
             if [ $? -ne 0 ];then
@@ -131,42 +131,48 @@ function clone_script() {
             sleep 2s ## sleep sleep sleep
             return 30 ## cloned fresh, need to run installation again!
         else
-            echo -e "A folder named ${red}${5} already exist!${nc} Choose your options:
-            1) ${5} is already installed. ${green}Move on!${nc}
-            2) Run ${5} installation again.
-            3) ${red}Remove the ${5} ${nc}Clone again..
+            echo -e "A folder named ${5} already exist!Choose your options:
+            ${yellow}1)${nc} ${5} is already installed. Move on!
+            ${yellow}2)${nc} Run ${5} installation again.
+            ${yellow}3)${nc} Remove the ${5} and Clone again..
             "
-            read -n1 -p "Please Choose between [1,2,3] : " user_option
-            echo ""
-            sleep 2s ## sleep sleep sleep
-            if (( $user_option == 1 ));then
-                echo -e "${green}Moving on...${nc}"
-                sleep 1s ## sleep sleep sleep
-                return 10 # green green. nothing to do.
-            elif (( $user_option == 2 ));then
-                return 20 ## running installation
-            elif (( $user_option == 3 ));then
-                echo -e "Removing ${red}OLD ${5}${nc}"
-                rm -rf ${directory}
-                ## if the previous commit failed to run.
-                if [ $? -ne 0 ];then
-                    echo -e "${red} Error installing ${short_name}${nc}"
-                    exit 255
-                fi
-                # installing fresh
-                cd /opt/ && git clone ${3}
-                ## if the previous commit failed to run.
-                if [ $? -ne 0 ];then
-                    echo -e "${red} Error installing ${short_name}${nc}"
-                    exit 255
-                fi
+
+            for (( ; ; )) do
+                read -n1 -p "Please Choose between [1,2,3] : " user_option
+                echo ""
                 sleep 2s ## sleep sleep sleep
-                return 30 ## cloned fresh, need to run installation again!
-            else
-                echo -e "${red} Wrong option : ${short_name}${nc}"
-                sleep 2s ## boom boom booooooooom!
-                exit 255
-            fi
+                if (( $user_option == 1 ));then
+                    echo -e "${green}Moving on...${nc}"
+                    sleep 1s ## sleep sleep sleep
+                    return 10 # green green. nothing to do.
+                    break
+                elif (( $user_option == 2 ));then
+                    return 20 ## running installation
+                    break
+                elif (( $user_option == 3 ));then
+                    echo -e "Removing ${red}OLD ${5}${nc}"
+                    rm -rf ${directory}
+                    ## if the previous commit failed to run.
+                    if [ $? -ne 0 ];then
+                        echo -e "${red} Error installing ${short_name}${nc}"
+                        exit 255
+                    fi
+                    # installing fresh
+                    cd /opt/ && git clone ${3}
+                    ## if the previous commit failed to run.
+                    if [ $? -ne 0 ];then
+                        echo -e "${red} Error installing ${short_name}${nc}"
+                        exit 255
+                    fi
+                    sleep 2s ## sleep sleep sleep
+                    return 30 ## cloned fresh, need to run installation again!
+                    break
+                else
+                    echo -e "Wrong option : ${short_name}. Try again!${nc}"
+                    sleep 2s ## boom boom booooooooom!
+                    break
+                fi
+            done
         fi
     fi
 }
@@ -179,7 +185,7 @@ function end_message() {
     echo -e "${lightPurple}
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ~~~That's It!! Happy coding :)~~~
+    ~~~That's It! Happy hacking :)~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ${nc}"
@@ -195,7 +201,6 @@ function end_message() {
 function little_wget_magic() {
 
     if [ ${isTest} == 'True' ];then
-        ## TODO : need to customize the test function for this script.
         end_message
     fi
 
@@ -266,53 +271,68 @@ function little_wget_magic() {
     # CrackStation Portion.
     # ---------------------------------------------------------
     echo -e "${green}Downloaded Rock you file of Skull Security${nc}
+
+
     ${yellow}-------------------------------${nc}
     ${blue}Downloading Human password list of CrackStation${nc}
-    ${cyan}The list is free however, CrackStation has a donation page running for whatever amount you wish. If you feel, follow this url: ${yellow} https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm${nc}
+    The list is free however, CrackStation has a donation page running for whatever amount you wish. If you feel, follow this url: ${yellow} https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm${nc}
     ${yellow}-------------------------------${nc}
+    Do you want to Download ${blue}CrackStation password list ${nc} using Torrent or HTTP Mirror?
+    Choose 1, if you want Torrent.
+    Choose 2, if you want to use HTTP Mirror${nc}"
 
-    Do you want to Download ${blue}CrackStation password list ${nc} using Torrent or HTTP Mirror? It's a ${blue}247 MB${nc} of GZIP compressed file.
-    ${blue}Choose 1, if you want Torrent (Fast).
-    Choose 2, if you want to use HTTP Mirror (Bit Slower) ${nc}"
+    for (( ; ; )) do
+        read -n1 -p "Please Choose between [1,2] : " user_option
 
-    read -n1 -p "Please Choose between [1,2] : " user_option
-    if (($user_option == 1 ));then
-        cd ~/Desktop/ && wget https://crackstation.net/downloads/crackstation-human-only.txt.gz.torrent
-        which -a transmission-gtk
-        if [ $? -eq 0 ];then
-            transmission-gtk ~/Desktop/crackstation-human-only.txt.gz.torrent
-            ## if the previous commit failed to run.
-            if [ $? -ne 0 ];then
-                echo -e "${red} Error running Transmission!${nc}"
-                exit 255
-            fi
-            sleep 5s # sleep 5 seconds for this command to finish
-            echo -e "${green}I am guessing Transmission is downloading the crackstation's file. Moving on... ${nc}"
-        else
-            echo -e "${red}Transmission is not installed or not found.${nc} Do you want to download it via ${green}1) HTTP Mirror ${nc} or 2) you will do it by yourself?"
-            read -n1 -p "Please Choose between [1,2] : " user_option
-            if (( $user_option == 1));then
-                echo -e  "${green} Downloading Crackstation password list via HTTP Mirror. ${yellow}It'll be awhile.. ${nc}"
-                if [ ! -d ${custom_password_directory} ];then
-                    mkdir ~/Desktop/password_list/
+        if (( $user_option == 1 ));then
+            cd ~/Desktop/ && wget https://crackstation.net/downloads/crackstation-human-only.txt.gz.torrent
+            which -a transmission-gtk
+            if [ $? -eq 0 ];then
+                transmission-gtk ~/Desktop/crackstation-human-only.txt.gz.torrent
+                ## if the previous commit failed to run.
+                if [ $? -ne 0 ];then
+                    echo -e "${red} Error running Transmission!${nc}"
+                    exit 255
                 fi
-                cd ~/Desktop/password_list/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
-                gzip ~/Desktop/password_list/crackstation-human-only.txt.gz
-                mv ~/Desktop/password_list/crackstation-human-only.txt.gz ~/backup_wget/password_list/
+                sleep 5s # sleep 5 seconds for this command to finish
+                echo -e "${green}I am guessing Transmission is downloading the crackstation's file. Moving on... ${nc}"
+
             else
-                echo -e "${green}Moving on...... ${nc}"
+
+                echo -e "${red}Transmission is not installed or not found.${nc} Do you want to download it via ${green}1) HTTP Mirror ${nc} or 2) you will do it by yourself?"
+                read -n1 -p "Please Choose between [1,2] : " user_option
+
+                if (( $user_option == 1));then
+                    echo -e  "${green} Downloading Crackstation password list via HTTP Mirror. ${yellow}It'll be awhile.. ${nc}"
+                    if [ ! -d ${custom_password_directory} ];then
+                        mkdir ~/Desktop/password_list/
+                    fi
+                    cd ~/Desktop/password_list/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
+                    gzip ~/Desktop/password_list/crackstation-human-only.txt.gz
+                    mv ~/Desktop/password_list/crackstation-human-only.txt.gz ~/backup_wget/password_list/
+                else
+                    echo -e "${green}Moving on...... ${nc}"
+                fi
+                break
             fi
+        elif (( $user_option == 1 ));then
+            echo -e "${green} Downloading Crackstation password list via HTTP Mirror. ${yellow}It'll be awhile.. ${nc}"
+            if [ ! -d ${custom_password_directory} ];then
+                mkdir ~/Desktop/password_list/
+            fi
+            cd ~/Desktop/password_list/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
+            gzip ~/Desktop/password_list/crackstation-human-only.txt.gz
+            mv ~/Desktop/password_list/crackstation-human-only.txt.gz ~/backup_wget/password_list/
+
+            break
+        else
+            echo -e "Wrong input brother! Try again!"
         fi
-    else
-        echo -e "${green} Downloading Crackstation password list via HTTP Mirror. ${yellow}It'll be awhile.. ${nc}"
-        if [ ! -d ${custom_password_directory} ];then
-            mkdir ~/Desktop/password_list/
-        fi
-        cd ~/Desktop/password_list/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
-        gzip ~/Desktop/password_list/crackstation-human-only.txt.gz
-        mv ~/Desktop/password_list/crackstation-human-only.txt.gz ~/backup_wget/password_list/
-    fi
-    echo -e "${yellow}------------------------------------------
+    done
+
+
+    echo -e "
+    ${yellow}------------------------------------------
     ${blue} CrackStation has a rather long (15 gigs uncompressed) password. Check them out on their website
     ${yellow}------------------------------------------${nc}"
     sleep 5s
@@ -328,6 +348,13 @@ function little_wget_magic() {
     ${yellow}###################################### ${nc}
     "
     cd /usr/share/nmap/scripts/ && wget http://raw.github.com/hdm/scan-tools/master/nse/banner-plus.nse
+
+    ## if the previous commit failed to run.
+    if [ $? -ne 0 ];then
+        echo -e "${red}Error downloading and copying Nmap script${nc}"
+        exit 255
+    fi
+
     sleep 2s # wait b4 next shot.
     end_message # last function call
 }
@@ -359,23 +386,41 @@ function beEF() {
     ${blue}Installing BeEF
     ${nc}BeFF will be used as an cross-site scripting attack framework
     "
-    ## TODO: lots of work and checker here.
     sudo apt install software-properties-common
+    ## if the previous commit failed to run.
+    if [ $? -ne 0 ];then
+        echo -e "${red}Error in downloading necessary software${nc}"
+        exit 255
+    fi
     sleep 2s
     sudo apt-add-repository -y ppa:brightbox/ruby-ng
+    ## if the previous commit failed to run.
+    if [ $? -ne 0 ];then
+        echo -e "${red} Error adding the Ruby repository${nc}"
+        exit 255
+    fi
     sleep 2s
     sudo apt update
+    ## if the previous commit failed to run.
+    if [ $? -ne 0 ];then
+        echo -e "${red} Error in system update${nc}"
+        exit 255
+    fi
     sleep 2s
     git clone https://github.com/beefproject/beef
+    ## if the previous commit failed to run.
+    if [ $? -ne 0 ];then
+        echo -e "${red} Error in beef cloning from github${nc}"
+        exit 255
+    fi
     sleep 2s
     cd beef && ./install
-    sleep 2s
-
     ## if the previous commit failed to run.
     if [ $? -ne 0 ];then
         echo -e "${red} Error installing beEF${nc}"
         exit 255
     fi
+    sleep 2s
     echo -e "${green} beEF installation is complete"
 
     fuzzing
@@ -544,72 +589,6 @@ function install_peeping_tom() {
             echo -e "${red} Error installing ${short_name}${nc}"
             exit 255
         fi
-
-#        if (( $(getconf LONG_BIT) == 64 ));then
-#            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-#
-#                ## if the previous commit failed to run.
-#            if [ $? -ne 0 ];then
-#                ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2"
-#                exit 255
-#            fi
-#
-#            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2
-#
-#            ## if the previous commit failed to run.
-#            if [ $? -ne 0 ];then
-#                ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-x86_64.tar.bz2"
-#                exit 255
-#            fi
-#
-#            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-#
-#            ## if the previous commit failed to run.
-#            if [ $? -ne 0 ];then
-#                ./terminator.sh 1 "chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
-#                exit 255
-#            fi
-#
-#            python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py
-#
-#            ## if the previous commit failed to run.
-#            if [ $? -ne 0 ];then
-#                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-x86_64/build.py"
-#                exit 255
-#            fi
-#        else
-#            cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2
-#
-#            ## if the previous commit failed to run.
-#            if [ $? -ne 0 ];then
-#                ./terminator.sh 1 "cd /opt/peepingtom && wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-i686.tar.bz2"
-#                exit 255
-#            fi
-#
-#            tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2
-#
-#            ## if the previous commit failed to run.
-#            if [ $? -ne 0 ];then
-#                ./terminator.sh 1 "tar xvjf /opt/peepingtom/phantomjs-2.1.1-linux-i686.tar.bz2"
-#                exit 255
-#            fi
-#
-#            chmod a+x /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py
-#
-#            ## if the previous commit failed to run.
-#            if [ $? -ne 0 ];then
-#                ./terminator.sh 1 "chmod a+x /opt/phantomjs-2.1.1-linux-i686/build.py"
-#                exit 255
-#            fi
-#
-#            python /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py
-#
-#            ## if the previous commit failed to run.
-#            if [ $? -ne 0 ];then
-#                ./terminator.sh 1 "python /opt/peepingtom/phantomjs-2.1.1-linux-i686/build.py"
-#                exit 255
-#            fi
-#        fi
         echo -e "${green}Peeping Tom installation is complete${nc}"
     fi
 
@@ -673,20 +652,24 @@ function peeping_tom_issue() {
         ${green}Both Peeping Tom and Eye Witness does the same job, Eye Witness just does it better. ${yellow} According to Tim Tomes (Creator of Peeping Tom)${nc}
         "
 
-        read -n1 -p "Please Choose between [1,2,3] : " user_choice
-        echo ""
+        for (( ; ; )) do
+            read -n1 -p "Please Choose between [1,2,3] : " user_choice
+            echo ""
 
-        if (($user_choice == 1));then
-            echo -e "${red}CAUTION ${nc} You are installing PeepingTom which is out of support for a long time."
-            peeping_tom_issue
-        elif (($user_choice == 2));then
-            echo -e "Installing ${cyan}Eye Witness${nc}"
-            install_eye_witness
-        else
-            echo -e "Installing BOTH ${cyan}Eye Witness${nc} and ${cyan}Peeping Tom.${red}You really should not play around with OLD tools${nc}"
-            install_peeping_tom
-            install_eye_witness
-        fi
+            if (( $user_choice == 1 ));then
+                echo -e "${red}CAUTION ${nc} You are installing PeepingTom which is out of support for a long time."
+                peeping_tom_issue
+            elif (( $user_choice == 2 ));then
+                echo -e "Installing ${cyan}Eye Witness${nc}"
+                install_eye_witness
+            elif (( $user_choice == 3 ));then
+                echo -e "Installing BOTH ${cyan}Eye Witness${nc} and ${cyan}Peeping Tom.${red}You really should not play around with OLD tools${nc}"
+                install_peeping_tom
+                install_eye_witness
+            else
+                echo -e "${red} Wrong choice.${nc} Please try again!"
+            fi
+        done
     fi
     sleep 2s # sleep 2s before doing anything else
     powersploit
@@ -854,11 +837,18 @@ else
             sudo su # script will ask user for password to sudo mode.
         fi
 
-        ## TODO: might need to check if postgreSQL is installed TOO.
-        discover #Beginning of everything.
+        which -a psql
+        if [ $? -eq 0 ];then
+            discover #Beginning of everything.
+        else
+            echo -e "${red} There might be some issue with PostgreSQL connection creation!${nc}. Terminating the script....
+            "
+            sleep 5s # wait before doing.
+            exit 255
+        fi
     else
-        echo -e "${red} Metasploit is not installed properly! or not found${blue} "$(which -a msfconsole)".${nc}Terminating script."
-        sleep 3s ## boom boom
+        echo -e "Metasploit is not installed properly! or not found${blue} "$(which -a msfconsole)".${nc}Terminating script..."
+        sleep 5s ## boom boom
         exit 255
     fi
 fi
@@ -866,5 +856,4 @@ fi
 
 
 ##TODO: Task at hand.
-##Install or Write code for the following in Kali machine -> Veil, BypassUAC, BeEF {Important}
-##might need to check if postgreSQL is installed TOO before calling discover.
+##Install or Write code for the following in Kali machine -> BypassUAC{Important}
