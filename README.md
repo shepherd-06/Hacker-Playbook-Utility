@@ -1,6 +1,6 @@
 <h1> Hello World! </h1>
 
-[![Build status](https://travis-ci.org/ibtehaz-shawon/Hacker-Playbook-Utility.svg?branch=master)](https://travis-ci.org/ibtehaz-shawon/Hacker-Playbook-Utility)
+<!-- [![Build status](https://travis-ci.org/ibtehaz-shawon/Hacker-Playbook-Utility.svg?branch=master)](https://travis-ci.org/ibtehaz-shawon/Hacker-Playbook-Utility) -->
 [![Supported Python Versions](https://img.shields.io/badge/Python-3.4%2C%203.5%2C%203.6-brightgreen.svg)](https://img.shields.io/badge/Python-3.4%2C%203.5%2C%203.6-brightgreen.svg)
 
 
