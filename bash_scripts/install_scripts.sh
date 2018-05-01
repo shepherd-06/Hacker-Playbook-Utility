@@ -858,4 +858,8 @@ fi
 
 
 ##TODO: Task at hand.
-##Install or Write code for the following in Kali machine -> BypassUAC{Important}
+##Install or Write code for the following in Kali machine -> BypassUAC & Peeping Tom{Important}
+##Implement Silent mode first.
+##Implement Setup steps.
+##Implement network connection availability timer.
+##Implement timer.

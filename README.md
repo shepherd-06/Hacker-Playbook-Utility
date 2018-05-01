@@ -8,7 +8,7 @@ This is a Python powered bash script to help install different scripts of <a hre
 
 -----------------------------------------------------------
 
-<h4> What does this script do </h4>
+<h3> What does this script do </h3>
 <ol>
 <li> Update & Upgrade System </li>
 <li> Postgresql status </li>
@@ -35,7 +35,7 @@ Since there are lots of tools, it will take about an eternity to finish install 
 
 -----------------------------------------------------------
 
-<h4> <b> How to run: </b> </h4>
+<h3> <b> How to run: </b> </h3>
 <h6> Step 1 </h6>
 <p> Clone this repository
 <pre>git clone https://github.com/ibtehaz-shawon/Hacker-Playbook-Utility </pre>
