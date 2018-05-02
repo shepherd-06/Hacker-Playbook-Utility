@@ -67,4 +67,7 @@ echo -e "
     ${green}Upgrade Complete${nc}
     ${yellow}-------------------------------------------${nc}
     "
+
+sleep 3s
+clear
 exit 0 ##success

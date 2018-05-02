@@ -9,14 +9,15 @@ yellow="\033[1;33m"
 lightPurple='\033[1;35m'
 
 isTest=${1}
+user_input=${2}
 
-echo -e "${lightPurple}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Running Phase BRAVO Installation
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ${nc}"
+#echo -e "${lightPurple}
+#    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    Running Phase BRAVO Installation
+#    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#    ${nc}"
 
 #--------------------------------------------------------------------
 #Discover -> parameter val 1
@@ -356,7 +357,6 @@ function little_wget_magic() {
     fi
 
     sleep 2s # wait b4 next shot.
-    end_message # last function call
 }
 
 
@@ -366,14 +366,13 @@ function little_wget_magic() {
 #----------------------------------------
 function fuzzing() {
     script_name="Fuzzing Lists (SecLists)"
-    extra_message="SET will be used for Social Engineering Campagin"
+    extra_message="SET will be used for Social Engineering Campaign"
     short_name="Fuzzing Lists"
 
     #calling clone script with addition parameters
     clone_script "${script_name}" 9 http://github.com/danielmiessler/SecLists.git "${extra_message}" "${short_name}"
 
     sleep 2s #almost there
-    little_wget_magic # its a long wget call.
 }
 
 #exit 255
@@ -422,8 +421,6 @@ function beEF() {
     fi
     sleep 2s
     echo -e "${green} beEF installation is complete"
-
-    fuzzing
 }
 #----------------------------------------
 #Installing bypassUAC--------------------
@@ -440,8 +437,7 @@ function bypassUAC() {
     #####################################
     #####################################
     ${nc}"
-
-    beEF
+    sleep 2s
 }
 
 #----------------------------------------
@@ -475,7 +471,6 @@ function social_engineering_toolkit() {
     fi
 
     sleep 2s # sleeping 2s b4 doing anything else.
-    bypassUAC
 }
 
 
@@ -491,7 +486,6 @@ function responder() {
     clone_script "${script_name}" 7 http://github.com/SpiderLabs/Responder.git "${extra_message}" "${short_name}"
 
     sleep 2s #sleeping....
-    social_engineering_toolkit
 }
 
 
@@ -527,7 +521,6 @@ function powersploit() {
     fi
 
     sleep 2s #wait 2seconds b4 doing anything stupid! :p
-    responder
 }
 
 #----------------------------------------
@@ -674,7 +667,6 @@ function peeping_tom_issue() {
         done
     fi
     sleep 2s # sleep 2s before doing anything else
-    powersploit
 }
 
 
@@ -740,7 +732,6 @@ function Veil() {
     fi
 
     sleep 2s
-    peeping_tom_issue
 }
 
 
@@ -776,7 +767,6 @@ function SMBExec() {
         echo -e "Installing ${short_name} -- ${green} DONE$ ${nc}"
     fi
     sleep 2s
-    Veil
 }
 
 
@@ -784,7 +774,7 @@ function SMBExec() {
 #Discover Installation!
 #----------------------------------------
 function discover() {
-    script_name="Discover Scripts (Formerly known as backtrack Scrpts)"
+    script_name="Discover Scripts (Formerly known as backtrack Scripts)"
     extra_message="Discover is used for Passive Enumeration!"
     short_name="Discover"
 
@@ -814,7 +804,6 @@ function discover() {
     fi
 
     sleep 2s # Wait 2 seconds before Running SMBExec
-    SMBExec
 }
 
 
@@ -823,15 +812,9 @@ function discover() {
 #---------------------------------------------------------------
 #---------------------------------------------------------------
 if [ ${isTest} == 'True' ];then
-    which -a msfconsole
-    if [ $? -eq 0 ];then
-        discover
-    else
-        echo "Metasploit is not installed!"
-        exit 255
-    fi
+    exit 0
 else
-    which -a msfconsole
+    which -a msfconsole > /dev/null
     if [ $? -eq 0 ];then
         ## Metasploit is installed.
         if [[ $EUID -ne 0 ]];then
@@ -839,9 +822,72 @@ else
             sudo su # script will ask user for password to sudo mode.
         fi
 
-        which -a psql
+        which -a psql > /dev/null
         if [ $? -eq 0 ];then
-            discover #Beginning of everything.
+            #### -------------------------------------------------
+            #### -------------------------------------------------
+            #### -------------------------------------------------
+            #### -------------------------------------------------
+            if (( ${user_input} == 1 ));then
+                discover
+                clear
+                exit 0
+            elif (( ${user_input} == 2 )); then
+                SMBExec
+                clear
+                exit 0
+            elif (( ${user_input} == 3 )); then
+                Veil
+                clear
+                exit 0
+            elif (( ${user_input} == 4 )); then
+                install_peeping_tom
+                clear
+                exit 0
+            elif (( ${user_input} == 5 )); then
+                install_eye_witness
+                clear
+                exit 0
+            elif (( ${user_input} == 6 )); then
+                powersploit
+                clear
+                exit 0
+            elif (( ${user_input} == 7 )); then
+                responder
+                clear
+                exit 0
+            elif (( ${user_input} == 8 )); then
+                social_engineering_toolkit
+                clear
+                exit 0
+            elif (( ${user_input} == 9 )); then
+                bypassUAC
+                clear
+                exit 0
+            elif (( ${user_input} == 10 )); then
+                beEF
+                clear
+                exit 0
+            elif (( ${user_input} == 11 )); then
+                fuzzing
+                clear
+                exit 0
+            elif (( ${user_input} == 12 )); then
+                little_wget_magic
+                clear
+                exit 0
+            elif (( ${user_input} == 13 )); then
+                end_message
+                exit 0
+            else
+                # Invalid Parameter
+                echo -e "${red}Invalid parameter for function!!${nc}"
+                exit 0
+            fi
+            #### -------------------------------------------------
+            #### -------------------------------------------------
+            #### -------------------------------------------------
+            #### -------------------------------------------------
         else
             echo -e "${red} There might be some issue with PostgreSQL connection creation!${nc}. Terminating the script....
             "
@@ -860,6 +906,6 @@ fi
 ##TODO: Task at hand.
 ##Install or Write code for the following in Kali machine -> BypassUAC & Peeping Tom{Important}
 ##Implement Silent mode first.
-##Implement Setup steps.
+##Implement Setup steps. > DONE.
 ##Implement network connection availability timer.
-##Implement timer.
+##Implement timer. > NOT NECESSARY

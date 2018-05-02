@@ -11,6 +11,7 @@ class Utility:
     """
     Utility class holds all the working functions!
     """
+
     @staticmethod
     def is_root():
         """
@@ -64,7 +65,7 @@ class Utility:
         finally:
             if return_code != 0:
                 # error occurred in the process
-                Utility().terminate("Error Code --> "+str(return_code) + " "+error_message)
+                Utility().terminate("Error Code --> " + str(return_code) + " " + error_message)
             return return_code
 
     @staticmethod
@@ -133,21 +134,20 @@ class Utility:
             return return_code
 
     @staticmethod
-    def install_scripts(is_test=False):
+    def install_scripts():
         """
         Installing scripts and apps inside /opt/
-        :param is_test: :bool
         :return:
         """
-        return_code = 200
+        return_code = 0
         error_message = ""
         try:
             file_status = os.stat('bash_scripts/install_scripts.sh')
             os.chmod('bash_scripts/install_scripts.sh', file_status.st_mode | stat.S_IEXEC)
-            result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test)])
-            result.communicate()
-            return_code = result.returncode
-            del result
+            # result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test)])
+            # result.communicate()
+            # return_code = result.returncode
+            # del result
             del file_status
         except IOError as error:
             return_code = 255
@@ -171,6 +171,66 @@ class Utility:
         :return: none
         """
         sys.exit(message)
+
+    @classmethod
+    def baby_step(cls, is_test=False):
+        """
+        baby step takes care of the installing scripts
+        :param is_test: boolean
+        :return:
+        """
+        return_code = 0
+        error_message = ""
+        try:
+            while True:
+                print("Choose your options:"
+                      "\n** Press [ 1 ] to install Discover Script (Former Backtrack Script)"
+                      "\n** Press [ 2 ] to install SMBExec (grab hashes out of Domain Controller and reverse shells)"
+                      "\n** Press [ 3 ] to install Veil 3.0 (to create Python based Metepreter executable)"
+                      "\n** Press [ 4 ] to install PeepingTom (to take snapshots of web pages) (NOT AVAILABLE NOW***)"
+                      "\n** Press [ 5 ] to install Eye Witness (to take snapshots of web pages"
+                      "\n** Press [ 6 ] to install Powersploit (to create Powershell script)"
+                      "\n** Press [ 7 ] to install Responder (to gain NTLM challenge/hashes)"
+                      "\n** Press [ 8 ] to install Social Engineering Toolkit"
+                      "\n** Press [ 9 ] to install bypassUAC (NOT AVAILABLE NOW***)"
+                      "\n** Press [ 10 ] to install beEF for cross site scripting"
+                      "\n** Press [ 11 ] to install Fuzzing Lists (for Social Engineering Campaign)"
+                      "\n** Press [ 12 ] to download & install other necessary scripts like\n   - WCE (Windows "
+                      "Credential "
+                      "Editor), "
+                      "\n   - Mimikatz (to recover password from memory),\n   - Custom password list from Skull "
+                      "Security "
+                      "and "
+                      "Crackstation,\n   - & NMap scripts (for quicker scanning and smarter identification"
+                      "\n\n** Press [ 13 ] to terminate the script")
+
+                user_input = input("Your option:: ")
+                if user_input == "13":
+                    # terminate the loop
+                    time.sleep(3)
+                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                    print("~~~~~~~~~~~~~~That's a wrap baby!~~~~~~~~~~~~~~")
+                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                    sys.exit(0)  # The END
+                else:
+                    time.sleep(5)
+                    result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test), user_input])
+                    result.communicate()
+                    return_code = result.returncode
+                    del result
+                    if return_code != 0:
+                        Utility().terminate("System terminated!")
+        except subprocess.CalledProcessError as error:
+            return_code = 255
+            error_message = str(error)
+        except OSError as error:
+            return_code = 255
+            error_message = str(error)
+        finally:
+            if return_code != 0:
+                Utility().terminate("System terminated! "+str(error_message))
 
 
 def main():
@@ -203,14 +263,7 @@ def main():
         util.install_psql()
         util.install_metasploit()
         util.install_scripts()
-
-        time.sleep(3)
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("~~~~~~~~~~~~~~That's a wrap baby!~~~~~~~~~~~~~~")
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        sys.exit(0)  # The END
+        util.baby_step()
     else:
         print("###############################################")
         print("###############################################")
@@ -221,5 +274,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# kill $(pgrep -f 'HP-Utility')

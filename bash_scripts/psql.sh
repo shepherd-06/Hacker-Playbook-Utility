@@ -24,7 +24,7 @@ echo -e "${lightPurple}
     ${nc}"
 
 #check if psql is installed.
-which -a psql
+which -a psql > /dev/null
 if [ $? -eq 1 ] #returns 0 if psql is installed.
 then
     echo -e "PostgreSQL is not installed" #install psql here.
@@ -38,7 +38,7 @@ if [ $? -ne 0 ];then
 fi
 
 sleep 2s
-which -a psql
+which -a psql > /dev/null
 if [ $? -eq 0 ];then
     echo -e "${green}PostgreSQL is installed!${nc}"
     echo ""
@@ -123,4 +123,6 @@ else
     exit 255
 fi
 
+sleep 3s
+clear
 exit 0 ## mission success

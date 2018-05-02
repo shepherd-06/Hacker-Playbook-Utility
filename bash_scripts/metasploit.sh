@@ -18,7 +18,7 @@ echo -e "${lightPurple}
 runningDistro=${1}
 isTest=${2}
 
-which -a msfconsole
+which -a msfconsole > /dev/null
 if [ $? -eq 1 ];then #returns 0 if metasploit framework is installed.
     echo -e "${red}Metasploit Framework is not installed${nc} ${nc}"
     sleep 3s # wait before doing.
@@ -193,4 +193,6 @@ else
     fi
 fi
 
+sleep 3s
+clear
 exit 0 ## total success
