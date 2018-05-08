@@ -16,12 +16,12 @@ This is a Python powered bash script to help install different scripts of <a hre
 <li> Discover Script </li>
 <li> SMBExec </li>
 <li> Veil 3.0 </li>
-<li> Peeping Tom (Not functional yet) </li>
+<li> Peeping Tom (<b>Not functional yet</b>) </li>
 <li> Eye Witness </li>
 <li> Powersploit </li>
 <li> Responder </li>
 <li> Social Engineering Toolkit </li>
-<li> bypassUAC (Not functional yet) </li>
+<li> bypassUAC (<b>Not functional yet</b>) </li>
 <li> beEF (for cross site scripting) </li>
 <li> Fuzzing List </li>
 <li> WCE (Windows Credential Editor)</li>
@@ -31,7 +31,25 @@ This is a Python powered bash script to help install different scripts of <a hre
 <li> & NMap script </li>
 </ol>
 
-Since there are lots of tools, it will take about an eternity to finish install all of those. I will try to automate them in future. <i> Also, </i> this script is fairly linear. There no option of choosing stuff out in the middle. I will (probably) do that later!
+You can choose to download all scripts at once or choose the scripts you need.
+{PS: I will add the silent download option later}
+
+-----------------------------------------------------------
+<h3> <b> Requirement: </b> </h3>
+<h6> Operating system </h6>
+<p> This script currently work for <b>Debian systems</b> only.
+
+Tested in the following OS: <u> Ubuntu 16.04 </u> <u> Kali Rolling 2.0 </u> & <u> Linux Mint </u>
+</p>
+<h6> Install python3 and pip3 (for python3+) </h6>
+<p> Currently this script only support python3+
+You can install python3 and pip3 using the following command
+<pre>sudo apt-get install python3.6 </pre>
+Install pip3 (for python3)
+<pre>sudo apt-get install python3-pip </pre>
+</p>
+<h6> Install curl </h6>
+<pre> sudo apt install curl </pre>
 
 -----------------------------------------------------------
 
@@ -44,11 +62,6 @@ Since there are lots of tools, it will take about an eternity to finish install 
 <p>
 Install the requirements from the requirements file using the following command.
 <pre>pip3 install -r requirements.txt </pre>
-Right now, this script supports only Python3.
-Install Python3 using
-<pre>sudo apt-get install python3.6 </pre>
-Install pip3 (for python3)
-<pre>sudo apt-get install python3-pip </pre>
 </p>
 <h6> Step 3 </h6>
 <p> Run the HP_Utility.py file in superuser mode
@@ -60,4 +73,4 @@ The scripts need to install some file in administrative accessed area!
 <b> Thats it! </b>
 If there is any problem regarding this script, please create an issue here - https://github.com/ibtehaz-shawon/Hacker-Playbook-Utility/issues
 
-Thank you! -- Ibtehaz Shawon
+Thank you! -- Ibtehaz {galahad} Shawon

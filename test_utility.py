@@ -20,4 +20,4 @@ class TestUtility(TestCase):
         self.assertEqual(Utility.install_metasploit(True), 0, "Metasploit install crashed")
 
     def test_install_scripts(self):
-        self.assertEqual(Utility.install_scripts(True), 0, "Script Installation Error!")
+        self.assertEqual(Utility.chmod_scripts(True), 0, "Script Installation Error!")

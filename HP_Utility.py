@@ -62,6 +62,9 @@ class Utility:
         except OSError as error:
             return_code = 255
             error_message = str(error)
+        except KeyboardInterrupt as error:
+            return_code = 255
+            error_message = str(error)
         finally:
             if return_code != 0:
                 # error occurred in the process
@@ -91,6 +94,9 @@ class Utility:
             return_code = 255
             error_message = str(error)
         except OSError as error:
+            return_code = 255
+            error_message = str(error)
+        except KeyboardInterrupt as error:
             return_code = 255
             error_message = str(error)
         finally:
@@ -128,13 +134,16 @@ class Utility:
         except OSError as error:
             return_code = 255
             error_message = str(error)
+        except KeyboardInterrupt as error:
+            return_code = 255
+            error_message = str(error)
         finally:
             if return_code != 0:
                 Utility().terminate("Error Code --> " + str(return_code) + " " + error_message)
             return return_code
 
     @staticmethod
-    def install_scripts():
+    def chmod_scripts():
         """
         Installing scripts and apps inside /opt/
         :return:
@@ -144,10 +153,6 @@ class Utility:
         try:
             file_status = os.stat('bash_scripts/install_scripts.sh')
             os.chmod('bash_scripts/install_scripts.sh', file_status.st_mode | stat.S_IEXEC)
-            # result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test)])
-            # result.communicate()
-            # return_code = result.returncode
-            # del result
             del file_status
         except IOError as error:
             return_code = 255
@@ -156,6 +161,9 @@ class Utility:
             return_code = 255
             error_message = str(error)
         except OSError as error:
+            return_code = 255
+            error_message = str(error)
+        except KeyboardInterrupt as error:
             return_code = 255
             error_message = str(error)
         finally:
@@ -199,13 +207,13 @@ class Utility:
                       "Credential "
                       "Editor), "
                       "\n   - Mimikatz (to recover password from memory),\n   - Custom password list from Skull "
-                      "Security "
-                      "and "
+                      "Security and "
                       "Crackstation,\n   - & NMap scripts (for quicker scanning and smarter identification"
-                      "\n\n** Press [ 13 ] to terminate the script")
+                      "\n** Press [ 13 ] to download ** all scripts **"
+                      "\n\n** Press [ 14 ] to terminate the script")
 
                 user_input = input("Your option:: ")
-                if user_input == "13":
+                if user_input == "14":
                     # terminate the loop
                     time.sleep(3)
                     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -214,6 +222,9 @@ class Utility:
                     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                     sys.exit(0)  # The END
+                elif user_input == "13":
+                    # install all
+                    return_code = Utility.__do_it_all(is_test)
                 else:
                     time.sleep(5)
                     result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test), user_input])
@@ -228,9 +239,43 @@ class Utility:
         except OSError as error:
             return_code = 255
             error_message = str(error)
+        except KeyboardInterrupt as error:
+            return_code = 255
+            error_message = str(error)
         finally:
             if return_code != 0:
-                Utility().terminate("System terminated! "+str(error_message))
+                Utility().terminate("System terminated! " + str(error_message))
+
+    @classmethod
+    def __do_it_all(cls, is_test=False):
+        """
+        do it install all the scripts in a linear fashion.
+        :param is_test: bool
+        :return: integer (success = 0, failure = 255)
+        """
+        return_code = 0
+        for user_input in range(1, 14):
+            try:
+                time.sleep(2)
+                result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test), str(user_input)])
+                result.communicate()
+                return_code = result.returncode
+                del result
+                if return_code != 0:
+                    Utility().terminate("System terminated!")
+            except subprocess.CalledProcessError as error:
+                return_code = 255
+                error_message = str(error)
+            except OSError as error:
+                return_code = 255
+                error_message = str(error)
+            except KeyboardInterrupt as error:
+                return_code = 255
+                error_message = str(error)
+            finally:
+                if return_code != 0:
+                    Utility().terminate("System terminated! " + str(error_message))
+        return return_code
 
 
 def main():
@@ -262,7 +307,7 @@ def main():
         util.system_upgrade()
         util.install_psql()
         util.install_metasploit()
-        util.install_scripts()
+        util.chmod_scripts()
         util.baby_step()
     else:
         print("###############################################")

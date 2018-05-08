@@ -255,7 +255,7 @@ function little_wget_magic() {
     echo -e "${yellow}-------------------------------${nc}
     ${blue}Download Custom Password list.${nc}
     First. Rock you of Skull Security
-    {yellow}-------------------------------${nc}"
+    ${yellow}-------------------------------${nc}"
     if [ ! -d ${custom_password_directory} ];then
         mkdir ~/Desktop/password_list/
     fi
@@ -275,62 +275,19 @@ function little_wget_magic() {
 
 
     ${yellow}-------------------------------${nc}
-    ${blue}Downloading Human password list of CrackStation${nc}
-    The list is free however, CrackStation has a donation page running for whatever amount you wish. If you feel, follow this url: ${yellow} https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm${nc}
-    ${yellow}-------------------------------${nc}
-    Do you want to Download ${blue}CrackStation password list ${nc} using Torrent or HTTP Mirror?
-    Choose 1, if you want Torrent.
-    Choose 2, if you want to use HTTP Mirror${nc}"
+    ${blue}Downloading Human password list of CrackStation using HTTP Mirror${nc}
+    The list is free however, CrackStation has a donation page running for ANY amount you wish. If you feel, follow this url: ${yellow} https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm${nc}
+    ${yellow}-------------------------------${nc}"
 
-    for (( ; ; )) do
-        read -n1 -p "Please Choose between [1,2] : " user_option
+    echo -e "${green} Downloading Crackstation password list via HTTP Mirror. ${yellow}It'll be awhile.. ${nc}"
+    sleep 2s
 
-        if (( $user_option == 1 ));then
-            cd ~/Desktop/ && wget https://crackstation.net/downloads/crackstation-human-only.txt.gz.torrent
-            which -a transmission-gtk
-            if [ $? -eq 0 ];then
-                transmission-gtk ~/Desktop/crackstation-human-only.txt.gz.torrent
-                ## if the previous commit failed to run.
-                if [ $? -ne 0 ];then
-                    echo -e "${red} Error running Transmission!${nc}"
-                    exit 255
-                fi
-                sleep 5s # sleep 5 seconds for this command to finish
-                echo -e "${green}I am guessing Transmission is downloading the crackstation's file. Moving on... ${nc}"
-
-            else
-
-                echo -e "${red}Transmission is not installed or not found.${nc} Do you want to download it via ${green}1) HTTP Mirror ${nc} or 2) you will do it by yourself?"
-                read -n1 -p "Please Choose between [1,2] : " user_option
-
-                if (( $user_option == 1));then
-                    echo -e  "${green} Downloading Crackstation password list via HTTP Mirror. ${yellow}It'll be awhile.. ${nc}"
-                    if [ ! -d ${custom_password_directory} ];then
-                        mkdir ~/Desktop/password_list/
-                    fi
-                    cd ~/Desktop/password_list/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
-                    gzip ~/Desktop/password_list/crackstation-human-only.txt.gz
-                    mv ~/Desktop/password_list/crackstation-human-only.txt.gz ~/backup_wget/password_list/
-                else
-                    echo -e "${green}Moving on...... ${nc}"
-                fi
-                break
-            fi
-        elif (( $user_option == 1 ));then
-            echo -e "${green} Downloading Crackstation password list via HTTP Mirror. ${yellow}It'll be awhile.. ${nc}"
-            if [ ! -d ${custom_password_directory} ];then
-                mkdir ~/Desktop/password_list/
-            fi
-            cd ~/Desktop/password_list/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
-            gzip ~/Desktop/password_list/crackstation-human-only.txt.gz
-            mv ~/Desktop/password_list/crackstation-human-only.txt.gz ~/backup_wget/password_list/
-
-            break
-        else
-            echo -e "Wrong input brother! Try again!"
-        fi
-    done
-
+    if [ ! -d ${custom_password_directory} ];then
+        mkdir ~/Desktop/password_list/
+    fi
+    cd ~/Desktop/password_list/ && wget https://crackstation.net/files/crackstation-human-only.txt.gz
+    gzip ~/Desktop/password_list/crackstation-human-only.txt.gz
+    mv ~/Desktop/password_list/crackstation-human-only.txt.gz ~/backup_wget/password_list/
 
     echo -e "
     ${yellow}------------------------------------------
@@ -527,63 +484,6 @@ function powersploit() {
 #Peeping Tom
 #----------------------------------------
 function install_peeping_tom() {
-#    script_name="Peeping Tom"
-#    extra_message="PeepingTom will be used to take snapshots of Webpages"
-#    short_name="Peeping Tom"
-#
-#
-#    #calling clone script with addition parameters
-#    clone_script "${script_name}" 4 http://bitbucket.org/LaNMaSteR53/peepingtom.git "${extra_message}" "${short_name}"
-#
-#    status=$?
-#    ## install for 0, 20, 30
-#    ## no install for 10
-#    if (( ${status} == 0 )) || (( ${status} == 20 )) || (( ${status} == 30 ));then
-#
-#        cd /opt/peepingtom && wget http://gist.github.com/nopslider/5984316/raw/423b02c53d225fe8dfb4e2df9a20bc800cc78e2c/gnmap.pl
-#
-#        ## if the previous commit failed to run.
-#        if [ $? -ne 0 ];then
-#            echo -e "${red}Error installing ${short_name}${nc}"
-#            exit 255
-#        fi
-#
-#        git clone git://github.com/ariya/phantomjs.git
-#        ## if the previous commit failed to run.
-#        if [ $? -ne 0 ];then
-#            echo -e "${red}Error installing ${short_name}${nc}"
-#            exit 255
-#        fi
-#
-#        cd phantomjs && git checkout 2.1.1
-#        ## if the previous commit failed to run.
-#        if [ $? -ne 0 ];then
-#            echo -e "${red}Error installing ${short_name}${nc}"
-#            exit 255
-#        fi
-#
-#        cd phantomjs && git submodule init
-#        ## if the previous commit failed to run.
-#        if [ $? -ne 0 ];then
-#            echo -e "${red}Error installing ${short_name}${nc}"
-#            exit 255
-#        fi
-#
-#        cd phantomjs && git submodule update
-#        ## if the previous commit failed to run.
-#        if [ $? -ne 0 ];then
-#            echo -e "${red}Error installing ${short_name}${nc}"
-#            exit 255
-#        fi
-#
-#        cd phantomjs && python build.py
-#        ## if the previous commit failed to run.
-#        if [ $? -ne 0 ];then
-#            echo -e "${red}Error installing ${short_name}${nc}"
-#            exit 255
-#        fi
-#        echo -e "${green}Peeping Tom installation is complete${nc}"
-#    fi
     echo -e "Ignoring Peeping Tom for now! Error in PhantomJS installation!"
     sleep 2s # sleep 2s before doing anything else
     return 0
