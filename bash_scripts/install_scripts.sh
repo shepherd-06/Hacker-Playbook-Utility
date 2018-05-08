@@ -279,7 +279,7 @@ function little_wget_magic() {
     The list is free however, CrackStation has a donation page running for ANY amount you wish. If you feel, follow this url: ${yellow} https://crackstation.net/buy-crackstation-wordlist-password-cracking-dictionary.htm${nc}
     ${yellow}-------------------------------${nc}"
 
-    echo -e "${green} Downloading Crackstation password list via HTTP Mirror. ${yellow}It'll be awhile.. ${nc}"
+    echo -e "${green} Downloading Crackstation password list via HTTP Mirror. ${yellow}It might take awhile.. ${nc}"
     sleep 2s
 
     if [ ! -d ${custom_password_directory} ];then
@@ -807,5 +807,7 @@ fi
 ##Install or Write code for the following in Kali machine -> BypassUAC & Peeping Tom{Important}
 ##Implement Silent mode first.
 ##Implement Setup steps. > DONE.
-##Implement network connection availability timer.
+##Implement network connection availability timer. > NOT NECESSARY
 ##Implement timer. > NOT NECESSARY
+##Implement logging the entire process to a separate file.
+##Implement check if all tools are installed or how many are missing {generic location first (opt)}

@@ -225,6 +225,15 @@ class Utility:
                 elif user_input == "13":
                     # install all
                     return_code = Utility.__do_it_all(is_test)
+                    if return_code != 0:
+                        Utility().terminate("System terminated!")
+                    else:
+                        time.sleep(3)
+                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        print("~~~~~~~~~~~~~~That's a wrap baby!~~~~~~~~~~~~~~")
+                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
                 else:
                     time.sleep(5)
                     result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test), user_input])
