@@ -20,16 +20,30 @@ isTest=${2}
 
 which -a msfconsole > /dev/null
 if [ $? -eq 1 ];then #returns 0 if metasploit framework is installed.
-    echo -e "${red}Metasploit Framework is not installed${nc} ${nc}"
+    echo -e "${red}Metasploit Framework is not installed ${nc}"
     sleep 3s # wait before doing.
 
+    which -a curl > /dev/null
+
+    if [ $? -eq 1 ];then
+        echo -e "${red}curl is not installed${nc}"
+        echo -e "Installing curl.."
+        sleep 2s
+        sudo apt install curl
+
+        if [ $? -eq 1 ];then
+            echo "Error occurred installing curl. ${red} Terminating.. ${nc}"
+            sleep 1s
+            exit 255
+         fi
+    fi
     echo -e "Installing Metasploit framework from ${yellow}'https://github.com/rapid7/metasploit-framework/wiki/Nightly-Installers'
         ${nc}Script invocation will import the Rapid7 signing key and setup the package for all supported Linux systems
         "
     sleep 5s #sleeping 5 seconds before installation begin.
     sudo curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall && chmod 755 msfinstall && ./msfinstall
 
-    if [ $? -ne 0 ];then
+    if [ $? -eq 1 ];then
         echo "Error occurred installing metasploit framework. ${red} Terminating.. ${nc}"
         exit 255
     fi

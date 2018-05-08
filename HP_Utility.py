@@ -303,6 +303,7 @@ def main():
                   "easily!")
             print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
+        time.sleep(5)
         # call the utility functions
         util.system_upgrade()
         util.install_psql()

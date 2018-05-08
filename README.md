@@ -41,15 +41,10 @@ You can choose to download all scripts at once or choose the scripts you need.
 
 Tested in the following OS: <u> Ubuntu 16.04 </u> <u> Kali Rolling 2.0 </u> & <u> Linux Mint </u>
 </p>
-<h6> Install python3 and pip3 (for python3+) </h6>
+<h6> Install python3, pip3 (for python3+)and curl </h6>
 <p> Currently this script only support python3+
-You can install python3 and pip3 using the following command
-<pre>sudo apt-get install python3.6 </pre>
-Install pip3 (for python3)
-<pre>sudo apt-get install python3-pip </pre>
+<pre>sudo apt-get install python3.6 python3-pip curl</pre>
 </p>
-<h6> Install curl </h6>
-<pre> sudo apt install curl </pre>
 
 -----------------------------------------------------------
 
