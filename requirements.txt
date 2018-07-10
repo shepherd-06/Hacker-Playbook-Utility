@@ -4,3 +4,4 @@ peppercorn==0.5
 setuptools==14.0
 wheel==0.22
 argparse==1.4.0
+pyfiglet==0.7.3
