@@ -70,4 +70,4 @@ The scripts need to install some file in administrative accessed area!
 <b> Thats it! </b>
 If there is any problem regarding this script, please create an issue here - https://github.com/ibtehaz-shawon/Hacker-Playbook-Utility/issues
 
-Thank you! -- Ibtehaz {galahad} Shawon
+Thank you! -- Ibtehaz :)
