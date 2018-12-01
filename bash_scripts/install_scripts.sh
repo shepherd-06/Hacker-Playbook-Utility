@@ -440,7 +440,7 @@ function responder() {
     short_name="Responder"
 
     #calling clone script with addition parameters
-    clone_script "${script_name}" 7 http://github.com/SpiderLabs/Responder.git "${extra_message}" "${short_name}"
+    clone_script "${script_name}" 7 http://github.com/lgandx/Responder.git "${extra_message}" "${short_name}"
 
     sleep 2s #sleeping....
 }
