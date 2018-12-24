@@ -43,31 +43,32 @@ echo -e "
     ${yellow}-------------------------------------------${nc}
     ${green}Update complete${nc}
     ${yellow}-------------------------------------------${nc}
-    ${blue}Upgrading ${nc}
+    ${blue}Skipping Upgrading ${nc}
     ${yellow}-------------------------------------------${nc}
     "
 sleep 3s # wait before doing.
 
-if [ ${isTest} == 'True' ];then
+#if [ ${isTest} == 'True' ];then
     ## force Upgrades can break things. Use this on your own risk.
     ## This does not run properly in travisCI
-    echo ""
+#    echo ""
 #    sudo apt upgrade -y --fix-missing > /dev/null ## running in force installation mode
-else
-    sudo apt upgrade --fix-missing
-fi
+#else
+#    sudo apt upgrade --fix-missing
+#fi
 
-if [ $? -ne 0 ];then
-    echo "System upgrade crashed"
-    exit 255
-fi
+#if [ $? -ne 0 ];then
+#    echo "System upgrade crashed"
+#    exit 255
+#fi
 
 echo -e "
     ${yellow}-------------------------------------------${nc}
-    ${green}Upgrade Complete${nc}
+    ${green}Please consider upgrading by yourself. You might not want to upgrade or in Kali linux's case, 
+    /var/lib/dpkg/lock is always inaccessible on first try. Also, upgrading a system may leave your system unstable. ${nc}
     ${yellow}-------------------------------------------${nc}
     "
 
-sleep 3s
+sleep 1s
 clear
 exit 0 ##success
