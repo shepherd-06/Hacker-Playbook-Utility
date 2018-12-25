@@ -299,6 +299,8 @@ def main():
         # TODO: ####################################
         # TODO: I need to run a check either inside baby steps to see which scripts has already been installed.
         # TODO: status of main menu should go through this check each time. Based on user choice is a bad idea.
+        # TODO: need to check the status of wget installation too. Otherwise file will always be there even
+        # TODO: if it's already downloaded.
         # TODO: ####################################
         util.baby_step()
     else:
