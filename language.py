@@ -30,6 +30,7 @@ class Language:
 
     def main_menu(self, last_item):
         last_item = int(last_item)
+        last_item = 12 if last_item > 12 else last_item
         sentence_list = self._make_sentences()
         count = 0
         while count < last_item:
