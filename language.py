@@ -29,6 +29,7 @@ class Language:
               '\n   - & NMap scripts (for quicker scanning and smarter identification'
 
     def main_menu(self, last_item):
+	last_item = int(last_item)
         sentence_list = self._make_sentences()
         count = 0
         while count < last_item:
