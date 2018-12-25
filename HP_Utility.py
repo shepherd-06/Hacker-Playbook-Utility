@@ -5,8 +5,10 @@ import stat
 import platform
 import time
 import distro
+from language import Language
 
 
+# noinspection PyExceptClausesOrder
 class Utility:
     """
     Utility class holds all the working functions!
@@ -189,38 +191,18 @@ class Utility:
         """
         return_code = 0
         error_message = ""
+        language = Language()
+        first_time = language.main_menu(last_item=-1)  # since there is no last item
+        print(first_time)
         try:
             while True:
-                print("Choose your options:"
-                      "\n** Press [ 1 ] to install Discover Script (Former Backtrack Script)"
-                      "\n** Press [ 2 ] to install SMBExec (grab hashes out of Domain Controller and reverse shells)"
-                      "\n** Press [ 3 ] to install Veil 3.0 (to create Python based Metepreter executable)"
-                      "\n** Press [ 4 ] to install PeepingTom (to take snapshots of web pages) (NOT AVAILABLE NOW***)"
-                      "\n** Press [ 5 ] to install Eye Witness (to take snapshots of web pages"
-                      "\n** Press [ 6 ] to install Powersploit (to create Powershell script)"
-                      "\n** Press [ 7 ] to install Responder (to gain NTLM challenge/hashes)"
-                      "\n** Press [ 8 ] to install Social Engineering Toolkit"
-                      "\n** Press [ 9 ] to install bypassUAC (NOT AVAILABLE NOW***)"
-                      "\n** Press [ 10 ] to install beEF for cross site scripting"
-                      "\n** Press [ 11 ] to install Fuzzing Lists (for Social Engineering Campaign)"
-                      "\n** Press [ 12 ] to download & install other necessary scripts like\n   - WCE (Windows "
-                      "Credential "
-                      "Editor), "
-                      "\n   - Mimikatz (to recover password from memory),\n   - Custom password list from Skull "
-                      "Security and "
-                      "Crackstation,\n   - & NMap scripts (for quicker scanning and smarter identification"
-                      "\n** Press [ 13 ] to download ** all scripts **"
-                      "\n\n** Press [ 14 ] to terminate the script")
-
                 user_input = input("Your option:: ")
                 if user_input == "14":
                     # terminate the loop
                     time.sleep(3)
-                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                    print("~~~~~~~~~~~~~~That's a wrap baby!~~~~~~~~~~~~~~")
-                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                    print(language.line_apprx + '\n' + language.line_apprx
+                          + '\n' + language.line_thats_wrap + '\n'
+                          + language.line_apprx + '\n' + language.line_apprx)
                     sys.exit(0)  # The END
                 elif user_input == "13":
                     # install all
@@ -229,11 +211,9 @@ class Utility:
                         Utility().terminate("System terminated!")
                     else:
                         time.sleep(3)
-                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                        print("~~~~~~~~~~~~~~That's a wrap baby!~~~~~~~~~~~~~~")
-                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-                        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                        print(language.line_apprx + '\n' + language.line_apprx
+                              + '\n' + language.line_thats_wrap + '\n'
+                              + language.line_apprx + '\n' + language.line_apprx)
                 else:
                     time.sleep(5)
                     result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test), user_input])
@@ -242,6 +222,9 @@ class Utility:
                     del result
                     if return_code != 0:
                         Utility().terminate("System terminated!")
+
+                current_menu = language.main_menu(user_input)
+                print(current_menu)
         except subprocess.CalledProcessError as error:
             return_code = 255
             error_message = str(error)
@@ -263,6 +246,7 @@ class Utility:
         :return: integer (success = 0, failure = 255)
         """
         return_code = 0
+        error_message = None
         for user_input in range(1, 14):
             try:
                 time.sleep(2)
@@ -288,29 +272,23 @@ class Utility:
 
 
 def main():
+    language = Language()
     util = Utility()
     if util.is_root():
         if platform.system() != 'Linux':
-            print("###############################################")
-            print("###############################################")
-            sys.stderr.write("This script must run in a Kali or any Linux distro.\nGood bye! :)\n")
-            print("###############################################")
-            print("###############################################")
+            print(language.line_hashes + '\n' + language.line_hashes )
+            sys.stderr.write(language.line_non_linux_distro)
+            print(language.line_hashes + '\n' + language.line_hashes)
             sys.exit(255)
 
         if sys.version_info < (3, 0, 0):
-            print("###############################################")
-            print("###############################################")
-            sys.stderr.write("Need python3 to run this script\nGood bye! :)\n")
-            print("###############################################")
-            print("###############################################")
+            print(language.line_hashes + '\n' + language.line_hashes)
+            sys.stderr.write(language.line_not_python3)
+            print(language.line_hashes + '\n' + language.line_hashes)
             sys.exit(255)
 
         if distro.linux_distribution(False)[0] != 'kali':
-            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-            print("You are not using Kali OS! Please at least use these in a VirtualBOX so that you can roll back more "
-                  "easily!")
-            print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+            print(language.line_apprx + '\n' + language.line_not_kali + '\n' + language.line_apprx)
 
         time.sleep(5)
         # call the utility functions
@@ -318,13 +296,13 @@ def main():
         util.install_psql()
         util.install_metasploit()
         util.chmod_scripts()
+        # TODO: ####################################
+        # TODO: I need to run a check either inside baby steps to see which scripts has already been installed.
+        # TODO: ####################################
         util.baby_step()
     else:
-        print("###############################################")
-        print("###############################################")
-        print("You need to be a superuser or run this script in super user mode.\nGood bye. :)")
-        sys.exit("Permission Denied!\n###############################################\n"
-                 "###############################################")
+        print(language.line_hashes + '\n' + language.line_hashes + '\n' + language.line_non_superuser)
+        sys.exit("Permission Denied!\n{}\n{}".format(language.line_hashes, language.line_hashes))
 
 
 if __name__ == '__main__':

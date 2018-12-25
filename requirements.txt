@@ -1,7 +1,4 @@
-distro==1.2.0
+distro==1.3.0
 grin==1.2.1
-peppercorn==0.5
-setuptools==14.0
-wheel==0.22
-argparse==1.4.0
-pyfiglet==0.7.3
+peppercorn==0.6
+pyfiglet==0.8.post0
