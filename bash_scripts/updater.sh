@@ -65,10 +65,11 @@ sleep 3s # wait before doing.
 echo -e "
     ${yellow}-------------------------------------------${nc}
     ${green}Please consider upgrading by yourself. You might not want to upgrade or in Kali linux's case, 
-    /var/lib/dpkg/lock is always inaccessible on first try. Also, upgrading a system may leave your system unstable. ${nc}
+    /var/lib/dpkg/lock is always inaccessible on first try. Also, upgrading a system may leave your system unstable.
+    moving on in 5 seconds${nc}
     ${yellow}-------------------------------------------${nc}
     "
 
-sleep 1s
+sleep 5s
 clear
 exit 0 ##success
