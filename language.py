@@ -1,6 +1,7 @@
 class Language:
+
     line_hashes = '###############################################'
-    line_apprx = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+    line_apprx = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
     line_non_linux_distro = "This script must run in a Kali or any Linux distro.\nGood bye! :)\n"
     line_not_python3 = "Need python3 to run this script\nGood bye! :)\n"
     line_not_kali = "You are not using Kali OS! Please at least use these in a VirtualBOX so that you can " \
@@ -28,7 +29,57 @@ class Language:
               '\n   - Custom password list from Skull Security and Crackstation, ' \
               '\n   - & NMap scripts (for quicker scanning and smarter identification'
 
+    def __init__(self):
+        # These will be all the folders in a selected machine
+        self.folder_name = ['discover', 'smbexec', 'Veil', 'EyeWitness', 'PowerSploit', 
+        'Responder', 'set', 'beEF', 'SecLists']
+        self.password_folders = ['mimikatz_trunk.zip',
+         'crackstation-human-only.txt.gz', 'rockyou.txt.bz2']
+
+        self.opt_status = dict()
+        self.wget_status = dict()
+        self.folder_to_index = {
+            1: 'discover',
+            2: 'smbexec',
+            3: 'Veil',
+            4: '',
+            5: 'EyeWitness',
+            6: 'PowerSploit',
+            7: 'Responder',
+            8: 'set',
+            9: '',
+            10: 'beEF',
+            11: 'SecLists',
+            12: 'mimikatz_trunk.zip',
+            13: 'crackstation-human-only.txt.gz',
+            14: 'rockyou.txt.bz2',
+        }
+
+    def main_menu_v2(self):
+        self.item_status() # this will update the dicts inside __init__
+        sentence_list = self._make_sentences()
+        final_line = ''
+        for index in range(0, 12):
+            folder_name = self.folder_to_index[index + 1]
+            if index < 11:
+                folder_status = self.opt_status[folder_name] if folder_name != '' else False
+            else:
+                folder_status = self.wget_status[folder_name] if folder_name != '' else False
+            new_sentence = sentence_list[index]
+            if folder_status:
+                new_sentence = new_sentence.format(' [ Completed ] -')
+            else:
+                new_sentence = new_sentence.format('Press [ {} ] to install'.format(index + 1))
+            sentence_list[index] = new_sentence
+        all_lines = ''
+        for sentence in sentence_list:
+            all_lines += sentence
+        final_line = self.line_0.format(all_lines)
+        return final_line
+
+
     def main_menu(self, last_item):
+        # its deprecated
         last_item = int(last_item)
         last_item = 12 if last_item > 12 else last_item
         sentence_list = self._make_sentences()
@@ -71,7 +122,47 @@ class Language:
         sentence_array.append(self.line_12)
         return sentence_array
 
+    def item_status(self):
+        """
+        update the status of items /opt and wget magic.
+        """
+        # update the status of all files in opt/
+        all_opt_files = self.list_dir()
+        for files in self.folder_name:
+            if files in all_opt_files:
+                self.opt_status[files] = True
+            else:
+                self.opt_status[files] = False
+
+        # update the status over backup password and mimikatz
+        import os
+        mimikatz_path = '~/backup_wget/'
+        password_list = '~/backup_wget/password_list/'
+        mimikatz_bkup = self.list_dir(path = os.path.expanduser(mimikatz_path))
+        if self.password_folders[0] in mimikatz_bkup:
+            self.wget_status[self.password_folders[0]] = True
+        else:
+            self.wget_status[self.password_folders[0]] = False
+
+        all_wget_files = self.list_dir(path = os.path.expanduser(password_list))
+        for files in self.password_folders[1:]:
+            if files in all_wget_files:
+                self.wget_status[files] = True
+            else:
+                self.wget_status[files] = False
+        return
+        
+
+    @staticmethod
+    def list_dir(path = '/opt/'):
+        """
+        returns a list of all the folders in a directory given.
+        """
+        import os
+        # this program is suppose to run in sudo mode
+        return os.listdir(path)
+
 
 if __name__ == '__main__':
-    # print(Language().menu_form(-12))
+    #print(Language().main_menu_v2())
     pass
