@@ -296,10 +296,6 @@ def main():
         util.install_psql()
         util.install_metasploit()
         util.chmod_scripts()
-        # TODO: ####################################
-        # TODO: I need to run a check either inside baby steps to see which scripts has already been installed.
-        # TODO: status of main menu should go through this check each time. Based on user choice is a bad idea.
-        # TODO: ####################################
         util.baby_step()
     else:
         print(language.line_hashes + '\n' + language.line_hashes + '\n' + language.line_non_superuser)
