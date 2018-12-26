@@ -192,7 +192,7 @@ class Utility:
         return_code = 0
         error_message = ""
         language = Language()
-        first_time = language.main_menu(last_item=-1)  # since there is no last item
+        first_time = language.main_menu_v2()  # since there is no last item
         print(first_time)
         try:
             while True:
@@ -223,7 +223,7 @@ class Utility:
                     if return_code != 0:
                         Utility().terminate("System terminated!")
 
-                current_menu = language.main_menu(user_input)
+                current_menu = language.main_menu_v2()
                 print(current_menu)
         except subprocess.CalledProcessError as error:
             return_code = 255
