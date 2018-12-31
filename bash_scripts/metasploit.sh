@@ -70,7 +70,6 @@ echo -e "${cyan}
     -------------------------------------------
     ${nc}
     "
-sleep 5s
 
 ### Test case for Metasploit Installation (in Silent Mode too)
 if [ ${isTest} == 'True' ];then
