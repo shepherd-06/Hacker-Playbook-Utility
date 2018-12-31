@@ -67,7 +67,7 @@ class Language:
                 folder_status = self.wget_status[folder_name] if folder_name != '' else False
             new_sentence = sentence_list[index]
             if folder_status:
-                new_sentence = new_sentence.format(' [ Completed ] -')
+                new_sentence = new_sentence.format(' [ Completed ] | [ {} ] to re-install/download again'.format(index + 1))
             else:
                 new_sentence = new_sentence.format('Press [ {} ] to install'.format(index + 1))
             sentence_list[index] = new_sentence
@@ -86,7 +86,7 @@ class Language:
         count = 0
         while count < last_item:
             new_sentence = sentence_list[count]
-            new_sentence = new_sentence.format(' [ Completed ] -')
+            new_sentence = new_sentence.format(' [ Completed ] | Press [ {} ] to re-install/download again'.format(count + 1))
             sentence_list[count] = new_sentence
             count += 1
 
