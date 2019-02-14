@@ -200,11 +200,6 @@ function end_message() {
 #Downloading Different files using WGET
 #----------------------------------------
 function little_wget_magic() {
-
-    if [ ${isTest} == 'True' ];then
-        end_message
-    fi
-
     echo -e "${yellow}-------------------------------
     ${blue} Running a little WGET magic to download ${cyan}WCE (Windows Credential Editor), Mimikatz, Custom Password Lists, PeepingTom, NMap Script, PowerSploit, Responder, SET (Social Engineering Toolkit), BypassUAC and Fuzzing Lists.
     ${blue} This list is so f**king long, I know....

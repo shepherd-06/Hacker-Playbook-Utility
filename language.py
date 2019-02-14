@@ -31,10 +31,10 @@ class Language:
 
     def __init__(self):
         # These will be all the folders in a selected machine
-        self.folder_name = ['discover', 'smbexec', 'Veil', 'EyeWitness', 'PowerSploit', 
-        'Responder', 'set', 'beEF', 'SecLists']
+        self.folder_name = ['discover', 'smbexec', 'Veil', 'EyeWitness', 'PowerSploit',
+                            'Responder', 'set', 'beEF', 'SecLists']
         self.password_folders = ['mimikatz_trunk.zip',
-         'crackstation-human-only.txt.gz', 'rockyou.txt.bz2']
+                                 'crackstation-human-only.txt.gz', 'rockyou.txt.bz2']
 
         self.opt_status = dict()
         self.wget_status = dict()
@@ -56,7 +56,7 @@ class Language:
         }
 
     def main_menu_v2(self):
-        self.item_status() # this will update the dicts inside __init__
+        self.item_status()  # this will update the dicts inside __init__
         sentence_list = self._make_sentences()
         final_line = ''
         for index in range(0, 12):
@@ -67,16 +67,17 @@ class Language:
                 folder_status = self.wget_status[folder_name] if folder_name != '' else False
             new_sentence = sentence_list[index]
             if folder_status:
-                new_sentence = new_sentence.format(' [ Completed ] | [ {} ] to re-install/download again'.format(index + 1))
+                new_sentence = new_sentence.format(
+                    ' [ Completed ] | [ {} ] to re-install/download again'.format(index + 1))
             else:
-                new_sentence = new_sentence.format('Press [ {} ] to install'.format(index + 1))
+                new_sentence = new_sentence.format(
+                    'Press [ {} ] to install'.format(index + 1))
             sentence_list[index] = new_sentence
         all_lines = ''
         for sentence in sentence_list:
             all_lines += sentence
         final_line = self.line_0.format(all_lines)
         return final_line
-
 
     def main_menu(self, last_item):
         # its deprecated
@@ -86,16 +87,19 @@ class Language:
         count = 0
         while count < last_item:
             new_sentence = sentence_list[count]
-            new_sentence = new_sentence.format(' [ Completed ] | Press [ {} ] to re-install/download again'.format(count + 1))
+            new_sentence = new_sentence.format(
+                ' [ Completed ] | Press [ {} ] to re-install/download again'.format(count + 1))
             sentence_list[count] = new_sentence
             count += 1
 
         while count < len(sentence_list):
             new_sentence = sentence_list[count]
             if count == len(sentence_list):
-                new_sentence = new_sentence.format('Press [ {} ] to download & install'.format(count + 1))
+                new_sentence = new_sentence.format(
+                    'Press [ {} ] to download & install'.format(count + 1))
             else:
-                new_sentence = new_sentence.format('Press [ {} ] to install'.format(count + 1))
+                new_sentence = new_sentence.format(
+                    'Press [ {} ] to install'.format(count + 1))
             sentence_list[count] = new_sentence
             count += 1
 
@@ -138,23 +142,25 @@ class Language:
         import os
         mimikatz_path = '~/backup_wget/'
         password_list = '~/backup_wget/password_list/'
-        mimikatz_bkup = self.list_dir(path = os.path.expanduser(mimikatz_path))
+        mimikatz_bkup = self.list_dir(path=os.path.expanduser(mimikatz_path))
         if self.password_folders[0] in mimikatz_bkup:
             self.wget_status[self.password_folders[0]] = True
         else:
             self.wget_status[self.password_folders[0]] = False
-
-        all_wget_files = self.list_dir(path = os.path.expanduser(password_list))
-        for files in self.password_folders[1:]:
-            if files in all_wget_files:
-                self.wget_status[files] = True
-            else:
-                self.wget_status[files] = False
+        try:
+            all_wget_files = self.list_dir(path=os.path.expanduser(password_list))
+            for files in self.password_folders[1:]:
+                if files in all_wget_files:
+                    self.wget_status[files] = True
+                else:
+                    self.wget_status[files] = False
+        except OSError as _:
+            print("OSError - {}".format(_))
+            self.wget_status[files] = False
         return
-        
 
     @staticmethod
-    def list_dir(path = '/opt/'):
+    def list_dir(path='/opt/'):
         """
         returns a list of all the folders in a directory given.
         """
@@ -164,5 +170,5 @@ class Language:
 
 
 if __name__ == '__main__':
-    #print(Language().main_menu_v2())
+    # print(Language().main_menu_v2())
     pass

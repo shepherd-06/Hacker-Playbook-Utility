@@ -49,8 +49,10 @@ class Utility:
         error_message = ""
         try:
             file_status = os.stat('bash_scripts/updater.sh')
-            os.chmod('bash_scripts/updater.sh', file_status.st_mode | stat.S_IEXEC)
-            result = subprocess.Popen(['./bash_scripts/updater.sh', str(is_test)])
+            os.chmod('bash_scripts/updater.sh',
+                     file_status.st_mode | stat.S_IEXEC)
+            result = subprocess.Popen(
+                ['./bash_scripts/updater.sh', str(is_test)])
             result.communicate()
             return_code = result.returncode
             del file_status
@@ -83,7 +85,8 @@ class Utility:
         error_message = ""
         try:
             file_status = os.stat('bash_scripts/psql.sh')
-            os.chmod('bash_scripts/psql.sh', file_status.st_mode | stat.S_IEXEC)
+            os.chmod('bash_scripts/psql.sh',
+                     file_status.st_mode | stat.S_IEXEC)
             result = subprocess.Popen(['./bash_scripts/psql.sh', str(is_test)])
             result.communicate()
             return_code = result.returncode
@@ -117,12 +120,15 @@ class Utility:
         error_message = ""
         try:
             metasploit = os.stat('bash_scripts/metasploit.sh')
-            os.chmod('bash_scripts/metasploit.sh', metasploit.st_mode | stat.S_IEXEC)
+            os.chmod('bash_scripts/metasploit.sh',
+                     metasploit.st_mode | stat.S_IEXEC)
 
             if distro.linux_distribution(False)[0] == 'kali':
-                result = subprocess.Popen(['./bash_scripts/metasploit.sh', 'Kali', str(is_test)])
+                result = subprocess.Popen(
+                    ['./bash_scripts/metasploit.sh', 'Kali', str(is_test)])
             else:
-                result = subprocess.Popen(['./bash_scripts/metasploit.sh', 'Linux', str(is_test)])
+                result = subprocess.Popen(
+                    ['./bash_scripts/metasploit.sh', 'Linux', str(is_test)])
             result.communicate()
             return_code = result.returncode
             del result
@@ -154,7 +160,8 @@ class Utility:
         error_message = ""
         try:
             file_status = os.stat('bash_scripts/install_scripts.sh')
-            os.chmod('bash_scripts/install_scripts.sh', file_status.st_mode | stat.S_IEXEC)
+            os.chmod('bash_scripts/install_scripts.sh',
+                     file_status.st_mode | stat.S_IEXEC)
             del file_status
         except IOError as error:
             return_code = 255
@@ -216,7 +223,8 @@ class Utility:
                               + language.line_apprx + '\n' + language.line_apprx)
                 else:
                     time.sleep(5)
-                    result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test), user_input])
+                    result = subprocess.Popen(
+                        ['./bash_scripts/install_scripts.sh', str(is_test), user_input])
                     result.communicate()
                     return_code = result.returncode
                     del result
@@ -250,7 +258,8 @@ class Utility:
         for user_input in range(1, 14):
             try:
                 time.sleep(2)
-                result = subprocess.Popen(['./bash_scripts/install_scripts.sh', str(is_test), str(user_input)])
+                result = subprocess.Popen(
+                    ['./bash_scripts/install_scripts.sh', str(is_test), str(user_input)])
                 result.communicate()
                 return_code = result.returncode
                 del result
@@ -276,7 +285,7 @@ def main():
     util = Utility()
     if util.is_root():
         if platform.system() != 'Linux':
-            print(language.line_hashes + '\n' + language.line_hashes )
+            print(language.line_hashes + '\n' + language.line_hashes)
             sys.stderr.write(language.line_non_linux_distro)
             print(language.line_hashes + '\n' + language.line_hashes)
             sys.exit(255)
@@ -288,7 +297,8 @@ def main():
             sys.exit(255)
 
         if distro.linux_distribution(False)[0] != 'kali':
-            print(language.line_apprx + '\n' + language.line_not_kali + '\n' + language.line_apprx)
+            print(language.line_apprx + '\n' +
+                  language.line_not_kali + '\n' + language.line_apprx)
 
         time.sleep(5)
         # call the utility functions
@@ -298,8 +308,10 @@ def main():
         util.chmod_scripts()
         util.baby_step()
     else:
-        print(language.line_hashes + '\n' + language.line_hashes + '\n' + language.line_non_superuser)
-        sys.exit("Permission Denied!\n{}\n{}".format(language.line_hashes, language.line_hashes))
+        print(language.line_hashes + '\n' + language.line_hashes +
+              '\n' + language.line_non_superuser)
+        sys.exit("Permission Denied!\n{}\n{}".format(
+            language.line_hashes, language.line_hashes))
 
 
 if __name__ == '__main__':
